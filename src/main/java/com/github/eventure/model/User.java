@@ -4,7 +4,8 @@ public class User {
 
 	private String name;
 	private String email;
-	private String password;
+	private byte[] passwordSalt;
+    private byte[] passwordHash;
 	private int userId;
 	private int cpf;
 	public String getName()
@@ -23,14 +24,23 @@ public class User {
 	{
 		this.email = email;
 	}
-	public String getPassword()
-	{
-		return this.password;
-	}
-	public void setPassword(String password)
-	{
-       this.password = password;
-	}
+
+    public byte[] getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(byte[] passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public byte[] getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(byte[] passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+
 	public int getUserId()
 	{
 		return this.userId;
