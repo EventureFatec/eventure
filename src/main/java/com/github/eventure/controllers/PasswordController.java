@@ -20,16 +20,13 @@ public class PasswordController {
         if (password.length() >= MINIMUM_LENGTH) activeRules |= PasswordRules.HAS_ENOUGH_CHARACTERS;
 
         for (char c: password.toCharArray()) {
-            if (((activeRules & PasswordRules.HAS_INVALID_CHARACTERS) == 0) && (c < '!' || c > '~')) {
-                activeRules |= PasswordRules.HAS_INVALID_CHARACTERS;
-            }
-            else if (((activeRules & PasswordRules.HAS_LOWERCASE_CHARACTERS) == 0) && (c >= 'a' && c <= 'z')) {
+            if (!((activeRules & PasswordRules.HAS_INVALID_CHARACTERS) == 0) && (c < '!' || c > '~')) {
+                activeRules |= PasswordRules.HAS_INVALID_CHARACTERS;  // NOTE: This is the rule that must not be set!
+            } else if (((activeRules & PasswordRules.HAS_LOWERCASE_CHARACTERS) == 0) && (c >= 'a' && c <= 'z')) {
                 activeRules |= PasswordRules.HAS_LOWERCASE_CHARACTERS;
-            }
-            else if (((activeRules & PasswordRules.HAS_UPPERCASE_CHARACTERS) == 0) && (c >= 'A' && c <= 'Z')) {
+            } else if (((activeRules & PasswordRules.HAS_UPPERCASE_CHARACTERS) == 0) && (c >= 'A' && c <= 'Z')) {
                 activeRules |= PasswordRules.HAS_UPPERCASE_CHARACTERS;
-            }
-            else if (((activeRules & PasswordRules.HAS_NUMBERS) == 0) && (c >= '0' && c <= '9')) {
+            } else if (((activeRules & PasswordRules.HAS_NUMBERS) == 0) && (c >= '0' && c <= '9')) {
                 activeRules |= PasswordRules.HAS_NUMBERS;
             } else {
                 if ((activeRules & PasswordRules.HAS_SYMBOLS) == 0) {
