@@ -42,6 +42,19 @@ public class PasswordController {
     }
 
     /**
+     * Changes a password if it is new
+     *
+     * @param   newPassword     the new password as a string
+     * @param   storedPassword  the current password as its class
+     * @return                  null if failed, Password if successful.
+     */
+    public Password changePassword(String newPassword, Password storedPassword) {
+        if (verifyPassword(newPassword, storedPassword)) return null;
+
+        return createPassword(newPassword);
+    }
+
+    /**
      * Checks the password and verifies its validity.
      *
      * NOTE: Allowed characters: Basic Latin (0x20 -> 0x7E)
