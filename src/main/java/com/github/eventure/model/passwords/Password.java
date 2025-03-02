@@ -1,4 +1,4 @@
-package com.github.eventure.model;
+package com.github.eventure.model.passwords;
 
 public class Password {
     private byte[] passwordHash;

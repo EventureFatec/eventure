@@ -1,6 +1,6 @@
 package com.github.eventure.controllers;
 
-import com.github.eventure.model.PasswordRules;
+import com.github.eventure.model.passwords.PasswordRules;
 
 public class PasswordController {
     private static final short MINIMUM_LENGTH = 8;

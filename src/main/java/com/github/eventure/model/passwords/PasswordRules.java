@@ -1,4 +1,4 @@
-package com.github.eventure.model;
+package com.github.eventure.model.passwords;
 
 /**
  * Uses bitwise rules to set any special flags when checking the password 
