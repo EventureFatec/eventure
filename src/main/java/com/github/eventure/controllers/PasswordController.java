@@ -29,12 +29,16 @@ public class PasswordController {
     /**
      * Verifies if a password is equal to another.
      *
-     * @param   p1      the first password
-     * @param   p2      the second password
-     * @return          true if they are equal, false if they are not
+     * @param   password        the first password as a string
+     * @param   storedPassword  the second password as its class
+     * @return                  true if they are equal, false if they are not
      */
-    public boolean verifyPassword(Password p1, Password p2) {
-        return Arrays.equals(p1.getPasswordHash(), p2.getPasswordHash());
+    public boolean verifyPassword(String password, Password storedPassword) {
+        var p = new Password();
+
+        p.setPasswordHash(Encryption.generateHash(password, storedPassword.getPasswordSalt()));
+
+        return Encryption.checkHashes(p.getPasswordHash(), storedPassword.getPasswordHash());
     }
 
     /**
