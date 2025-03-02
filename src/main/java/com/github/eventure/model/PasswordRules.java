@@ -12,7 +12,7 @@ public class PasswordRules {
     public static final short HAS_UPPERCASE_CHARACTERS = 0b000100;
     public static final short HAS_NUMBERS              = 0b001000;
     public static final short HAS_SYMBOLS              = 0b010000;
-    public static final short HAS_ALL                  = 0b011111;
+    public static final short HAS_FULL_VALIDITY        = 0b011111;
     /** This is the exception and must always be unset. */
     public static final short HAS_INVALID_CHARACTERS   = 0b100000;
 }
