@@ -1,0 +1,7 @@
+# Maven Project Files
+/.settings
+/.classpath
+/.project
+
+# Output Files
+/target
