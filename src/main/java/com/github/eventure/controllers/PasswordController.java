@@ -1,9 +1,41 @@
 package com.github.eventure.controllers;
 
+import java.util.Arrays;
+
+import com.github.eventure.encryption.Encryption;
+import com.github.eventure.model.passwords.Password;
 import com.github.eventure.model.passwords.PasswordRules;
 
 public class PasswordController {
     private static final short MINIMUM_LENGTH = 8;
+
+    /**
+     * Encrypts a password.
+     *
+     * @param   password    the password before it is encrypted
+     * @return              the encrypted password class
+     * @see                 Password
+     */
+    public Password createPassword(String password) {
+        var p = new Password();
+
+        var salt = Encryption.generateSalt();
+
+        p.setPasswordSalt(salt);
+        p.setPasswordHash(Encryption.generateHash(password, salt));
+        return p;
+    }
+
+    /**
+     * Verifies if a password is equal to another.
+     *
+     * @param   p1      the first password
+     * @param   p2      the second password
+     * @return          true if they are equal, false if they are not
+     */
+    public boolean verifyPassword(Password p1, Password p2) {
+        return Arrays.equals(p1.getPasswordHash(), p2.getPasswordHash());
+    }
 
     /**
      * Checks the password and verifies its validity.
