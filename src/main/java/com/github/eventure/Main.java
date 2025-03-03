@@ -31,5 +31,7 @@ public class Main {
         var user = userController.createUser("Chrystian", "Mendes Franklin", "exemplo123");
         System.out.println(user.getName());
         System.out.println(user.getPasswordHash().toString());
+        String cpf = "29640340871";
+        userController.validarCpf(cpf);
     }
 }
