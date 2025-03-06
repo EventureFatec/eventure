@@ -1,5 +1,7 @@
 package com.github.eventure.view.windowing;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -9,11 +11,19 @@ import com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme;
 
 
 public class Window extends JFrame {
+    private final Dimension MINIMUM_SIZE = new Dimension(800, 600);
     private RootPanel panel;
 
     public Window() {
         setupLookAndFeel();
         setupRootPanel();
+        setupBehavior();
+    }
+
+    private void setupBehavior () {
+        setMinimumSize(MINIMUM_SIZE);
+        setSize(MINIMUM_SIZE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
