@@ -28,19 +28,18 @@ public class RootPanel extends JPanel {
     }
 
     private void addPagesViaReflection() {
-        Class<?>[] classes = null;
         try {
-            classes = Reflection.getClassesInPackage(PAGES_PACKAGE);
+            var classes = Reflection.getClassesInPackage(PAGES_PACKAGE);
+
+            for (var cls : classes) {
+                if (Page.class.isAssignableFrom(cls)) {
+                    Page p = derivePageFromClass(cls);
+                    if (p != null)
+                        addPage(p);
+                }
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-
-        for (var cls : classes) {
-            if (Page.class.isAssignableFrom(cls)) {
-                Page p = derivePageFromClass(cls);
-                if (p != null)
-                    addPage(p);
-            }
         }
     }
 
