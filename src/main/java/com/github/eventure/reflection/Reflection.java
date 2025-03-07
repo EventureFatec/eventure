@@ -45,15 +45,11 @@ public class Reflection {
 
                 // Check if the entry is a class file inside the target package
                 if (name.startsWith(cleanedPackagePath) && name.endsWith(".class")) {
-                    System.out.println("Valid Entry Name: " + name);
-
-                    // Load each class
+                    // Load each class - formatting the class name correctly
                     String className = name.substring(0, name.length() - 6).replace('/', '.');
                     Class<?> cls = Class.forName(className);
 
                     classes.add(cls);
-                } else {
-                    System.out.println("Invalid Entry Name: " + name);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
