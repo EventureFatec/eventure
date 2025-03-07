@@ -23,17 +23,19 @@ public class UserController {
         EmailController emailTest = new EmailController();
         boolean verdade_ou_nao = emailTest.ValidarEmail("teste@.yahoo.com.br");
         System.out.println("email é :"+verdade_ou_nao);
+        if(verdade_ou_nao)
+        {
         u.setEmail(emailTest.getEmail());
+        }
         // Create the password hash
         var salt = Encryption.generateSalt();
         var hash = Encryption.generateHash(password, salt);
         u.setPasswordSalt(salt);
         u.setPasswordHash(hash);
-        User user02 = new User();
-        user02.setName(firstName + " " + lastName);
-        user02.setEmail("carlos@gmail.com");
+        
+        
         userStorage.add(u);
-        userStorage.add(user02);
+        
         // Return the user
         return u;
     }
