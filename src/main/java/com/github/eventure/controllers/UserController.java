@@ -9,6 +9,7 @@ import com.github.eventure.storage.Storage;
 
 public class UserController {
 	private Storage<User> userStorage;
+	private static int lastGeneratedId = 0;
 	public UserController()
 	{
 		if(userStorage == null)
@@ -16,12 +17,12 @@ public class UserController {
 			userStorage = new Storage<User>();
 		}
 	}
-    public User createUser(String firstName, String lastName, String password) {
+    public User createUser(String firstName, String lastName, String password , String email) {
         // Instantiate the user
         var u = new User();
         u.setName(firstName + " " + lastName);
         EmailController emailTest = new EmailController();
-        boolean verdade_ou_nao = emailTest.ValidarEmail("teste@.yahoo.com.br");
+        boolean verdade_ou_nao = emailTest.ValidarEmail(email);
         System.out.println("email é :"+verdade_ou_nao);
         if(verdade_ou_nao)
         {
@@ -33,7 +34,11 @@ public class UserController {
         u.setPasswordSalt(salt);
         u.setPasswordHash(hash);
         
-        
+        if(u.getName()  != null && u.getPasswordHash() != null && u.getName() != null)
+        {
+        	int id = UserController.generateId();
+        	u.setUserId(id);
+        }
         userStorage.add(u);
         
         // Return the user
@@ -107,4 +112,8 @@ public class UserController {
             }
         }
     }
+    public static int generateId() 
+        { 
+    	return lastGeneratedId++; 
+    	}
 }

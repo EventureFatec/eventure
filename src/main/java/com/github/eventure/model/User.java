@@ -45,6 +45,10 @@ public class User {
 	{
 		return this.userId;
 	}
+	
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	public int getCpf()
 	{
 		return this.cpf;
