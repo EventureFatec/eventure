@@ -5,9 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import com.github.eventure.view.windowing.Page;
-import com.github.eventure.view.windowing.PageLayouts;
-import com.github.eventure.view.windowing.RootPanel;
+import com.github.eventure.view.windowing.basic.Page;
+import com.github.eventure.view.windowing.basic.PageLayouts;
 
 public class SecondaryPage extends Page {
     private JButton tempButton;

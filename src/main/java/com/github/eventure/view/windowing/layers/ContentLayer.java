@@ -10,7 +10,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import com.github.eventure.reflection.Reflection;
-import com.github.eventure.view.windowing.Page;
+import com.github.eventure.view.windowing.basic.Page;
 
 import net.miginfocom.swing.MigLayout;
 
