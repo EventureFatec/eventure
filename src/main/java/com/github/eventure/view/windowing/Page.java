@@ -2,14 +2,16 @@ package com.github.eventure.view.windowing;
 
 import javax.swing.JPanel;
 
+import com.github.eventure.view.windowing.layers.ContentLayer;
+
 import net.miginfocom.swing.MigLayout;
 
 public class Page extends JPanel {
     private static final String DEFAULT_CONSTRAINT = "fill";
     private MigLayout layout;
-    private RootPanel parentRootPanel;
+    private ContentLayer parentRootPanel;
 
-    public Page(String layoutString, RootPanel rootPanel) {
+    public Page(String layoutString, ContentLayer rootPanel) {
         layout = new MigLayout(DEFAULT_CONSTRAINT, layoutString);
         parentRootPanel = rootPanel;
     }
@@ -24,7 +26,7 @@ public class Page extends JPanel {
 
     public void switchPage(String id) {
         if (parentRootPanel == null) {
-            parentRootPanel = (RootPanel) getParent();
+            parentRootPanel = (ContentLayer) getParent();
             System.out.println(parentRootPanel);
         }
         parentRootPanel.switchPage(id);
