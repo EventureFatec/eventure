@@ -1,6 +1,6 @@
 package com.github.eventure.model;
 
-public class Adress {
+public class Address {
     private String localName;
     private String adress;
     private String street;

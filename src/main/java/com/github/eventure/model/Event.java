@@ -18,7 +18,7 @@ public class Event {
     private LocalTime endHours;
     // Ideia para uso seria LocalTime hora = LocalTime.of(14,35); para pegar somente hora e minutos
     // mesma ideia da data não sei qual é melhor por causa do espaço em memoria ocupado
-    private Adress adress;
+    private Address address;
     
     public int getId() {
         return id;
