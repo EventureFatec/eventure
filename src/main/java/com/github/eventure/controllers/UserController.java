@@ -1,22 +1,54 @@
 package com.github.eventure.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.github.eventure.encryption.Encryption;
 import com.github.eventure.model.User;
+import com.github.eventure.storage.Storage;
 
 public class UserController {
+	private Storage<User> userStorage;
+	public UserController()
+	{
+		if(userStorage == null)
+		{
+			userStorage = new Storage<User>();
+		}
+	}
     public User createUser(String firstName, String lastName, String password) {
         // Instantiate the user
         var u = new User();
         u.setName(firstName + " " + lastName);
-
+        EmailController emailTest = new EmailController();
+        boolean verdade_ou_nao = emailTest.ValidarEmail("teste@.yahoo.com.br");
+        System.out.println("email é :"+verdade_ou_nao);
+        if(verdade_ou_nao)
+        {
+        u.setEmail(emailTest.getEmail());
+        }
         // Create the password hash
         var salt = Encryption.generateSalt();
         var hash = Encryption.generateHash(password, salt);
         u.setPasswordSalt(salt);
         u.setPasswordHash(hash);
-
+        
+        
+        userStorage.add(u);
+        
         // Return the user
         return u;
+    }
+    
+    public void deleteUser(User u)
+    {
+    	userStorage.remove(u);
+    }
+    
+    public List<String> findUser(String lastName)
+    {
+    	List<String> emails = userStorage.find(user -> user.getName().equals("Chrystian Mendes Franklin")).map(User::getEmail).collect(Collectors.toList());
+    	return emails;
     }
 
     public void validarCpf(String cpf) {
