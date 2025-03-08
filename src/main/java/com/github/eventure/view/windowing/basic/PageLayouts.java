@@ -1,4 +1,4 @@
-package com.github.eventure.view.windowing;
+package com.github.eventure.view.windowing.basic;
 
 public class PageLayouts {
     // TODO: Add more layouts
