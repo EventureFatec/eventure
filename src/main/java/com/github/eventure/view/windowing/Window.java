@@ -8,11 +8,13 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme;
+import com.github.eventure.Constants;
 
 
 public class Window extends JFrame {
     private final Dimension MINIMUM_SIZE = new Dimension(800, 600);
-    private RootPanel panel;
+    // private RootPanel panel;
+    private LayeredRootPanel panel;
 
     public Window() {
         setupLookAndFeel();
@@ -21,14 +23,25 @@ public class Window extends JFrame {
     }
 
     private void setupBehavior () {
+        // Size and Position
         setMinimumSize(MINIMUM_SIZE);
         setSize(MINIMUM_SIZE);
+        setLocationRelativeTo(null);
+        setResizable(true);
+
+        // Close Behavior
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Title and Icon
+        setTitle(Constants.PROJECT_NAME);
+
+        // Visibility
         setVisible(true);
     }
 
     private void setupRootPanel() {
-        panel = new RootPanel();
+        // panel = new RootPanel();
+        panel = new LayeredRootPanel();
         add(panel);
     }
 

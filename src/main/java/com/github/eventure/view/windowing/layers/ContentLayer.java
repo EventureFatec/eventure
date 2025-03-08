@@ -24,8 +24,8 @@ public class ContentLayer extends JPanel {
     public ContentLayer() {
         setBackground(Color.PINK);
         setupContent();
-        // setupLayout();
-        // addPagesViaReflection();
+        setupLayout();
+        addPagesViaReflection();
     }
 
     private void setupContent() {
@@ -49,6 +49,7 @@ public class ContentLayer extends JPanel {
                 if (Page.class.isAssignableFrom(cls)) {
                     Page p = derivePageFromClass(cls);
                     if (p != null)
+                        System.out.println("Adding Page: " + p.getClass().getSimpleName());
                         addPage(p);
                 }
             }
