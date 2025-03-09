@@ -38,8 +38,8 @@ public class Main {
 		System.out.println(user.getCpf());
 		System.out.println("id do chrystian " + user.getUserId());
 
-		User user02 = userController.findUserById(0);
-
-		System.out.println(user02.getName());
+		int id = user.getUserId();
+        userController.EditUserName(id, "marcos" , "Donizete");
+		System.out.println(user.getName());
 	}
 }

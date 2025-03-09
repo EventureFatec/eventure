@@ -57,15 +57,15 @@ public class UserController {
 	}
 
 	public boolean validarCpf(String cpf) {
-		
+
 		boolean valid = false;
-	    if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
-	        System.out.println("CPF inválido");
-	        return false;
-	    }
-	    
-	    int[] cpfArray = ConvertCpfToArray(cpf);
-	    
+		if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
+			System.out.println("CPF inválido");
+			return false;
+		}
+
+		int[] cpfArray = ConvertCpfToArray(cpf);
+
 		if (IsCpf(1, cpfArray) == true) {
 			System.out.println("é um cpf valido");
 			valid = true;
@@ -121,6 +121,11 @@ public class UserController {
 				return false;
 			}
 		}
+	}
+
+	public void EditUserName(int id, String firstName, String lastName) {
+		var u = findUserById(id);
+		u.setName(firstName + " " + lastName);
 	}
 
 	public static int generateId() {
