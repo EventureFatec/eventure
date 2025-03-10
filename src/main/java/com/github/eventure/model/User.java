@@ -5,52 +5,55 @@ public class User {
 	private String name;
 	private String email;
 	private byte[] passwordSalt;
-    private byte[] passwordHash;
+	private byte[] passwordHash;
 	private int userId;
-	private int cpf;
-	public String getName()
-	{
+	private String cpf;
+
+	public String getName() {
 		return this.name;
 	}
-	public void setName (String name)
-	{
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	public String getEmail()
-	{
+
+	public String getEmail() {
 		return this.email;
 	}
-	public void setEmail(String email)
-	{
+
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
-    public byte[] getPasswordHash() {
-        return passwordHash;
-    }
+	public byte[] getPasswordHash() {
+		return passwordHash;
+	}
 
-    public void setPasswordHash(byte[] passwordHash) {
-        this.passwordHash = passwordHash;
-    }
+	public void setPasswordHash(byte[] passwordHash) {
+		this.passwordHash = passwordHash;
+	}
 
-    public byte[] getPasswordSalt() {
-        return passwordSalt;
-    }
+	public byte[] getPasswordSalt() {
+		return passwordSalt;
+	}
 
-    public void setPasswordSalt(byte[] passwordSalt) {
-        this.passwordSalt = passwordSalt;
-    }
+	public void setPasswordSalt(byte[] passwordSalt) {
+		this.passwordSalt = passwordSalt;
+	}
 
-	public int getUserId()
-	{
+	public int getUserId() {
 		return this.userId;
 	}
-	public int getCpf()
-	{
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public String getCpf() {
 		return this.cpf;
 	}
-	public void setCpf(int cpf)
-	{
+
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 }
