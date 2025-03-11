@@ -11,22 +11,23 @@ public class Page extends JPanel {
     private MigLayout layout;
     private ContentLayer parentRootPanel;
 
-    public Page(String layoutString, ContentLayer rootPanel) {
-        layout = new MigLayout(DEFAULT_CONSTRAINT, layoutString);
-        parentRootPanel = rootPanel;
-    }
-
     public Page(String layoutString) {
-        layout = new MigLayout(DEFAULT_CONSTRAINT, layoutString);
+        setupLayout(layoutString);
     }
 
     public String getPageId() {
         return this.getClass().getSimpleName();
     }
 
+    private void setupLayout(String layoutString) {
+        layout = new MigLayout(DEFAULT_CONSTRAINT, layoutString);
+        setLayout(layout);
+    }
+
     public void switchPage(String id) {
         if (parentRootPanel == null) {
             parentRootPanel = (ContentLayer) getParent();
+            System.out.println("parentRootPanel: " + getParent().getClass().getSimpleName());
             System.out.println(parentRootPanel);
         }
         parentRootPanel.switchPage(id);
