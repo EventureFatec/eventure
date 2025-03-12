@@ -8,9 +8,10 @@ public class Event {
     private int id;
     private String name;
     private String description;
-    private String title;
+	private String title;
     private String typeEvent;
-    private String category;
+    private String [] category = {"Musicais", "Festas" , "Show",}
+    ;
     private List<Image> images;
     private Date date;
     // não sei qual é melhor para armazenar data se é a class Date ou uma string 
@@ -20,6 +21,24 @@ public class Event {
     // mesma ideia da data não sei qual é melhor por causa do espaço em memoria ocupado
     private Address address;
     
+    public Event(int id, String name, String description, String title, String typeEvent,
+			List<Image> images, Date date, LocalTime startHours, LocalTime endHours, Address address) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.title = title;
+		this.typeEvent = typeEvent;
+		this.images = images;
+		this.date = date;
+		this.startHours = startHours;
+		this.endHours = endHours;
+		this.address = address;
+	}
+    public Event()
+    {
+    	
+    }
     public int getId() {
         return id;
     }

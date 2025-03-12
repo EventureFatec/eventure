@@ -2,6 +2,7 @@ package com.github.eventure;
 
 import com.github.eventure.storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.eventure.controllers.UserController;
@@ -37,9 +38,14 @@ public class Main {
 		System.out.println(user.getPasswordHash().toString());
 		System.out.println(user.getCpf());
 		System.out.println("id do chrystian " + user.getUserId());
-
+		userController.cloneUser("Chrystian", "Mendes Franklin", "Queijo123", "Chrystian02@gmail.com", "5299", 0);
 		int id = user.getUserId();
-        userController.EditUserName(id, "marcos" , "Donizete");
 		System.out.println(user.getName());
+		System.out.println(user.getPasswordHash().toString());
+		System.out.println(user.getCpf());
+		System.out.println(user.getEmail());
+		System.out.println("id do chrystian " + user.getUserId());
+        
+
 	}
 }

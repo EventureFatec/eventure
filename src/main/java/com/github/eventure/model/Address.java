@@ -64,4 +64,9 @@ public class Address {
 	public void setCep(int cep) {
 		this.cep = cep;
 	}
+	
+	public Address()
+	{
+		
+	}
 }

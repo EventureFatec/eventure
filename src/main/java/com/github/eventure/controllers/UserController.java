@@ -48,6 +48,38 @@ public class UserController {
 		return u;
 	}
 
+	public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
+		// Instantiate the user
+		var userCloned = new User();
+		userCloned.setName(firstName + " " + lastName);
+		EmailController emailTest = new EmailController();
+		boolean verdade_ou_nao = emailTest.ValidarEmail(email);
+
+		if (verdade_ou_nao) {
+			userCloned.setEmail(emailTest.getEmail());
+		}
+		boolean cpfValid = validarCpf(cpf);
+
+		if (cpfValid) {
+			userCloned.setCpf(cpf);
+		}
+		// Create the password hash
+		var salt = Encryption.generateSalt();
+		var hash = Encryption.generateHash(password, salt);
+		userCloned.setPasswordSalt(salt);
+		userCloned.setPasswordHash(hash);
+
+		if (userCloned.getName() != null && userCloned.getPasswordHash() != null && userCloned.getName() != null
+				&& cpfValid) {
+
+			userCloned.setUserId(id);
+
+		}
+
+		applyChanges(id, userCloned);
+
+	}
+
 	public void deleteUser(User u) {
 		userStorage.remove(u);
 	}
@@ -123,9 +155,24 @@ public class UserController {
 		}
 	}
 
-	public void EditUserName(int id, String firstName, String lastName) {
-		var u = findUserById(id);
-		u.setName(firstName + " " + lastName);
+	public void applyChanges(int id, User userCloned) {
+		var storedUser = findUserById(id);
+
+		if (!(storedUser.getName() == userCloned.getName()) && userCloned.getName() != null) {
+			storedUser.setName(userCloned.getName());
+		}
+		if (!(storedUser.getEmail() == userCloned.getEmail()) && userCloned.getEmail() != null) {
+			storedUser.setEmail(userCloned.getEmail());
+		}
+		if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) {
+			storedUser.setCpf(userCloned.getCpf());
+		}
+		if (!(storedUser.getPasswordHash().equals(userCloned.getPasswordHash())
+				&& userCloned.getPasswordHash() != null)) {
+			storedUser.setPasswordHash(userCloned.getPasswordHash());
+			storedUser.setPasswordSalt(userCloned.getPasswordSalt());
+		}
+
 	}
 
 	public static int generateId() {
