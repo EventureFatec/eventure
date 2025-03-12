@@ -7,8 +7,28 @@ public class Address {
     private String state;
     private String district;
     private String city;
-    private int cep;
+    private String cep;
+    private int idUser;
+    public Address()
+    {
+    	
+    }
     
+    
+	public Address(String localName, String adress, String street, String state, String district, String city,
+			String cep ,  int idUser) {
+		
+		this.localName = localName;
+		this.adress = adress;
+		this.street = street;
+		this.state = state;
+		this.district = district;
+		this.city = city;
+		this.cep = cep;
+		this.idUser = idUser;
+	}
+    
+
 	public void setLocalName(String localName)
 	{
 		this.localName = localName;
@@ -57,16 +77,23 @@ public class Address {
 		this.city = city;
 	}
 
-	public int getCep() {
+	public String getCep() {
 		return cep;
 	}
 
-	public void setCep(int cep) {
+	public void setCep(String cep) {
 		this.cep = cep;
 	}
-	
-	public Address()
-	{
-		
+
+
+	public int getIdUser() {
+		return idUser;
 	}
+
+
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+	
+
 }

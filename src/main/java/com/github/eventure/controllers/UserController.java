@@ -27,7 +27,7 @@ public class UserController {
 		if (verdade_ou_nao) {
 			u.setEmail(emailTest.getEmail());
 		}
-		boolean cpfValid = validarCpf(cpf);
+		boolean cpfValid = validateCpf(cpf);
 
 		if (cpfValid) {
 			u.setCpf(cpf);
@@ -58,7 +58,7 @@ public class UserController {
 		if (verdade_ou_nao) {
 			userCloned.setEmail(emailTest.getEmail());
 		}
-		boolean cpfValid = validarCpf(cpf);
+		boolean cpfValid = validateCpf(cpf);
 
 		if (cpfValid) {
 			userCloned.setCpf(cpf);
@@ -88,7 +88,7 @@ public class UserController {
 		return userStorage.find(user -> user.getUserId() == id).findFirst().orElse(null);
 	}
 
-	public boolean validarCpf(String cpf) {
+	public boolean validateCpf(String cpf) {
 
 		boolean valid = false;
 		if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {

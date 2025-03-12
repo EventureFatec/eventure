@@ -5,7 +5,9 @@ import com.github.eventure.storage.Storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.eventure.controllers.AddressController;
 import com.github.eventure.controllers.UserController;
+import com.github.eventure.model.Address;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
 
@@ -46,6 +48,13 @@ public class Main {
 		System.out.println(user.getEmail());
 		System.out.println("id do chrystian " + user.getUserId());
         
+        var d = new Address(" Espaço capela "," 450 " , "rua ronaldo viera" , "São paulo" , "capela" , "lavrinhas" , "1276000" ,id);
+        var d2 = new Address(" Espaço cruzeiro "," 600 " , "rua dois" , "São paulo" , "centro" , "cruzeiro" , "1270000" , id);
 
+        AddressController ad = new AddressController();
+        ad.createAddres(d);
+        ad.createAddres(d2);
+        ad.imprimir();
+        
 	}
 }
