@@ -9,10 +9,10 @@ public class Event {
 	private String name;
 	private String description;
 	private String title;
-	private String typeEvent;
-	private String[] category = { "Musicais", "Festas e Shows", "Teatros e espetáculos", "Stand Up Comedy",
-			"Passeios e Tours", "Esportes", "Congressos e Palestras", "Infaltil", "Gastronomia", "Cursos e Workshops",
-			"Eventos online", "Tecnologia", "Religião e esperitualidade" };
+	private EventClassification type;
+//	private String[] category = { "Musicais", "Festas e Shows", "Teatros e espetáculos", "Stand Up Comedy",
+//			"Passeios e Tours", "Esportes", "Congressos e Palestras", "Infantil", "Gastronomia", "Cursos e Workshops",
+//			"Eventos online", "Tecnologia", "Religião e esperitualidade" };
 	private List<Image> images;
 	private Date date;
 	// não sei qual é melhor para armazenar data se é a class Date ou uma string
@@ -23,15 +23,21 @@ public class Event {
 	// mesma ideia da data não sei qual é melhor por causa do espaço em memoria
 	// ocupado
 	private Address address;
-
-	public Event(int id, String name, String description, String title, String typeEvent, List<Image> images, Date date,
-			LocalTime startHours, LocalTime endHours, Address address) {
-		super();
+    public Event(int id , String name , String description , String title , EventClassification type)
+    {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.title = title;
-		this.typeEvent = typeEvent;
+		this.type = type;
+    }
+	public Event(int id, String name, String description, String title, List<Image> images, Date date,
+			LocalTime startHours, LocalTime endHours, Address address) {
+		
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.title = title;
 		this.images = images;
 		this.date = date;
 		this.startHours = startHours;
@@ -58,7 +64,57 @@ public class Event {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public List<Image> getImages() {
+		return images;
+	}
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	public LocalTime getStartHours() {
+		return startHours;
+	}
+	public void setStartHours(LocalTime startHours) {
+		this.startHours = startHours;
+	}
+	public LocalTime getEndHours() {
+		return endHours;
+	}
+	public void setEndHours(LocalTime endHours) {
+		this.endHours = endHours;
+	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
+	public EventClassification getType() {
+		return type;
+	}
+	public void setType(EventClassification type) {
+		this.type = type;
+	}
 	@Override
 	public String toString() {
 		return String.format("Evento(id=%d, name=%s)", id, name);
