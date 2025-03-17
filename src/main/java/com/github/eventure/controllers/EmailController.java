@@ -12,7 +12,7 @@ public class EmailController {
 	private static final String[] ALLOWED_PROVIDERS = { "gmail.com", "outlook.com", "hotmail.com", "yahoo.com", "yahoo.com.br",
 			"icloud.com" , "fatec.sp.gov.br" };
 
-	public boolean ValidarEmail(String email) {
+	public boolean ValidateEmail(String email) {
 		for (int i = 0; i < email.length(); i++) {
 
 			char caracteres = email.charAt(i);

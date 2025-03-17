@@ -22,12 +22,12 @@ public class UserController {
 		var u = new User();
 		u.setName(firstName + " " + lastName);
 		EmailController emailTest = new EmailController();
-		boolean verdade_ou_nao = emailTest.ValidarEmail(email);
+		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
 		if (verdade_ou_nao) {
 			u.setEmail(emailTest.getEmail());
 		}
-		boolean cpfValid = validarCpf(cpf);
+		boolean cpfValid = validateCpf(cpf);
 
 		if (cpfValid) {
 			u.setCpf(cpf);
@@ -48,6 +48,52 @@ public class UserController {
 		return u;
 	}
 
+	public void createUser(User u) {
+		EmailController eController = new EmailController();
+		boolean isAllCorrect = true;
+
+		if (!eController.ValidateEmail(u.getEmail()))
+			isAllCorrect = false;
+		if (!validateCpf(u.getCpf()))
+			isAllCorrect = false;
+
+		if (isAllCorrect) {
+			userStorage.add(u);
+		}
+	}
+
+	public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
+		// Instantiate the user
+		var userCloned = new User();
+		userCloned.setName(firstName + " " + lastName);
+		EmailController emailTest = new EmailController();
+		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
+
+		if (verdade_ou_nao) {
+			userCloned.setEmail(emailTest.getEmail());
+		}
+		boolean cpfValid = validateCpf(cpf);
+
+		if (cpfValid) {
+			userCloned.setCpf(cpf);
+		}
+		// Create the password hash
+		var salt = Encryption.generateSalt();
+		var hash = Encryption.generateHash(password, salt);
+		userCloned.setPasswordSalt(salt);
+		userCloned.setPasswordHash(hash);
+
+		if (userCloned.getName() != null && userCloned.getPasswordHash() != null && userCloned.getName() != null
+				&& cpfValid) {
+
+			userCloned.setUserId(id);
+
+		}
+
+		applyChanges(id, userCloned);
+
+	}
+
 	public void deleteUser(User u) {
 		userStorage.remove(u);
 	}
@@ -56,16 +102,16 @@ public class UserController {
 		return userStorage.find(user -> user.getUserId() == id).findFirst().orElse(null);
 	}
 
-	public boolean validarCpf(String cpf) {
-		
+	public boolean validateCpf(String cpf) {
+
 		boolean valid = false;
-	    if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
-	        System.out.println("CPF inválido");
-	        return false;
-	    }
-	    
-	    int[] cpfArray = ConvertCpfToArray(cpf);
-	    
+		if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
+			System.out.println("CPF inválido");
+			return false;
+		}
+
+		int[] cpfArray = ConvertCpfToArray(cpf);
+
 		if (IsCpf(1, cpfArray) == true) {
 			System.out.println("é um cpf valido");
 			valid = true;
@@ -121,6 +167,26 @@ public class UserController {
 				return false;
 			}
 		}
+	}
+
+	public void applyChanges(int id, User userCloned) {
+		var storedUser = findUserById(id);
+
+		if (!(storedUser.getName() == userCloned.getName()) && userCloned.getName() != null) {
+			storedUser.setName(userCloned.getName());
+		}
+		if (!(storedUser.getEmail() == userCloned.getEmail()) && userCloned.getEmail() != null) {
+			storedUser.setEmail(userCloned.getEmail());
+		}
+		if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) {
+			storedUser.setCpf(userCloned.getCpf());
+		}
+		if (!(storedUser.getPasswordHash().equals(userCloned.getPasswordHash())
+				&& userCloned.getPasswordHash() != null)) {
+			storedUser.setPasswordHash(userCloned.getPasswordHash());
+			storedUser.setPasswordSalt(userCloned.getPasswordSalt());
+		}
+
 	}
 
 	public static int generateId() {

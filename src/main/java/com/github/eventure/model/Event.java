@@ -5,41 +5,126 @@ import java.util.Date;
 import java.util.List;
 
 public class Event {
-    private int id;
-    private String name;
-    private String description;
-    private String title;
-    private String typeEvent;
-    private String category;
-    private List<Image> images;
-    private Date date;
-    // não sei qual é melhor para armazenar data se é a class Date ou uma string 
-    private LocalTime startHours;
-    private LocalTime endHours;
-    // Ideia para uso seria LocalTime hora = LocalTime.of(14,35); para pegar somente hora e minutos
-    // mesma ideia da data não sei qual é melhor por causa do espaço em memoria ocupado
-    private Address address;
-    
-    public int getId() {
-        return id;
-    }
+	private int id;
+	private String name;
+	private String description;
+	private String title;
+	private EventClassification type;
+	private List<Image> images;
+	private Date date;
+	private LocalTime startHours;
+	private LocalTime endHours;
+	private Address address;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public Event(int id, String name, String description, String title, EventClassification type) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.title = title;
+		this.type = type;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Event(int id, String name, String description, String title, List<Image> images, Date date,
+			LocalTime startHours, LocalTime endHours, Address address) {
 
-    public void setName(String name) {
-        this.name = name;
-    }
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.title = title;
+		this.images = images;
+		this.date = date;
+		this.startHours = startHours;
+		this.endHours = endHours;
+		this.address = address;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("Evento(id=%d, name=%s)", id, name);
-    }
+	public Event() {
+
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public LocalTime getStartHours() {
+		return startHours;
+	}
+
+	public void setStartHours(LocalTime startHours) {
+		this.startHours = startHours;
+	}
+
+	public LocalTime getEndHours() {
+		return endHours;
+	}
+
+	public void setEndHours(LocalTime endHours) {
+		this.endHours = endHours;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public EventClassification getType() {
+		return type;
+	}
+
+	public void setType(EventClassification type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Evento(id=%d, name=%s)", id, name);
+	}
 
 }
-
