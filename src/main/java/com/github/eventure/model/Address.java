@@ -1,23 +1,22 @@
 package com.github.eventure.model;
 
 public class Address {
-    private String localName;
-    private String adress;
-    private String street;
-    private String state;
-    private String district;
-    private String city;
-    private String cep;
-    private int idUser;
-    public Address()
-    {
-    	
-    }
-    
-    
+	private String localName;
+	private String adress;
+	private String street;
+	private String state;
+	private String district;
+	private String city;
+	private String cep;
+	private int idUser;
+
+	public Address() {
+
+	}
+
 	public Address(String localName, String adress, String street, String state, String district, String city,
-			String cep ,  int idUser) {
-		
+			String cep, int idUser) {
+
 		this.localName = localName;
 		this.adress = adress;
 		this.street = street;
@@ -27,16 +26,15 @@ public class Address {
 		this.cep = cep;
 		this.idUser = idUser;
 	}
-    
 
-	public void setLocalName(String localName)
-	{
+	public void setLocalName(String localName) {
 		this.localName = localName;
 	}
-	public String getLocalName()
-	{
+
+	public String getLocalName() {
 		return this.localName;
 	}
+
 	public String getAdress() {
 		return adress;
 	}
@@ -85,15 +83,12 @@ public class Address {
 		this.cep = cep;
 	}
 
-
 	public int getIdUser() {
 		return idUser;
 	}
 
-
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-	
 
 }

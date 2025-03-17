@@ -22,7 +22,7 @@ public class UserController {
 		var u = new User();
 		u.setName(firstName + " " + lastName);
 		EmailController emailTest = new EmailController();
-		boolean verdade_ou_nao = emailTest.ValidarEmail(email);
+		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
 		if (verdade_ou_nao) {
 			u.setEmail(emailTest.getEmail());
@@ -48,26 +48,26 @@ public class UserController {
 		return u;
 	}
 
+	public void createUser(User u) {
+		EmailController eController = new EmailController();
+		boolean isAllCorrect = true;
 
-    public void createUser(User u) {
-        EmailController eController = new EmailController();
-        boolean isAllCorrect = true;
+		if (!eController.ValidateEmail(u.getEmail()))
+			isAllCorrect = false;
+		if (!validateCpf(u.getCpf()))
+			isAllCorrect = false;
 
-        if (!eController.ValidarEmail(u.getEmail())) isAllCorrect = false;
-        if (!validateCpf(u.getCpf())) isAllCorrect = false;
-
-
-        if (isAllCorrect) {
-            userStorage.add(u);
-        }
-    }
+		if (isAllCorrect) {
+			userStorage.add(u);
+		}
+	}
 
 	public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
 		// Instantiate the user
 		var userCloned = new User();
 		userCloned.setName(firstName + " " + lastName);
 		EmailController emailTest = new EmailController();
-		boolean verdade_ou_nao = emailTest.ValidarEmail(email);
+		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
 		if (verdade_ou_nao) {
 			userCloned.setEmail(emailTest.getEmail());

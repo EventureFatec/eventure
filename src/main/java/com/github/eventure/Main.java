@@ -50,13 +50,7 @@ public class Main {
 		System.out.println(user.getEmail());
 		System.out.println("id do chrystian " + user.getUserId());
         
-//        var d = new Address(" Espaço capela "," 450 " , "rua ronaldo viera" , "São paulo" , "capela" , "lavrinhas" , "1276000" ,id);
-//        var d2 = new Address(" Espaço cruzeiro "," 600 " , "rua dois" , "São paulo" , "centro" , "cruzeiro" , "1270000" , id);
-//
-//        AddressController ad = new AddressController();
-//        ad.createAddres(d);
-//        ad.createAddres(d2);
-//        ad.imprimir();
+		
         EventController e = new EventController();
         EventClassification type = EventClassification.SCIENTIFIC;
         EventClassification type2 = EventClassification.PARTIES_AND_SHOWS;
@@ -69,7 +63,7 @@ public class Main {
         lista.add(type3);
         lista.add(type);
 //        e.imprimir();
-        e.filtro(lista);
+        e.filterCategories(lista);
         
         
 //        System.out.println(type.getLabel());

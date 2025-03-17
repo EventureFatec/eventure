@@ -6,7 +6,6 @@ import com.github.eventure.storage.Storage;
 public class AddressController {
 	
 	private Storage<Address> addressStorage;
-	private Address address;
 	public AddressController()
 	{
 		if(addressStorage == null)
@@ -14,13 +13,13 @@ public class AddressController {
 			addressStorage = new Storage<Address>();	
 		}
 	}
-	public void createAddres(Address address)
+	public void createAddres(String localName , String city , String state ,String district , String street , String cep , String address , int idUser)
 	{
-		 this.address = address;
-		 addressStorage.add(address);
+		 Address ad = new Address(localName,city , state , district ,  street , cep ,  address , idUser);
+		 addressStorage.add(ad);
 	}
 	
-	public void imprimir ()
+	public void print ()
 	{
 		for(Address a : addressStorage)
 		{
