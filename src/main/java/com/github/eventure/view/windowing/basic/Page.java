@@ -29,6 +29,9 @@ public class Page extends JPanel {
         return this.getClass().getSimpleName();
     }
 
+    public String getAnotherPageId(Class<? extends Page> p) {
+        return p.getSimpleName();
+    }
 
     public void switchPage(String id) {
         if (parentRootPanel == null) {

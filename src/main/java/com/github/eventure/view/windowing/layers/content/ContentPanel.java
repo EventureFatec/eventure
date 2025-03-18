@@ -51,7 +51,7 @@ public class ContentPanel extends JPanel {
         }
     }
 
-    private void addPage(Page p) {
+    private <T extends Page> void addPage(T p) {
         add(p, p.getPageId());
     }
 

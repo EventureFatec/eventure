@@ -17,7 +17,7 @@ public class SecondaryPage extends Page {
 
         tempButton = new JButton("Previous Page");
         tempButton.addActionListener((ActionEvent _) -> {
-            switchPage(HomePage.class.getSimpleName());
+            switchPage(getAnotherPageId(HomePage.class));
         });
         add(tempButton);
     }
