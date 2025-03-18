@@ -8,6 +8,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class Page extends JPanel {
     private static final String DEFAULT_CONSTRAINT = "fill";
+    private static final String DEBUG_CONSTRAINT = DEFAULT_CONSTRAINT + ", debug";
     private MigLayout layout;
     private ContentPanel parentRootPanel;
 
@@ -21,7 +22,7 @@ public class Page extends JPanel {
     }
 
     private void setupLayout(String layoutString) {
-        layout = new MigLayout(DEFAULT_CONSTRAINT, layoutString);
+        layout = new MigLayout(DEBUG_CONSTRAINT, layoutString);
         setLayout(layout);
     }
 

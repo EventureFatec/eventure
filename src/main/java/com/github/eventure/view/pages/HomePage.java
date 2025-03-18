@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import net.miginfocom.swing.MigLayout;
 
 import com.github.eventure.view.windowing.basic.Page;
 import com.github.eventure.view.windowing.basic.PageLayouts;
@@ -12,22 +14,16 @@ public class HomePage extends Page {
     private JButton tempButton;
 
     public HomePage() {
-        super(PageLayouts.REGULAR_LAYOUT);
-        add(new JLabel("Hello, World!"), "split 2, center");
+        super(PageLayouts.GALLERY_LAYOUT);
 
-        tempButton = new JButton("Next Page");
-        tempButton.addActionListener((ActionEvent _) -> {
-            switchPage(getPageId(SecondaryPage.class));
-        });
-        add(tempButton, "wrap");
+        add(new JLabel("GALERIA"), "span");
+        add(new JLabel("Example 1"), "");
 
-        add(new JLabel("This is on another line"));
+        var p = new JPanel(new MigLayout("fillx", PageLayouts.REGULAR_LAYOUT));
+        p.add(new JButton("Button 1"), "wrap");
+        p.add(new JButton("Button 2"), "");
 
-
-        JButton exampleButton = new JButton("Página de Exemplo");
-        exampleButton.addActionListener((ActionEvent _) -> {
-            switchPage(getPageId(ExamplePage.class));
-        });
-        add(exampleButton, "wrap");
+        add(p, "wrap");
+        add(new JLabel("Example 3"), "");
     }
 }
