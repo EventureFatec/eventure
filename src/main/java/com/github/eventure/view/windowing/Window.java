@@ -15,8 +15,6 @@ import com.github.eventure.Constants;
 public class Window extends JFrame {
     private final Dimension MINIMUM_SIZE = new Dimension(800, 600);
     private RootPanel rootPanel;
-    // private RootPanel panel;
-    // private LayeredRootPanel panel;
 
     public Window() {
         setupLookAndFeel();
