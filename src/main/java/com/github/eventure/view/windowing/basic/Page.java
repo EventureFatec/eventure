@@ -29,7 +29,7 @@ public class Page extends JPanel {
         return this.getClass().getSimpleName();
     }
 
-    public String getAnotherPageId(Class<? extends Page> p) {
+    public String getPageId(Class<? extends Page> p) {
         return p.getSimpleName();
     }
 

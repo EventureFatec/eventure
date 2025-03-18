@@ -17,7 +17,7 @@ public class HomePage extends Page {
 
         tempButton = new JButton("Next Page");
         tempButton.addActionListener((ActionEvent _) -> {
-            switchPage(getAnotherPageId(SecondaryPage.class));
+            switchPage(getPageId(SecondaryPage.class));
         });
         add(tempButton, "wrap");
 
@@ -26,7 +26,7 @@ public class HomePage extends Page {
 
         JButton exampleButton = new JButton("Página de Exemplo");
         exampleButton.addActionListener((ActionEvent _) -> {
-            switchPage(getAnotherPageId(ExamplePage.class));
+            switchPage(getPageId(ExamplePage.class));
         });
         add(exampleButton, "wrap");
     }
