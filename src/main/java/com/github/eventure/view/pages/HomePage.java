@@ -1,7 +1,5 @@
 package com.github.eventure.view.pages;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,9 +22,11 @@ public class HomePage extends Page {
         b.addActionListener(_ -> {
             sendNotification(new Notification("example notification"));
         });
-        p.add(new JButton("Button 1"), "wrap");
-        p.add(new JButton("Button 2"), "wrap");
-        p.add(b, "");
+        p.add(new JButton("Button 1"), "split 1");
+        var b2 = new JButton("Button 2");
+        b2.addActionListener(_ -> switchPage(getPageId(SecondaryPage.class)));
+        p.add(b2, "wrap");
+        p.add(b, "growx, span");
 
         add(p, "");
         add(new JLabel("Example 3"), "span");
