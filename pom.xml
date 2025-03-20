@@ -62,5 +62,28 @@
             <artifactId>bcprov-jdk18on</artifactId>
             <version>1.80</version>
         </dependency>
+        <!-- Swing -->
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <!-- MigLayout -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.4.2</version>
+        </dependency>
+        <!-- Flat Look and Feel -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-intellij-themes</artifactId>
+            <version>3.5.4</version>
+        </dependency>
     </dependencies>
 </project>
