@@ -1,5 +1,6 @@
 package com.github.eventure.view.windowing;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -13,11 +14,11 @@ import com.github.eventure.Constants;
 
 public class Window extends JFrame {
     private final Dimension MINIMUM_SIZE = new Dimension(800, 600);
-    // private RootPanel panel;
-    private LayeredRootPanel panel;
+    private RootPanel rootPanel;
 
     public Window() {
         setupLookAndFeel();
+        setupLayout();
         setupRootPanel();
         setupBehavior();
     }
@@ -39,10 +40,13 @@ public class Window extends JFrame {
         setVisible(true);
     }
 
+    private void setupLayout() {
+        setLayout(new BorderLayout());
+    }
+
     private void setupRootPanel() {
-        // panel = new RootPanel();
-        panel = new LayeredRootPanel();
-        add(panel);
+        rootPanel = new RootPanel();
+        add(rootPanel, BorderLayout.CENTER);
     }
 
     private void setupLookAndFeel() {
