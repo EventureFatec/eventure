@@ -11,11 +11,11 @@ public class Page extends JPanel {
     private static final String DEBUG_CONSTRAINT = DEFAULT_CONSTRAINT + ", debug";
     private boolean isDefault = false;
     private MigLayout layout;
-    private ContentPanel parentRootPanel;
+    private ContentPanel parentPanel;
 
     public Page(String layoutString, ContentPanel rootPanel) {
         setupLayout(layoutString);
-        parentRootPanel = rootPanel;
+        parentPanel = rootPanel;
     }
 
     public Page(String layoutString) {
@@ -43,14 +43,19 @@ public class Page extends JPanel {
         return isDefault;
     }
 
-    public void switchPage(String id) {
-        if (parentRootPanel == null) {
-            System.out.println(getParent().getClass().getSimpleName());
-            parentRootPanel = (ContentPanel) getParent();
-            System.out.println(parentRootPanel);
+    private void deriveParentIfNeeded() {
+        if (parentPanel == null) {
+            parentPanel = (ContentPanel) getParent();
         }
-        parentRootPanel.switchPage(id);
     }
 
-    public void sendNotification() {}  // TODO: Implement this
+    public void switchPage(String id) {
+        deriveParentIfNeeded();
+        parentPanel.switchPage(id);
+    }
+
+    public void sendNotification(Notification n) {
+        deriveParentIfNeeded();
+        parentPanel.sendNotification(n);
+    }
 }

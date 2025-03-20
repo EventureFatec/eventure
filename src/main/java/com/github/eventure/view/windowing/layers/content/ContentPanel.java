@@ -6,14 +6,18 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JPanel;
 
 import com.github.eventure.reflection.Reflection;
+import com.github.eventure.view.windowing.RootPanel;
+import com.github.eventure.view.windowing.basic.Notification;
 import com.github.eventure.view.windowing.basic.Page;
 
 public class ContentPanel extends JPanel {
     private static final String PAGES_PACKAGE = "com.github.eventure.view.pages";
     private CardLayout panelLayout;
+    private ContentLayer parentLayer;
     private String defaultPageId;
-    
-    public ContentPanel() {
+
+    public ContentPanel(ContentLayer parent) {
+        parentLayer = parent;
         setupLayout();
         addPagesViaReflection();
         showDefault();
@@ -68,5 +72,9 @@ public class ContentPanel extends JPanel {
 
     public void switchPage(String pageId) {
         panelLayout.show(this, pageId);
+    }
+
+    public void sendNotification(Notification n) {
+        parentLayer.sendNotification(n);
     }
 }
