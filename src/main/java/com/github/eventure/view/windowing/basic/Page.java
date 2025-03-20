@@ -9,6 +9,7 @@ import net.miginfocom.swing.MigLayout;
 public class Page extends JPanel {
     private static final String DEFAULT_CONSTRAINT = "fill";
     private static final String DEBUG_CONSTRAINT = DEFAULT_CONSTRAINT + ", debug";
+    private boolean isDefault = false;
     private MigLayout layout;
     private ContentPanel parentRootPanel;
 
@@ -32,6 +33,14 @@ public class Page extends JPanel {
 
     public String getPageId(Class<? extends Page> p) {
         return p.getSimpleName();
+    }
+
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
     }
 
     public void switchPage(String id) {

@@ -13,6 +13,7 @@ public class SecondaryPage extends Page {
 
     public SecondaryPage() {
         super(PageLayouts.REGULAR_LAYOUT);
+        // setDefault(true);
         add(new JLabel("Secondary Page!"), "center, wrap");
 
         tempButton = new JButton("Previous Page");

@@ -11,19 +11,18 @@ import com.github.eventure.view.windowing.basic.Page;
 import com.github.eventure.view.windowing.basic.PageLayouts;
 
 public class HomePage extends Page {
-    private JButton tempButton;
-
     public HomePage() {
         super(PageLayouts.GALLERY_LAYOUT);
+        setDefault(true);
 
         add(new JLabel("GALERIA"), "span");
-        add(new JLabel("Example 1"), "");
+        add(new JLabel("Example 1"), "wrap");
 
         var p = new JPanel(new MigLayout("fillx", PageLayouts.REGULAR_LAYOUT));
         p.add(new JButton("Button 1"), "wrap");
         p.add(new JButton("Button 2"), "");
 
-        add(p, "wrap");
-        add(new JLabel("Example 3"), "");
+        add(p, "");
+        add(new JLabel("Example 3"), "span");
     }
 }

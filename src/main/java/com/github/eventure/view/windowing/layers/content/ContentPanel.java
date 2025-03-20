@@ -11,10 +11,12 @@ import com.github.eventure.view.windowing.basic.Page;
 public class ContentPanel extends JPanel {
     private static final String PAGES_PACKAGE = "com.github.eventure.view.pages";
     private CardLayout panelLayout;
+    private String defaultPageId;
     
     public ContentPanel() {
         setupLayout();
         addPagesViaReflection();
+        showDefault();
     }
 
     private void setupLayout() {
@@ -53,6 +55,15 @@ public class ContentPanel extends JPanel {
 
     private <T extends Page> void addPage(T p) {
         add(p, p.getPageId());
+        if (p.isDefault()) {
+            defaultPageId = p.getPageId();
+        }
+    }
+
+    private void showDefault() {
+        if (defaultPageId != null) {
+            switchPage(defaultPageId);
+        }
     }
 
     public void switchPage(String pageId) {
