@@ -15,7 +15,7 @@ public class Notification extends RoundedPanel {
     private String internalMessage;
 
     public Notification(String message) {
-        super(CORNER_RADIUS);
+        super(CORNER_RADIUS, true);
         internalMessage = message;
         setupLayout();
         setForeground(new Color(255, 0, 0, 0xA0));

@@ -18,10 +18,11 @@ import java.awt.image.Kernel;
 public class RoundedPanel extends JPanel {
     private int cornerRadius;
     private boolean enableBlurring;
+    private RootPanel rootPanel;
 
-    public RoundedPanel(int radius) {
+    public RoundedPanel(int radius, boolean blur) {
         cornerRadius = radius;
-        enableBlurring = false;
+        enableBlurring = blur;
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
     }
@@ -38,9 +39,63 @@ public class RoundedPanel extends JPanel {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
+        // Blurring
+        if (enableBlurring) {
+            // Derive root panel when it does not exist
+            if (rootPanel == null) {
+                deriveRootPanel();
+                System.out.println("Derived root panel");
+            }
+
+            // Capture the component
+            Point locationOnScreen = getLocationOnScreen();
+            BufferedImage bgImage = captureBackground(locationOnScreen, width, height);
+
+            if (bgImage != null) {
+                var blurredImage = applyGaussianBlur(bgImage);
+
+                // Set the clip
+                var roundedClip = new RoundRectangle2D.Float(0, 0, width, height, arcs.width, arcs.height);
+                graphics.setClip(roundedClip);
+
+                // Draw the blurred background
+                graphics.drawImage(blurredImage, 0, 0, null);
+
+                // Remove the clip
+                graphics.setClip(null);
+            }
+        }
+
         renderGraphics(graphics, width - 1, height - 1, arcs.width, arcs.height);
     }
 
+
+    private void deriveRootPanel() {
+        var p = (Component) this;
+        while (rootPanel == null) {
+            p = p.getParent();
+            System.out.println(p);
+            if (p.getClass().equals(RootPanel.class)) {
+                rootPanel = (RootPanel) p;
+            }
+        }
+    }
+
+    private BufferedImage captureBackground(Point p, int width, int height) {
+        var bgComponent = rootPanel.getComponentAt(p);
+
+        if (bgComponent != null) {
+            // Create a new image
+            var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            var graphics = image.createGraphics();
+
+            bgComponent.paint(graphics);
+            graphics.dispose();
+            return image;
+        }
+
+        return null;
+    }
 
     private void renderGraphics(Graphics2D g, int width, int height, int arcWidth, int arcHeight) {
         // Draw background
