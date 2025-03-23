@@ -18,7 +18,7 @@ public class Notification extends RoundedPanel {
         super(CORNER_RADIUS, true);
         internalMessage = message;
         setupLayout();
-        setForeground(new Color(255, 0, 0, 0xA0));
+        setForeground(new Color(255, 0, 0, 0x60));
         var label = new JLabel(message);
         label.setFont(label.getFont().deriveFont(48f));
         add(label);

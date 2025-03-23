@@ -82,19 +82,18 @@ public class RoundedPanel extends JPanel {
     }
 
     private BufferedImage captureBackground(Point p, int width, int height) {
-        var bgComponent = rootPanel.getComponentAt(p);
+        var combinedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        var graphics = combinedImage.createGraphics();
 
-        if (bgComponent != null) {
-            // Create a new image
-            var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            var graphics = image.createGraphics();
-
-            bgComponent.paint(graphics);
-            graphics.dispose();
-            return image;
+        // Get all components in each layer
+        for (int i = JLayeredPane.DEFAULT_LAYER; i <= JLayeredPane.MODAL_LAYER; i++) {
+            for (Component c: rootPanel.getComponentsInLayer(i)) {
+                c.paint(graphics);
+            }
         }
+        graphics.dispose();
 
-        return null;
+        return combinedImage;
     }
 
     private void renderGraphics(Graphics2D g, int width, int height, int arcWidth, int arcHeight) {
