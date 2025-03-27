@@ -36,9 +36,6 @@ public class LoginPage extends Page {
     public void tryLogin() {
         // Verify that user exists
         var account = new Account();
-        var pController = new PasswordController();
-        pController.verifyPassword(inputField.getText(), account.getAccountPassword());
-
         var user = inputField.getText();
         if (user.equals(EXISTING_USERNAME) && Session.login(account)) {
             clearFields();
