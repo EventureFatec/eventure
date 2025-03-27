@@ -17,7 +17,7 @@ public class SecondaryPage extends Page {
         add(new JLabel("Secondary Page!"), "center, wrap");
 
         tempButton = new JButton("Previous Page");
-        tempButton.addActionListener((ActionEvent _) -> {
+        tempButton.addActionListener(event -> {
             switchPage(getPageId(HomePage.class));
         });
         add(tempButton);
