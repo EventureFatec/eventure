@@ -16,12 +16,15 @@ public class Event {
 	private LocalTime endHours;
 	private Address address;
 
-	public Event(int id, String name, String description, String title, EventClassification type) {
+	public Event(int id, String name, String description, String title, EventClassification type , Date date , LocalTime startHours , LocalTime endHours) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.title = title;
 		this.type = type;
+		this.date = date;
+		this.startHours = startHours;
+		this.endHours = endHours;
 	}
 
 	public Event(int id, String name, String description, String title, List<Image> images, Date date,
