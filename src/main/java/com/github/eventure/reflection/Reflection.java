@@ -71,7 +71,7 @@ public class Reflection {
             return null;
         }
 
-        File[] files = directory.listFiles((_, name) -> name.endsWith(".class"));
+        File[] files = directory.listFiles((file, name) -> name.endsWith(".class"));
 
         // Load each class
         for (int i = 0; i < files.length; ++i) {
