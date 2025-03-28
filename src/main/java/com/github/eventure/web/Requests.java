@@ -11,13 +11,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
+
+import java.lang.reflect.Type;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
 public class Requests {
     private static final Gson gson = new Gson();
 
-    public static <T> T get(String address, Class<T> responseModel) {
+    public static <T> T get(String address, Type responseModel) {
         // Create the connection and request
         var httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofMinutes(1))

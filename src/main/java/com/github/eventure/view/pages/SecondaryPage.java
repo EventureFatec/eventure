@@ -1,6 +1,7 @@
 package com.github.eventure.view.pages;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,6 +19,10 @@ public class SecondaryPage extends Page {
     private JButton tempButton;
     private JTextField cepField;
     private JLabel cepLabel;
+    private JTextField ufField;
+    private JTextField cityField;
+    private JTextField streetField;
+    private JLabel addressLabel;
 
     public SecondaryPage() {
         super(PageLayouts.REGULAR_LAYOUT);
@@ -44,6 +49,31 @@ public class SecondaryPage extends Page {
         cepPanel.add(cepLabel);
 
         add(cepPanel, "span");
+
+        var addressPanel = new JPanel(new MigLayout("fill", PageLayouts.REGULAR_LAYOUT));
+
+        ufField = new JTextField();
+        ufField.setFont(ufField.getFont().deriveFont(24f));
+        addressPanel.add(ufField, "grow, split 2");
+
+        cityField = new JTextField();
+        cityField.setFont(cityField.getFont().deriveFont(24f));
+        addressPanel.add(cityField, "grow");
+
+        streetField = new JTextField();
+        streetField.setFont(streetField.getFont().deriveFont(24f));
+        addressPanel.add(streetField, "grow, span, push");
+
+        var addressButton = new JButton("Buscar Endereço");
+        addressButton.setFont(addressButton.getFont().deriveFont(24f));
+        addressButton.addActionListener(event -> tryFindingStreet());
+        addressPanel.add(addressButton, "grow, span, wrap");
+
+        addressLabel = new JLabel("Endereço: ");
+        addressLabel.setFont(addressLabel.getFont().deriveFont(16f));
+        addressPanel.add(addressLabel, "align left, grow, span");
+
+        add(addressPanel, "growx");
     }
 
     private void tryFindingCPF() {
@@ -53,6 +83,16 @@ public class SecondaryPage extends Page {
             cepLabel.setText("CEP: " + cep.toString());
         } else {
             cepLabel.setText("CEP: ");
+        }
+    }
+
+    private void tryFindingStreet() {
+        var aController = new AddressController();
+        ArrayList<Cep> cep;
+        if ((cep = aController.searchAddressOnViacep(ufField.getText(), cityField.getText(), streetField.getText())) != null) {
+            addressLabel.setText("Endereço: " + cep.getFirst().toString());
+        } else {
+            addressLabel.setText("Endereço: ");
         }
     }
 }

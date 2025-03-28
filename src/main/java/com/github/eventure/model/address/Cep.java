@@ -3,7 +3,7 @@ package com.github.eventure.model.address;
 import com.google.gson.annotations.SerializedName;
 
 public class Cep {
-    public static final String VIACEP_URL = "https://viacep.com.br/ws/";
+    public static final String VIACEP_URL = "https://viacep.com.br/ws";
     private String cep;
     private @SerializedName("logradouro") String street;
     private @SerializedName("complemento") String complement;
