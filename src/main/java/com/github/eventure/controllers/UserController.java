@@ -127,6 +127,18 @@ public class UserController {
 	public User findUserById(int id) {
 		return userStorage.find(user -> user.getUserId() == id).findFirst().orElse(null);
 	}
+	
+	public boolean isOrganizador(int id)
+	{
+		User u = findUserById(id);
+		if(u.isOrganazador() == true)
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
+	}
 
 	public boolean validateCpf(String cpf) {
 
