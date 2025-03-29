@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+import com.github.eventure.model.address.Address;
+
 public class Event {
 	private int id;
 	private String name;
@@ -15,7 +17,7 @@ public class Event {
 	private LocalTime startHours;
 	private LocalTime endHours;
 	private Address address;
-
+    
 	public Event(int id, String name, String description, String title, EventClassification type) {
 		this.id = id;
 		this.name = name;
@@ -25,7 +27,7 @@ public class Event {
 	}
 
 	public Event(int id, String name, String description, String title, List<Image> images, Date date,
-			LocalTime startHours, LocalTime endHours, Address address) {
+			LocalTime startHours, LocalTime endHours ,Address address) {
 
 		this.id = id;
 		this.name = name;

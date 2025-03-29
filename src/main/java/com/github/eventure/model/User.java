@@ -8,7 +8,7 @@ public class User {
 	private byte[] passwordHash;
 	private int userId;
 	private String cpf;
-
+    private boolean organazador = false;
 	public String getName() {
 		return this.name;
 	}
@@ -56,4 +56,13 @@ public class User {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+
+	public boolean isOrganazador() {
+		return organazador;
+	}
+
+	public void setOrganazador(boolean organazador) {
+		this.organazador = organazador;
+	}
+	
 }
