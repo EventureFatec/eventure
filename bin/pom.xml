@@ -54,8 +54,13 @@
         </plugins>
     </build>
 
-    <!-- TODO: Add dependencies -->
     <!-- Dependencies -->
-    <!-- <dependencies> -->
-    <!-- </dependencies> -->
+    <dependencies>
+        <!-- Encryption -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.80</version>
+        </dependency>
+    </dependencies>
 </project>
