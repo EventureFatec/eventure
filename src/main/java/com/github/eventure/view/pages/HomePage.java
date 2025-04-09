@@ -14,13 +14,13 @@ import com.github.eventure.view.windowing.basic.Notification;
 public class HomePage extends Page {
     public HomePage() {
         super(PageLayouts.GALLERY_LAYOUT);
-        // setDefault(true);
+         setDefault(true);
 
         var gallery = new JLabel("GALERIA");
         gallery.setFont(gallery.getFont().deriveFont(48f));
         add(gallery, "span");
         add(new JLabel("Example 1"), "wrap");
-
+        System.out.println("test");
         var p = new JPanel(new MigLayout("fillx", PageLayouts.REGULAR_LAYOUT));
         var b = new JButton("Send Notification");
         b.addActionListener(event -> {

@@ -1,8 +1,8 @@
+
 package com.github.eventure.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.storage.Storage;

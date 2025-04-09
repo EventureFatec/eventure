@@ -16,7 +16,32 @@ public class UserController {
 			userStorage = new Storage<User>();
 		}
 	}
+	public User createUser(String firstName, String lastName, String password, String email) {
+		// Instantiate the user
+		var u = new User();
+		u.setName(firstName + " " + lastName);
+		EmailController emailTest = new EmailController();
+		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
+		if (verdade_ou_nao) {
+			u.setEmail(emailTest.getEmail());
+		}
+		
+		// Create the password hash
+		var salt = Encryption.generateSalt();
+		var hash = Encryption.generateHash(password, salt);
+		u.setPasswordSalt(salt);
+		u.setPasswordHash(hash);
+
+		if (u.getName() != null && u.getPasswordHash() != null && u.getName() != null ) {
+			int id = UserController.generateId();
+			u.setUserId(id);
+			userStorage.add(u);
+		}
+
+		// Return the user
+		return u;
+	}
 	public User createUser(String firstName, String lastName, String password, String email, String cpf) {
 		// Instantiate the user
 		var u = new User();
@@ -31,6 +56,7 @@ public class UserController {
 
 		if (cpfValid) {
 			u.setCpf(cpf);
+			u.setOrganazador(true);
 		}
 		// Create the password hash
 		var salt = Encryption.generateSalt();
@@ -100,6 +126,18 @@ public class UserController {
 
 	public User findUserById(int id) {
 		return userStorage.find(user -> user.getUserId() == id).findFirst().orElse(null);
+	}
+	
+	public boolean isOrganizador(int id)
+	{
+		User u = findUserById(id);
+		if(u.isOrganazador() == true)
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
 
 	public boolean validateCpf(String cpf) {

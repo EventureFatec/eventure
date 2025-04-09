@@ -17,7 +17,8 @@ public class LoginPage extends Page {
 
     public LoginPage() {
         super(PageLayouts.REGULAR_LAYOUT);
-        setDefault(true);
+//        5
+//       setDefault(true);
 
 
         inputField = new JTextField();

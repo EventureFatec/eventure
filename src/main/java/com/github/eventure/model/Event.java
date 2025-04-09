@@ -17,7 +17,7 @@ public class Event {
 	private LocalTime startHours;
 	private LocalTime endHours;
 	private Address address;
-
+    
 	public Event(int id, String name, String description, String title, EventClassification type) {
 		this.id = id;
 		this.name = name;
@@ -27,7 +27,7 @@ public class Event {
 	}
 
 	public Event(int id, String name, String description, String title, List<Image> images, Date date,
-			LocalTime startHours, LocalTime endHours, Address address) {
+			LocalTime startHours, LocalTime endHours ,Address address) {
 
 		this.id = id;
 		this.name = name;
