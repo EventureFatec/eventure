@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+import com.github.eventure.model.address.Address;
+
 public class Event {
 	private int id;
 	private String name;
