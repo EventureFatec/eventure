@@ -1,9 +1,10 @@
 package com.github.eventure;
 
-import com.github.eventure.view.windowing.Window;
+import com.github.eventure.view.TelaCadastro;
 
 public class Main {
     public static void main(String[] args) {
-        Window.run();
+       TelaCadastro tela = new TelaCadastro(); 
+       tela.setVisible(true);
     }
 }
