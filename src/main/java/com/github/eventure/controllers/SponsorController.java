@@ -13,7 +13,7 @@ public class SponsorController {
         } // always execute first to ensure that it's instanced
     }
 
-    private void createSponsor(String name,String bussinessEmail, String cep, String cnpj) {
+    public Sponsor createSponsor(String name,String bussinessEmail, String cep, long cnpj) {
         // create a sponsor var
         var sponsor = new Sponsor();
 
@@ -35,5 +35,18 @@ public class SponsorController {
             sponsor.setBussinessEmail(bussinessEmail); // sets the email in the Storage
             sponsor.setCnpj(cnpj); // sets the CNPJ in the Storage
         }
+        return sponsor;
+    }
+
+        public void createSponsor(Sponsor sponsor) {
+            EmailController eController = new EmailController();
+            CnpjController cController = new CnpjController();
+            boolean isAllCorrect = true;
+
+            if (!eController.ValidateEmail(sponsor.getBussinessEmail()) && !cController.isCnpjValid(sponsor.getCnpj())) {
+                isAllCorrect = false;
+            } else {
+                sponsorStorage.add(sponsor);
+            }
     }
 }

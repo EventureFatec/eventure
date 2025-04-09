@@ -7,7 +7,7 @@ public class Sponsor {
     private String name;
     private String bussinessEmail;
     private Address address;
-    private int cnpj;
+    private long cnpj;
     private int idSponsor;
 //  private Event event; Future plans if we have time
 
@@ -35,11 +35,11 @@ public class Sponsor {
         this.address = address;
     }
 
-    public int getCnpj() {
+    public long getCnpj() {
         return cnpj;
     }
 
-    public void setCnpj(int cnpj) {
+    public void setCnpj(long cnpj) {
         this.cnpj = cnpj;
     }
 
