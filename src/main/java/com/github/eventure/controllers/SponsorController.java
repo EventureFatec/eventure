@@ -6,6 +6,7 @@ import com.github.eventure.model.Sponsor;
 import com.github.eventure.storage.Storage;
 
 public class SponsorController {
+    private static int lastGeneratedId = 0;
     private Storage<Sponsor> sponsorStorage;
     public SponsorController() {
         if (sponsorStorage == null) {
@@ -49,4 +50,31 @@ public class SponsorController {
                 sponsorStorage.add(sponsor);
             }
     }
-}
+
+        public void deleteSponsor(Sponsor sponsor) {
+            sponsorStorage.remove(sponsor);
+        }
+
+        public Sponsor findSponsor(int idSponsor) {
+            return sponsorStorage.find(sponsor -> sponsor.getIdSponsor() == idSponsor).findFirst().orElse(null);
+        }
+
+        public void cloneSponsor(String name,String bussinessEmail, String cep, long cnpj) {
+            var sponsorCloned = new Sponsor();
+            sponsorCloned.setName(name);
+            EmailController emailController = new EmailController(); 
+            CnpjController cnpjController = new CnpjController();
+
+            boolean emailIsCorrect = emailController.ValidateEmail(bussinessEmail);
+            boolean cnpjIsCorrect = cnpjController.isCnpjValid(cnpj);
+
+            if(emailIsCorrect && cnpjIsCorrect) {
+                sponsorCloned.setBussinessEmail(bussinessEmail);
+                sponsorCloned.setCnpj(cnpj);
+            }
+        }
+        
+       	public static int generateId() {
+	    	return lastGeneratedId++;
+	}
+    }
