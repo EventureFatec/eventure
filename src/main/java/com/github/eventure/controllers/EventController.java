@@ -19,16 +19,18 @@ public class EventController {
 			eventController = new Storage<Event>();
 		}
 	}
-	public void createEvent(int id, String name, String description, String title, EventClassification type , Date date ,LocalTime startHours,
-			 LocalTime endHours , Cep cep) {	
-				var e = new Event(id,name,description,title,type,date,startHours,endHours,cep);
-				eventController.add(e);
-				
-			}
+
+	public void createEvent(int id, String name, String description, String title, EventClassification type, Date date,
+			LocalTime startHours, LocalTime endHours, Cep cep) {
+		var e = new Event(id, name, description, title, type, date, startHours, endHours, cep);
+		eventController.add(e);
+
+	}
+
 	public void createEvent(int id, String name, String description, String title, EventClassification type) {
 		var e = new Event(id, name, description, title, type);
 		eventController.add(e);
-        System.out.println("deu certo");
+		System.out.println("deu certo");
 	}
 
 	public void print(List<Event> eventos) {
@@ -49,6 +51,7 @@ public class EventController {
 		}
 
 	}
+
 	public void print() {
 		for (Event eb : eventController) {
 			System.out.println(eb.getId());

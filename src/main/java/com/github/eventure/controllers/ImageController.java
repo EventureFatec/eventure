@@ -33,10 +33,10 @@ public class ImageController {
 		return imagePath;
 	}
 
-    public JLabel carregarImagem(String imagePath) throws IOException {
-        BufferedImage myPicture = ImageIO.read(new File(imagePath)); 
-        JLabel picLabel = new JLabel();
-        picLabel.setIcon(new ImageIcon(myPicture));
-        return picLabel;
-    }
+	public JLabel carregarImagem(String imagePath) throws IOException {
+		BufferedImage myPicture = ImageIO.read(new File(imagePath));
+		JLabel picLabel = new JLabel();
+		picLabel.setIcon(new ImageIcon(myPicture));
+		return picLabel;
+	}
 }

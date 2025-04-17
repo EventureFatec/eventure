@@ -19,7 +19,7 @@ public class Event {
 	private LocalTime endHours;
 	private Address address;
 	private Cep cep;
-    
+
 	public Event(int id, String name, String description, String title, EventClassification type) {
 		this.id = id;
 		this.name = name;
@@ -27,8 +27,6 @@ public class Event {
 		this.title = title;
 		this.type = type;
 	}
-
-   
 
 	public Event(int id, String name, String description, String title, EventClassification type, Date date,
 			LocalTime startHours, LocalTime endHours, Cep cep) {
@@ -43,8 +41,6 @@ public class Event {
 		this.endHours = endHours;
 		this.cep = cep;
 	}
-
-
 
 	public Event() {
 
@@ -65,6 +61,7 @@ public class Event {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public Cep getCep() {
 		return cep;
 	}
