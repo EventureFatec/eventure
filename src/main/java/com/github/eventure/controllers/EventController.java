@@ -49,11 +49,11 @@ public class EventController {
 	public void deleteEventById(int id)
 	{
 		// deletar caso o que eu tenha seja o id da empresa 
-		var e = findEnterpriseById(id);
+		var e = findEventById(id);
 		eventController.remove(e);
 	}
 	
-	public Event findEnterpriseById(int id)
+	public Event findEventById(int id)
 	{
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
