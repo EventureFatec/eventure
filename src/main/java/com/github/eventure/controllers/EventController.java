@@ -13,7 +13,7 @@ import com.github.eventure.storage.Storage;
 
 public class EventController {
 	private Storage<Event> eventController;
-
+	private static int lastGeneratedId = 0;
 	public EventController() {
 		if (eventController == null) {
 			eventController = new Storage<Event>();
@@ -21,8 +21,17 @@ public class EventController {
 	}
 
 	public void createEvent(int id, String name, String description, String title, EventClassification type, Date date,
-			LocalTime startHours, LocalTime endHours, Cep cep) {
-		var e = new Event(id, name, description, title, type, date, startHours, endHours, cep);
+		LocalTime startHours, LocalTime endHours, Cep cep) {
+		var e = new Event();
+		e.setName(name);
+		e.setDescription(description);
+		e.setTitle(title);
+		e.setType(type);
+		e.setDate(date);
+		e.setStartHours(startHours);
+		e.setEndHours(endHours);
+		e.setCep(cep);
+		e.setId(generateId());
 		eventController.add(e);
 
 	}
@@ -32,7 +41,24 @@ public class EventController {
 		eventController.add(e);
 		System.out.println("deu certo");
 	}
-
+	public void deleteEvent(Event e)
+	{
+		eventController.remove(e);
+	}
+	
+	public void deleteEventById(int id)
+	{
+		// deletar caso o que eu tenha seja o id da empresa 
+		var e = findEnterpriseById(id);
+		eventController.remove(e);
+	}
+	
+	public Event findEnterpriseById(int id)
+	{
+		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
+	}
+    
+	
 	public void print(List<Event> eventos) {
 		for (Event eb : eventos) {
 			System.out.println(eb.getId());
@@ -74,5 +100,8 @@ public class EventController {
 	public void filterCategories(List<EventClassification> o) {
 		List<Event> eventos = eventController.find(event -> o.contains(event.getType())).collect(Collectors.toList());
 		print(eventos);
+	}
+	public static int generateId() {
+		return lastGeneratedId++;
 	}
 }

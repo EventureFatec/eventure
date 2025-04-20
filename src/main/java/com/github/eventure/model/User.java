@@ -1,11 +1,14 @@
 package com.github.eventure.model;
 
+import com.github.eventure.model.passwords.Password;
+
 public class User {
 
 	private String name;
 	private String email;
 	private byte[] passwordSalt;
 	private byte[] passwordHash;
+	private Password password;
 	private int userId;
 	private String cpf;
     private boolean organazador = false;
@@ -15,6 +18,15 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+
+	public Password getPassword() {
+		return password;
+	}
+
+	public void setPassword(Password password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
