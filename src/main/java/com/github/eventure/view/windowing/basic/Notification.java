@@ -15,12 +15,12 @@ public class Notification extends RoundedPanel {
     private String internalMessage;
 
     public Notification(String message) {
-        super(CORNER_RADIUS, true);
+        super(CORNER_RADIUS, false);
         internalMessage = message;
         setupLayout();
         setForeground(new Color(255, 0, 0, 0x60));
         var label = new JLabel(message);
-        label.setFont(label.getFont().deriveFont(48f));
+        label.setFont(label.getFont().deriveFont(20f));
         add(label);
     }
 
