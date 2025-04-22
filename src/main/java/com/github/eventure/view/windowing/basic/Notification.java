@@ -1,9 +1,11 @@
 package com.github.eventure.view.windowing.basic;
 
 import java.awt.Color;
+import java.awt.Container;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+//import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import com.github.eventure.view.windowing.RoundedPanel;
 
@@ -22,6 +24,15 @@ public class Notification extends RoundedPanel {
         var label = new JLabel(message);
         label.setFont(label.getFont().deriveFont(20f));
         add(label);
+
+        new Timer(3000, e -> {
+            Container parent = getParent();
+            if (parent != null) {
+                parent.remove(this);
+                parent.revalidate();
+                parent.repaint();
+            }
+        }).start();
     }
 
     private void setupLayout() {
