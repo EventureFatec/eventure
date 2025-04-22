@@ -20,11 +20,15 @@ public class HomePage extends Page {
 
         // Painel de botões (comentado para manter só o botão de cadastro)
         // var p = new JPanel(new MigLayout("fillx", PageLayouts.REGULAR_LAYOUT));
-        var cadastroUsuarioBtn = new JButton("Cadastrar Usuário");
+        var cadastroUsuarioBtn = new JButton("Cadastrar");
         cadastroUsuarioBtn.addActionListener(event -> {
             switchPage(getPageId(RegisterPage.class));
         });
         add(cadastroUsuarioBtn, "center");
+
+        var loginBtn = new JButton("Entrar");
+        loginBtn.addActionListener(e -> {switchPage(getPageId(LoginPage.class));});
+        add(loginBtn, "center");
 
         // Exemplo de botões anteriores (comentados)
         // p.add(new JButton("Button 1"), "split 1");

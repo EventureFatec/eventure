@@ -23,7 +23,7 @@ public class Page extends JPanel {
     }
 
     private void setupLayout(String layoutString) {
-        layout = new MigLayout(DEBUG_CONSTRAINT, layoutString);
+        layout = new MigLayout(DEFAULT_CONSTRAINT, layoutString);
         setLayout(layout);
     }
 
