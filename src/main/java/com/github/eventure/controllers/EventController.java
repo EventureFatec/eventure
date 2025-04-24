@@ -14,6 +14,7 @@ import com.github.eventure.storage.Storage;
 public class EventController {
 	private Storage<Event> eventController;
 	private static int lastGeneratedId = 0;
+
 	public EventController() {
 		if (eventController == null) {
 			eventController = new Storage<Event>();
@@ -21,7 +22,7 @@ public class EventController {
 	}
 
 	public void createEvent(String name, String description, String title, EventClassification type, Date date,
-		LocalTime startHours, LocalTime endHours, Cep cep) {
+			LocalTime startHours, LocalTime endHours, Cep cep) {
 		var e = new Event();
 		e.setName(name);
 		e.setDescription(description);
@@ -41,25 +42,23 @@ public class EventController {
 		eventController.add(e);
 		System.out.println("deu certo");
 	}
-	public void deleteEvent(Event e)
-	{
+
+	public void deleteEvent(Event e) {
 		eventController.remove(e);
 	}
-	
-	public void deleteEventById(int id)
-	{
-		// deletar caso o que eu tenha seja o id da empresa 
+
+	public void deleteEventById(int id) {
+		// deletar caso o que eu tenha seja o id da empresa
 		var e = findEventById(id);
 		eventController.remove(e);
 	}
-	
-	public Event findEventById(int id)
-	{
+
+	public Event findEventById(int id) {
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
-    public void eventClone(String name, String description, String title, EventClassification type, Date date,
-    		LocalTime startHours, LocalTime endHours, Cep cep , int id)
-    {
+
+	public void eventClone(String name, String description, String title, EventClassification type, Date date,
+			LocalTime startHours, LocalTime endHours, Cep cep, int id) {
 		var eventClone = new Event();
 		eventClone.setName(name);
 		eventClone.setDescription(description);
@@ -70,45 +69,41 @@ public class EventController {
 		eventClone.setEndHours(endHours);
 		eventClone.setCep(cep);
 		eventClone.setId(id);
-		applyChanges(id,eventClone);
-    }
-	public void applyChanges(int id , Event eventClone)
-	{
+		applyChanges(id, eventClone);
+	}
+
+	public void applyChanges(int id, Event eventClone) {
 		var event = findEventById(id);
-		if(event == null)
-		{
+		if (event == null) {
 			return;
 		}
-		if (eventClone.getName() != null && !eventClone.getName().trim().isEmpty() &&
-			    !eventClone.getName().equals(event.getName())) {
-			    event.setName(eventClone.getName());
-			}
+		if (eventClone.getName() != null && !eventClone.getName().trim().isEmpty()
+				&& !eventClone.getName().equals(event.getName())) {
+			event.setName(eventClone.getName());
+		}
 
-		if(eventClone.getDescription() != null && !eventClone.getDescription().trim().isEmpty() && !(eventClone.getDescription().equals(event.getDescription())))
-		{
+		if (eventClone.getDescription() != null && !eventClone.getDescription().trim().isEmpty()
+				&& !(eventClone.getDescription().equals(event.getDescription()))) {
 			event.setDescription(eventClone.getDescription());
 		}
-		if(eventClone.getTitle() != null && !eventClone.getTitle().trim().isEmpty() && !(eventClone.getTitle().equals(event.getTitle())))
-		{
+		if (eventClone.getTitle() != null && !eventClone.getTitle().trim().isEmpty()
+				&& !(eventClone.getTitle().equals(event.getTitle()))) {
 			event.setTitle(eventClone.getTitle());
 		}
-		if(eventClone.getDate() != null && !(eventClone.getDate().equals(event.getDate())))
-		{
+		if (eventClone.getDate() != null && !(eventClone.getDate().equals(event.getDate()))) {
 			event.setDate(eventClone.getDate());
 		}
-		if(eventClone.getStartHours() != null && !(eventClone.getStartHours().equals(event.getStartHours())))
-		{
+		if (eventClone.getStartHours() != null && !(eventClone.getStartHours().equals(event.getStartHours()))) {
 			event.setStartHours(eventClone.getStartHours());
 		}
-		if(eventClone.getEndHours() != null && !(eventClone.getEndHours().equals(event.getEndHours())))
-		{
+		if (eventClone.getEndHours() != null && !(eventClone.getEndHours().equals(event.getEndHours()))) {
 			event.setEndHours(eventClone.getEndHours());
 		}
-		if(eventClone.getCep() != null && !(eventClone.getCep().equals(event.getCep())))
-		{
+		if (eventClone.getCep() != null && !(eventClone.getCep().equals(event.getCep()))) {
 			event.setCep(eventClone.getCep());
 		}
 	}
+
 	public void print(List<Event> eventos) {
 		for (Event eb : eventos) {
 			System.out.println(eb.getId());
@@ -151,6 +146,7 @@ public class EventController {
 		List<Event> eventos = eventController.find(event -> o.contains(event.getType())).collect(Collectors.toList());
 		print(eventos);
 	}
+
 	public static int generateId() {
 		return lastGeneratedId++;
 	}

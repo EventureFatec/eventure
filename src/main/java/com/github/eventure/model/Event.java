@@ -65,10 +65,11 @@ public class Event {
 	public Cep getCep() {
 		return cep;
 	}
-    public void setCep(Cep cep)
-    {
-    	this.cep = cep;
-    }
+
+	public void setCep(Cep cep) {
+		this.cep = cep;
+	}
+
 	public void setName(Cep cep) {
 		this.cep = cep;
 	}
