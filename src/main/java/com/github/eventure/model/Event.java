@@ -66,6 +66,10 @@ public class Event {
 		return cep;
 	}
 
+	public void setCep(Cep cep) {
+		this.cep = cep;
+	}
+
 	public void setName(Cep cep) {
 		this.cep = cep;
 	}
