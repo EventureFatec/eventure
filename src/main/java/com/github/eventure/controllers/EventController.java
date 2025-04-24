@@ -20,7 +20,7 @@ public class EventController {
 		}
 	}
 
-	public void createEvent(int id, String name, String description, String title, EventClassification type, Date date,
+	public void createEvent(String name, String description, String title, EventClassification type, Date date,
 		LocalTime startHours, LocalTime endHours, Cep cep) {
 		var e = new Event();
 		e.setName(name);
@@ -57,8 +57,58 @@ public class EventController {
 	{
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
-    
-	
+    public void eventClone(String name, String description, String title, EventClassification type, Date date,
+    		LocalTime startHours, LocalTime endHours, Cep cep , int id)
+    {
+		var eventClone = new Event();
+		eventClone.setName(name);
+		eventClone.setDescription(description);
+		eventClone.setTitle(title);
+		eventClone.setType(type);
+		eventClone.setDate(date);
+		eventClone.setStartHours(startHours);
+		eventClone.setEndHours(endHours);
+		eventClone.setCep(cep);
+		eventClone.setId(id);
+		applyChanges(id,eventClone);
+    }
+	public void applyChanges(int id , Event eventClone)
+	{
+		var event = findEventById(id);
+		if(event == null)
+		{
+			return;
+		}
+		if (eventClone.getName() != null && !eventClone.getName().trim().isEmpty() &&
+			    !eventClone.getName().equals(event.getName())) {
+			    event.setName(eventClone.getName());
+			}
+
+		if(eventClone.getDescription() != null && !eventClone.getDescription().trim().isEmpty() && !(eventClone.getDescription().equals(event.getDescription())))
+		{
+			event.setDescription(eventClone.getDescription());
+		}
+		if(eventClone.getTitle() != null && !eventClone.getTitle().trim().isEmpty() && !(eventClone.getTitle().equals(event.getTitle())))
+		{
+			event.setTitle(eventClone.getTitle());
+		}
+		if(eventClone.getDate() != null && !(eventClone.getDate().equals(event.getDate())))
+		{
+			event.setDate(eventClone.getDate());
+		}
+		if(eventClone.getStartHours() != null && !(eventClone.getStartHours().equals(event.getStartHours())))
+		{
+			event.setStartHours(eventClone.getStartHours());
+		}
+		if(eventClone.getEndHours() != null && !(eventClone.getEndHours().equals(event.getEndHours())))
+		{
+			event.setEndHours(eventClone.getEndHours());
+		}
+		if(eventClone.getCep() != null && !(eventClone.getCep().equals(event.getCep())))
+		{
+			event.setCep(eventClone.getCep());
+		}
+	}
 	public void print(List<Event> eventos) {
 		for (Event eb : eventos) {
 			System.out.println(eb.getId());
