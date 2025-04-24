@@ -6,8 +6,6 @@ public class User {
 
 	private String name;
 	private String email;
-	private byte[] passwordSalt;
-	private byte[] passwordHash;
 	private Password password;
 	private int userId;
 	private String cpf;
@@ -35,22 +33,6 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public byte[] getPasswordHash() {
-		return passwordHash;
-	}
-
-	public void setPasswordHash(byte[] passwordHash) {
-		this.passwordHash = passwordHash;
-	}
-
-	public byte[] getPasswordSalt() {
-		return passwordSalt;
-	}
-
-	public void setPasswordSalt(byte[] passwordSalt) {
-		this.passwordSalt = passwordSalt;
 	}
 
 	public int getUserId() {

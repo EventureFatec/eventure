@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.github.eventure.encryption.Encryption;
 import com.github.eventure.model.User;
+import com.github.eventure.model.passwords.Password;
 import com.github.eventure.storage.Storage;
 
 public class UserController {
@@ -31,10 +32,11 @@ public class UserController {
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
-		u.setPasswordSalt(salt);
-		u.setPasswordHash(hash);
-
-		if (u.getName() != null && u.getPasswordHash() != null && u.getName() != null) {
+		var passwordClass = new Password();
+        passwordClass.setPasswordSalt(salt);
+        passwordClass.setPasswordHash(hash);
+        u.setPassword(passwordClass);
+		if (u.getName() != null && u.getPassword() != null && verdade_ou_nao) {
 			int id = UserController.generateId();
 			u.setUserId(id);
 			userStorage.add(u);
@@ -63,10 +65,11 @@ public class UserController {
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
-		u.setPasswordSalt(salt);
-		u.setPasswordHash(hash);
-
-		if (u.getName() != null && u.getPasswordHash() != null && u.getName() != null && cpfValid) {
+		var passwordClass = new Password();
+        passwordClass.setPasswordSalt(salt);
+        passwordClass.setPasswordHash(hash);
+        u.setPassword(passwordClass);
+		if (u.getName() != null && u.getPassword() != null && u.getName() != null && cpfValid && verdade_ou_nao) {
 			int id = UserController.generateId();
 			u.setUserId(id);
 			userStorage.add(u);
@@ -108,10 +111,13 @@ public class UserController {
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
-		userCloned.setPasswordSalt(salt);
-		userCloned.setPasswordHash(hash);
+		var passwordClass = new Password();
+        passwordClass.setPasswordSalt(salt);
+        passwordClass.setPasswordHash(hash);
+        userCloned.setPassword(passwordClass);
+       // arrumar esse metodo pois não posso gerar uma salt nova o que vai mudar a senha totalmente 
 
-		if (userCloned.getName() != null && userCloned.getPasswordHash() != null && userCloned.getName() != null
+		if (userCloned.getName() != null && userCloned.getPassword() != null && userCloned.getName() != null
 				&& cpfValid) {
 
 			userCloned.setUserId(id);
@@ -218,10 +224,8 @@ public class UserController {
 		if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) {
 			storedUser.setCpf(userCloned.getCpf());
 		}
-		if (!(storedUser.getPasswordHash().equals(userCloned.getPasswordHash())
-				&& userCloned.getPasswordHash() != null)) {
-			storedUser.setPasswordHash(userCloned.getPasswordHash());
-			storedUser.setPasswordSalt(userCloned.getPasswordSalt());
+		if (userCloned.getPassword() != null && !(storedUser.getPassword().equals(userCloned.getPassword()))) {
+			storedUser.setPassword(userCloned.getPassword());
 		}
 
 	}
