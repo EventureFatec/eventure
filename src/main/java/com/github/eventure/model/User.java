@@ -1,5 +1,7 @@
 package com.github.eventure.model;
 
+import java.util.List;
+
 import com.github.eventure.model.passwords.Password;
 
 public class User {
@@ -10,6 +12,8 @@ public class User {
 	private int userId;
 	private String cpf;
     private boolean organazador = false;
+    private List<Integer> eventsList;  // lista de eventos que o usuario partocipa
+    private List<Integer> communityList; // lista de comunidades que o usuario participa
 	public String getName() {
 		return this.name;
 	}
@@ -57,6 +61,10 @@ public class User {
 
 	public void setOrganazador(boolean organazador) {
 		this.organazador = organazador;
+	}
+	public void addListaEventos(int id)
+	{
+		eventsList.add(id);
 	}
 	
 }
