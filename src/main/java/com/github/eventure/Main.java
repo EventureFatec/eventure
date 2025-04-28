@@ -1,9 +1,14 @@
 package com.github.eventure;
 
-import com.github.eventure.view.windowing.Window;
+import javax.swing.SwingUtilities;
+
+import com.github.eventure.view.MainFrame;
 
 public class Main {
     public static void main(String[] args) {
-        Window.run();
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
     }
 }

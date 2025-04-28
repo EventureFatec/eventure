@@ -10,10 +10,6 @@ public class Address {
 	private String cep;
 	private int idUser;
 
-	public Address() {
-
-	}
-
 	public Address(String localName, String adress, String street, String state, String district, String city,
 			String cep, int idUser) {
 
