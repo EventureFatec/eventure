@@ -6,13 +6,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+// import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ViewRegister extends JPanel {
-    public ViewRegister() {
+public class RegisterPage extends JPanel {
+    public RegisterPage() {
         
         this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
@@ -26,7 +26,7 @@ public class ViewRegister extends JPanel {
         });
         
         var label1 = new JLabel();
-        var icon = new ImageIcon("C:/Users/User/Downloads/CADASTRO.png");
+        var icon = new ImageIcon("CADASTRO.png");
         label1.setIcon(icon);
         
         // Define posição e tamanho do label manualmente
