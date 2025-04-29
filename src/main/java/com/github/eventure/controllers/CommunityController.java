@@ -25,6 +25,12 @@ public class CommunityController {
     {
     	return communities.find(community -> community.getIdCommunity() == idCommunity).findFirst().orElse(null);
     }
+    public void invites(String nome, int idUser, int idCommunity)
+    {
+    	// seria uma funcão para que usuarios possam enviar convites ao criador da comunidade e ele escolha se aceita ou não
+    	var comunnity = findCommunity(idCommunity);
+    	addUser(idCommunity, idUser);
+    }
 	public void print()
 	{
 		for(Community c: communities)
