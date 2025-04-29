@@ -21,7 +21,10 @@ public class CommunityController {
 		var community = findCommunity(idCommunity);
 		communities.remove(community);
 	}
-    
+    public Community findCommunityById(int idCommunity)
+    {
+    	return communities.find(community -> community.getIdCommunity() == idCommunity).findFirst().orElse(null);
+    }
 	public void print()
 	{
 		for(Community c: communities)
