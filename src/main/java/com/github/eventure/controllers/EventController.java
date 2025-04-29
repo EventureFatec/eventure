@@ -142,9 +142,16 @@ public class EventController {
 
 	}
 
-	public void filterCategories(List<EventClassification> o) {
-		List<Event> eventos = eventController.find(event -> o.contains(event.getType())).collect(Collectors.toList());
+	public void filterCategories(List<EventClassification> eventClassification) {
+		List<Event> eventos = eventController.find(event -> eventClassification.contains(event.getType()))
+				.collect(Collectors.toList());
 		print(eventos);
+	}
+
+	public List<Event> filterEventByPesquisa(String pesquisa) {
+		List<Event> eventos = eventController.find(event -> event.getTitle().toLowerCase().contains(pesquisa))
+				.collect(Collectors.toList());
+		return eventos;
 	}
 
 	public static int generateId() {

@@ -15,6 +15,7 @@ public class CommunityController {
 
 	public void createCommunity(User u, String nome) {
 		var community = new Community(nome, u.getUserId() , generateId());
+		community.addUserList(u.getUserId());
 		communities.add(community);
 	}
 	public void deleteCommunity(int idCommunity) {
