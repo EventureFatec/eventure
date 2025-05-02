@@ -1,6 +1,6 @@
 package com.github.eventure.controllers;
 
-public class PatrocinadorController {
+public class CnpjController {
     public boolean isCnpjValid(String cnpj) {
         if (cnpj == null || cnpj.length() != 14) {
             return false;

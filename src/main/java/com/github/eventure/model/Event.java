@@ -19,6 +19,7 @@ public class Event {
 	private LocalTime endHours;
 	private Address address;
 	private Cep cep;
+	private List<Integer> usersParticipantes;
 
 	public Event(int id, String name, String description, String title, EventClassification type) {
 		this.id = id;

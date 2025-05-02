@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.eventure.encryption.Encryption;
+import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
+import com.github.eventure.model.address.Cep;
+import com.github.eventure.model.passwords.Password;
 import com.github.eventure.storage.Storage;
 
 public class UserController {
@@ -24,22 +27,21 @@ public class UserController {
 		EmailController emailTest = new EmailController();
 		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
-		if (verdade_ou_nao) {
+		if (verdade_ou_nao && !emailRegister(email)) {
 			u.setEmail(emailTest.getEmail());
 		}
-
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
-		u.setPasswordSalt(salt);
-		u.setPasswordHash(hash);
-
-		if (u.getName() != null && u.getPasswordHash() != null && u.getName() != null) {
+		var passwordClass = new Password();
+		passwordClass.setPasswordSalt(salt);
+		passwordClass.setPasswordHash(hash);
+		u.setPassword(passwordClass);
+		if (u.getName() != null && u.getPassword() != null && u.getEmail() != null) {
 			int id = UserController.generateId();
 			u.setUserId(id);
 			userStorage.add(u);
 		}
-
 		// Return the user
 		return u;
 	}
@@ -63,10 +65,11 @@ public class UserController {
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
-		u.setPasswordSalt(salt);
-		u.setPasswordHash(hash);
-
-		if (u.getName() != null && u.getPasswordHash() != null && u.getName() != null && cpfValid) {
+		var passwordClass = new Password();
+		passwordClass.setPasswordSalt(salt);
+		passwordClass.setPasswordHash(hash);
+		u.setPassword(passwordClass);
+		if (u.getName() != null && u.getPassword() != null && u.getName() != null && cpfValid && verdade_ou_nao) {
 			int id = UserController.generateId();
 			u.setUserId(id);
 			userStorage.add(u);
@@ -90,6 +93,15 @@ public class UserController {
 		}
 	}
 
+	public Boolean emailRegister(String email) {
+		var u = userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
+		if (u != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
 		// Instantiate the user
 		var userCloned = new User();
@@ -108,10 +120,14 @@ public class UserController {
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
-		userCloned.setPasswordSalt(salt);
-		userCloned.setPasswordHash(hash);
+		var passwordClass = new Password();
+		passwordClass.setPasswordSalt(salt);
+		passwordClass.setPasswordHash(hash);
+		userCloned.setPassword(passwordClass);
+		// arrumar esse metodo pois não posso gerar uma salt nova o que vai mudar a
+		// senha totalmente
 
-		if (userCloned.getName() != null && userCloned.getPasswordHash() != null && userCloned.getName() != null
+		if (userCloned.getName() != null && userCloned.getPassword() != null && userCloned.getName() != null
 				&& cpfValid) {
 
 			userCloned.setUserId(id);
@@ -137,6 +153,17 @@ public class UserController {
 		} else {
 			return false;
 		}
+	}
+
+	public void print() {
+		for (User u : userStorage) {
+			System.out.println(u.getUserId());
+			System.out.println(u.getName());
+			System.out.println(u.getEmail());
+			System.out.println(u.getCpf());
+			System.out.println(u.getPassword().getPasswordHash().toString());
+		}
+
 	}
 
 	public boolean validateCpf(String cpf) {
@@ -218,10 +245,8 @@ public class UserController {
 		if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) {
 			storedUser.setCpf(userCloned.getCpf());
 		}
-		if (!(storedUser.getPasswordHash().equals(userCloned.getPasswordHash())
-				&& userCloned.getPasswordHash() != null)) {
-			storedUser.setPasswordHash(userCloned.getPasswordHash());
-			storedUser.setPasswordSalt(userCloned.getPasswordSalt());
+		if (userCloned.getPassword() != null && !(storedUser.getPassword().equals(userCloned.getPassword()))) {
+			storedUser.setPassword(userCloned.getPassword());
 		}
 
 	}

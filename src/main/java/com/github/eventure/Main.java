@@ -14,7 +14,7 @@ import com.github.eventure.view.windowing.Window;
 import com.github.eventure.web.Requests;
 
 public class Main {
-    public static void main(String[] args) {
-        Window.run();
-    }
+	public static void main(String[] args) {
+		Window.run();
+	}
 }

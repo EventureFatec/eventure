@@ -19,9 +19,13 @@ public class Community {
 
 	// mensagem seria um conjunto de label para dar uma formatação a mensagem.
 	// mensagem ia ter = nome do usuario , horario de envio e a propria mensagem
-	public Community(String name, int idMaker) {
+	public Community() {
+
+	}
+	public Community(String name, int idMaker, int idCommunity ) {
 		this.name = name;
 		this.idMaker = idMaker;
+		this.idCommunity = idCommunity;
 	}
 
 	public String getName() {
@@ -30,6 +34,11 @@ public class Community {
 
 	public void addUserList(int idUser) {
 		IdUsers.add(idUser);
+	}
+	
+	public void removeUserList(int idUser)
+	{
+		IdUsers.remove(Integer.valueOf(idUser));
 	}
 
 	public void setName(String name) {

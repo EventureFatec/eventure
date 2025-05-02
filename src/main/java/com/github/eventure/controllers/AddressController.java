@@ -5,12 +5,13 @@ import java.util.List;
 
 import java.lang.reflect.Type;
 
-import com.google.gson.reflect.TypeToken;
+
 
 import com.github.eventure.model.address.Address;
 import com.github.eventure.model.address.Cep;
 import com.github.eventure.storage.Storage;
 import com.github.eventure.web.Requests;
+import com.google.gson.reflect.TypeToken;
 
 public class AddressController {
     private Storage<Address> addresses;
