@@ -34,9 +34,9 @@ public class UserController {
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
 		var passwordClass = new Password();
-        passwordClass.setPasswordSalt(salt);
-        passwordClass.setPasswordHash(hash);
-        u.setPassword(passwordClass);
+		passwordClass.setPasswordSalt(salt);
+		passwordClass.setPasswordHash(hash);
+		u.setPassword(passwordClass);
 		if (u.getName() != null && u.getPassword() != null && u.getEmail() != null) {
 			int id = UserController.generateId();
 			u.setUserId(id);
@@ -45,6 +45,7 @@ public class UserController {
 		// Return the user
 		return u;
 	}
+
 	public User createUser(String firstName, String lastName, String password, String email, String cpf) {
 		// Instantiate the user
 		var u = new User();
@@ -65,9 +66,9 @@ public class UserController {
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
 		var passwordClass = new Password();
-        passwordClass.setPasswordSalt(salt);
-        passwordClass.setPasswordHash(hash);
-        u.setPassword(passwordClass);
+		passwordClass.setPasswordSalt(salt);
+		passwordClass.setPasswordHash(hash);
+		u.setPassword(passwordClass);
 		if (u.getName() != null && u.getPassword() != null && u.getName() != null && cpfValid && verdade_ou_nao) {
 			int id = UserController.generateId();
 			u.setUserId(id);
@@ -91,15 +92,15 @@ public class UserController {
 			userStorage.add(u);
 		}
 	}
-    public Boolean emailRegister(String email) {
-    	var u = userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
-    	if(u != null)
-    	{
-    		return true;
-    	}else {
-    		return false;
-    	}
-    }
+
+	public Boolean emailRegister(String email) {
+		var u = userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
+		if (u != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
 		// Instantiate the user
@@ -120,10 +121,11 @@ public class UserController {
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
 		var passwordClass = new Password();
-        passwordClass.setPasswordSalt(salt);
-        passwordClass.setPasswordHash(hash);
-        userCloned.setPassword(passwordClass);
-       // arrumar esse metodo pois não posso gerar uma salt nova o que vai mudar a senha totalmente 
+		passwordClass.setPasswordSalt(salt);
+		passwordClass.setPasswordHash(hash);
+		userCloned.setPassword(passwordClass);
+		// arrumar esse metodo pois não posso gerar uma salt nova o que vai mudar a
+		// senha totalmente
 
 		if (userCloned.getName() != null && userCloned.getPassword() != null && userCloned.getName() != null
 				&& cpfValid) {
@@ -152,6 +154,7 @@ public class UserController {
 			return false;
 		}
 	}
+
 	public void print() {
 		for (User u : userStorage) {
 			System.out.println(u.getUserId());
