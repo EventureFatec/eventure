@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.eventure.encryption.Encryption;
+import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
+import com.github.eventure.model.address.Cep;
 import com.github.eventure.model.passwords.Password;
 import com.github.eventure.storage.Storage;
 
@@ -25,10 +27,9 @@ public class UserController {
 		EmailController emailTest = new EmailController();
 		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
-		if (verdade_ou_nao) {
+		if (verdade_ou_nao && !emailRegister(email)) {
 			u.setEmail(emailTest.getEmail());
 		}
-
 		// Create the password hash
 		var salt = Encryption.generateSalt();
 		var hash = Encryption.generateHash(password, salt);
@@ -36,16 +37,14 @@ public class UserController {
         passwordClass.setPasswordSalt(salt);
         passwordClass.setPasswordHash(hash);
         u.setPassword(passwordClass);
-		if (u.getName() != null && u.getPassword() != null && verdade_ou_nao) {
+		if (u.getName() != null && u.getPassword() != null && u.getEmail() != null) {
 			int id = UserController.generateId();
 			u.setUserId(id);
 			userStorage.add(u);
 		}
-
 		// Return the user
 		return u;
 	}
-
 	public User createUser(String firstName, String lastName, String password, String email, String cpf) {
 		// Instantiate the user
 		var u = new User();
@@ -92,6 +91,15 @@ public class UserController {
 			userStorage.add(u);
 		}
 	}
+    public Boolean emailRegister(String email) {
+    	var u = userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
+    	if(u != null)
+    	{
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
 
 	public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
 		// Instantiate the user
@@ -143,6 +151,16 @@ public class UserController {
 		} else {
 			return false;
 		}
+	}
+	public void print() {
+		for (User u : userStorage) {
+			System.out.println(u.getUserId());
+			System.out.println(u.getName());
+			System.out.println(u.getEmail());
+			System.out.println(u.getCpf());
+			System.out.println(u.getPassword().getPasswordHash().toString());
+		}
+
 	}
 
 	public boolean validateCpf(String cpf) {

@@ -11,11 +11,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
+import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
+
 
 public class Requests {
     private static final Gson gson = new Gson();
