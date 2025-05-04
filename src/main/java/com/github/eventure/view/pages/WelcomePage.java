@@ -11,9 +11,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class WelcomePage extends JPanel {
-    public WelcomePage() {
+import com.github.eventure.view.MainFrame;
 
+public class WelcomePage extends JPanel {
+	private MainFrame mainFrame;
+    public WelcomePage(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
         this.setLayout(null);
@@ -26,7 +29,8 @@ public class WelcomePage extends JPanel {
         });
 
         var bg = new JLabel();
-        var bgIcon = new ImageIcon("src/main/java/com/github/eventure/view/pages/BOASVINDAS.png");
+//        var bgIcon = new ImageIcon("src/main/java/com/github/eventure/view/pages/BOASVINDAS.png");
+        var bgIcon = new ImageIcon(getClass().getResource("/BOASVINDAS.png"));
         bg.setIcon(bgIcon);
 
         bg.setBounds(50, 10, bgIcon.getIconWidth(), bgIcon.getIconHeight());
@@ -38,28 +42,30 @@ public class WelcomePage extends JPanel {
 
     private void initComponents() {
         
-        var registerBtn = new JButton();
-        registerBtn.setBounds(258, 406, 341, 53);        
-        registerBtn.setOpaque(false);
-        registerBtn.setContentAreaFilled(false);
-        registerBtn.setBorderPainted(false);
-        add(registerBtn);
-
         var loginBtn = new JButton();
-        loginBtn.setBounds(258, 491, 341, 53);        
+        loginBtn.setBounds(258, 406, 341, 53);        
         loginBtn.setOpaque(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setBorderPainted(false);
         add(loginBtn);
 
-        registerBtn.addActionListener(e -> {
-            var registerPage = new RegisterPage();
-            registerPage.setVisible(true);
-            this.setVisible(false);
+        var registerBtn = new JButton();
+        registerBtn.setBounds(258, 491, 341, 53);        
+        registerBtn.setOpaque(false);
+        registerBtn.setContentAreaFilled(false);
+        registerBtn.setBorderPainted(false);
+        add(registerBtn);
+        // troquei a ordem dos botoes pois estavam ao contrario
+        loginBtn.addActionListener(e -> {
+//            var registerPage = new RegisterPage(mainFrame);
+//            registerPage.setVisible(true);
+//            this.setVisible(false);
+        	JOptionPane.showMessageDialog(this, "Página de login ainda não implementado!");
         });
 
-        loginBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Página de login ainda não implementado!");
+        registerBtn.addActionListener(e -> {
+
+        	mainFrame.showPanel("register");
         });
 
     }

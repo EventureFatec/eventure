@@ -2,6 +2,7 @@ package com.github.eventure.view;
 
 import javax.swing.*;
 
+import com.github.eventure.view.pages.RegisterPage;
 import com.github.eventure.view.pages.WelcomePage;
 
 import java.awt.*;
@@ -29,8 +30,10 @@ public class MainFrame extends JFrame {
 
         // Configura o contentPanel como o painel principal da janela
         setContentPane(contentPanel);
-        var vr = new WelcomePage();
+        var vr = new WelcomePage(this);
         contentPanel.add(vr,"welcome");
+        var vregister = new RegisterPage(this);
+        contentPanel.add(vregister,"register");
         // Exibe explicitamente a tela de boas-vindas ao iniciar
         cardLayout.show(contentPanel, "welcome");
 
