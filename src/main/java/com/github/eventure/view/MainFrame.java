@@ -1,13 +1,12 @@
 package com.github.eventure.view;
 
 import javax.swing.*;
-
 import com.github.eventure.view.pages.RegisterPage;
 import com.github.eventure.view.pages.WelcomePage;
+import com.github.eventure.view.pages.LoginPage;
+import com.github.eventure.storage.UserStorage;
 
 import java.awt.*;
-//import java.awt.event.ComponentAdapter;
-//import java.awt.event.ComponentEvent;
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout; // Layout usado para alternar entre telas
@@ -24,20 +23,22 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
 
-        // Adiciona as telas (pages) no contentPanel
-//      contentPanel.add(new WelcomePage(this), "welcome"); // Tela de boas-vindas
-//      contentPanel.add(new RegisterPage(this), "register"); // Tela de cadastro
+        // Criação da instância de UserStorage
+        UserStorage userStorage = new UserStorage();
 
-        // Configura o contentPanel como o painel principal da janela
-        setContentPane(contentPanel);
-        var vr = new WelcomePage(this);
-        contentPanel.add(vr,"welcome");
-        var vregister = new RegisterPage(this);
-        contentPanel.add(vregister,"register");
+        // Adiciona as telas (pages) no contentPanel
+        WelcomePage welcomePage = new WelcomePage(this);
+        contentPanel.add(welcomePage, "welcome"); // Tela de boas-vindas
+        RegisterPage registerPage = new RegisterPage(this);
+        contentPanel.add(registerPage, "register"); // Tela de cadastro
+        LoginPage loginPage = new LoginPage(this, userStorage); // Passando o UserStorage
+        contentPanel.add(loginPage, "login"); // Tela de login
+
         // Exibe explicitamente a tela de boas-vindas ao iniciar
         cardLayout.show(contentPanel, "welcome");
 
         // Faz a janela aparecer
+        setContentPane(contentPanel);
         setVisible(true);
     }
 

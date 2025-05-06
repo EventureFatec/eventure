@@ -57,10 +57,7 @@ public class WelcomePage extends JPanel {
         add(registerBtn);
         // troquei a ordem dos botoes pois estavam ao contrario
         loginBtn.addActionListener(e -> {
-//            var registerPage = new RegisterPage(mainFrame);
-//            registerPage.setVisible(true);
-//            this.setVisible(false);
-        	JOptionPane.showMessageDialog(this, "Página de login ainda não implementado!");
+            mainFrame.showPanel("login");
         });
 
         registerBtn.addActionListener(e -> {
