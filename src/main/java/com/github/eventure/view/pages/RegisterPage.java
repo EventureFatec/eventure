@@ -31,12 +31,12 @@ public class RegisterPage extends JPanel {
             this.setPreferredSize(new Dimension(1280, 720));
             this.setBackground(new Color(0x330065));
             this.setLayout(null); 
-            this.addMouseMotionListener(new MouseMotionAdapter() {
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                    System.out.println("Mouse position: " + e.getX() + ", " + e.getY());
-                }
-            });
+//            this.addMouseMotionListener(new MouseMotionAdapter() {
+//                @Override
+//                public void mouseMoved(MouseEvent e) {
+//                    System.out.println("Mouse position: " + e.getX() + ", " + e.getY());
+//                }
+//            });
             initComponents();
             var label1 = new JLabel();
 //            var icon = new ImageIcon("C:/Users/User/Downloads/CADASTRO.png");
@@ -144,9 +144,8 @@ public class RegisterPage extends JPanel {
     }
     
 private void botaoCadastrarClicado(String name, String email, String username, String password, String password2) {
-    var passwordController = new PasswordController();
     if (password.equals(password2) && !name.isEmpty() && !email.isEmpty() && !username.isEmpty() && !password.isEmpty() && !password2.isEmpty()) {
-            userController.createUser(name, email, username, password, "29640340871"); 
+            userController.createUser(name, username, password, email);
         } 
         else {JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");}
 }

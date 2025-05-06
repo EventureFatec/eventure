@@ -1,10 +1,11 @@
 package com.github.eventure.view;
 
 import javax.swing.*;
+
+import com.github.eventure.view.pages.LoginPage;
 import com.github.eventure.view.pages.RegisterPage;
 import com.github.eventure.view.pages.WelcomePage;
-import com.github.eventure.view.pages.LoginPage;
-import com.github.eventure.storage.UserStorage;
+//import com.github.eventure.storage.UserStorage;
 
 import java.awt.*;
 
@@ -24,14 +25,14 @@ public class MainFrame extends JFrame {
         contentPanel = new JPanel(cardLayout);
 
         // Criação da instância de UserStorage
-        UserStorage userStorage = new UserStorage();
+//        UserStorage userStorage = new UserStorage();
 
         // Adiciona as telas (pages) no contentPanel
         WelcomePage welcomePage = new WelcomePage(this);
         contentPanel.add(welcomePage, "welcome"); // Tela de boas-vindas
         RegisterPage registerPage = new RegisterPage(this);
         contentPanel.add(registerPage, "register"); // Tela de cadastro
-        LoginPage loginPage = new LoginPage(this, userStorage); // Passando o UserStorage
+        LoginPage loginPage = new LoginPage(this); // Passando o UserStorage
         contentPanel.add(loginPage, "login"); // Tela de login
 
         // Exibe explicitamente a tela de boas-vindas ao iniciar

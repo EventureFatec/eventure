@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import com.github.eventure.model.User;
-import com.github.eventure.storage.UserStorage;
+import com.github.eventure.controllers.UserController;
 import com.github.eventure.encryption.Encryption;
 import com.github.eventure.view.MainFrame;
 import java.util.Optional;
@@ -25,11 +25,9 @@ public class LoginPage extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerBtn;
-    private UserStorage userStorage;
 
-    public LoginPage(MainFrame frame, UserStorage userStorage) {
+    public LoginPage(MainFrame frame) {
         this.frame = frame;
-        this.userStorage = userStorage;
         this.setLayout(null);
         this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
@@ -81,14 +79,14 @@ public class LoginPage extends JPanel {
                 }
 
                 // Procura o usuário no UserStorage
-                Optional<User> userOptional = userStorage.getUsers().stream()
-                    .filter(u -> u.getUserName().equalsIgnoreCase(loginInput) || 
-                                 u.getEmail().equalsIgnoreCase(loginInput) || 
-                                 u.getName().equalsIgnoreCase(loginInput))
-                    .findFirst();
-
-                if (userOptional.isPresent()) {
-                    User user = userOptional.get();
+//                Optional<User> userOptional = userStorage.getUsers().stream()
+//                    .filter(u -> u.getUsername().equalsIgnoreCase(loginInput) || 
+//                                 u.getEmail().equalsIgnoreCase(loginInput) || 
+//                                 u.getName().equalsIgnoreCase(loginInput))
+//                    .findFirst();
+                 Boolean t = true;
+                if (t) {
+//                    User user = userOptional.get();
                     // Gera o hash da senha inserida
 //                    byte[] hashedPassword = Encryption.generateHash(new String(passwordInput), user.getPasswordSalt());
 

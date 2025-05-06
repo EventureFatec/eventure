@@ -3,6 +3,8 @@ package com.github.eventure.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JOptionPane;
+
 import com.github.eventure.encryption.Encryption;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
@@ -20,26 +22,42 @@ public class UserController {
 		}
 	}
 
-	public User createUser(String firstName, String lastName, String password, String email) {
+	public User createUser(String firstName, String username, String password, String email) {
 		// Instantiate the user
 		var u = new User();
-		u.setName(firstName + " " + lastName);
+		u.setName(firstName);
 		EmailController emailTest = new EmailController();
 		boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
 		if (verdade_ou_nao && !emailRegister(email)) {
 			u.setEmail(emailTest.getEmail());
+		}else {
+			if(!verdade_ou_nao)
+			{JOptionPane.showMessageDialog(null, "Digite um email Valido");}
+			else {JOptionPane.showMessageDialog(null, "Email ja cadastrado digite outro ou faça login");}
+		}
+		if(!usernameRegister(username)) {
+			// verifica se o username ja foi criado se não foi ele seta 
+			u.setUsername(username);
+		}else {
+			JOptionPane.showMessageDialog(null, "username ja cadastrado digite outro");
 		}
 		// Create the password hash
-		var salt = Encryption.generateSalt();
-		var hash = Encryption.generateHash(password, salt);
-		var passwordClass = new Password();
-		passwordClass.setPasswordSalt(salt);
-		passwordClass.setPasswordHash(hash);
-		u.setPassword(passwordClass);
-		if (u.getName() != null && u.getPassword() != null && u.getEmail() != null && !emailRegister(email)) {
+		if(validarSenha(password)) {
+			var salt = Encryption.generateSalt();
+			var hash = Encryption.generateHash(password, salt);
+			var passwordClass = new Password();
+			passwordClass.setPasswordSalt(salt);
+			passwordClass.setPasswordHash(hash);
+			u.setPassword(passwordClass);
+			System.out.println(u.getPassword().getPasswordHash().toString());
+		}else {
+			JOptionPane.showMessageDialog(null, "Digite uma senha valida");
+		}
+		if (u.getName() != null && u.getPassword() != null && u.getPassword().getPasswordHash().length != 0 && !u.getEmail().isEmpty() && u.getEmail() != null && u.getUsername() != null) {
 			int id = UserController.generateId();
 			u.setUserId(id);
+			JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
 			userStorage.add(u);
 		}
 		// Return the user
@@ -78,23 +96,44 @@ public class UserController {
 		// Return the user
 		return u;
 	}
+    public void validarLogin(String email, String senha) {
+    	
+    }
+//	public void createUser(User u) {
+//		EmailController eController = new EmailController();
+//		boolean isAllCorrect = true;
+//
+//		if (!eController.ValidateEmail(u.getEmail()))
+//			isAllCorrect = false;
+//		if (!validateCpf(u.getCpf()))
+//			isAllCorrect = false;
+//
+//		if (isAllCorrect) {
+//			userStorage.add(u);
+//		}
+//	}
 
-	public void createUser(User u) {
-		EmailController eController = new EmailController();
-		boolean isAllCorrect = true;
+	public boolean validarSenha(String senha) {
+        if (senha == null || senha.length() < 8) {
+            return false;
+        }
 
-		if (!eController.ValidateEmail(u.getEmail()))
-			isAllCorrect = false;
-		if (!validateCpf(u.getCpf()))
-			isAllCorrect = false;
+        boolean temMaiuscula = senha.matches(".*[A-Z].*");
+        boolean temNumero = senha.matches(".*\\d.*");
+        boolean temEspecial = senha.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
 
-		if (isAllCorrect) {
-			userStorage.add(u);
-		}
-	}
-
+        return temMaiuscula && temNumero && temEspecial;
+    }
 	public Boolean emailRegister(String email) {
 		var u = userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
+		if (u != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public Boolean usernameRegister(String username) {
+		var u = userStorage.find(user -> user.getUsername().equals(username)).findFirst().orElse(null);
 		if (u != null) {
 			return true;
 		} else {
