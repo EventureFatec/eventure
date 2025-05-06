@@ -4,6 +4,9 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+import com.github.eventure.model.address.Address;
+import com.github.eventure.model.address.Cep;
+
 public class Event {
 	private int id;
 	private String name;
@@ -15,6 +18,8 @@ public class Event {
 	private LocalTime startHours;
 	private LocalTime endHours;
 	private Address address;
+	private Cep cep;
+	private List<Integer> usersParticipantes;
 
 	public Event(int id, String name, String description, String title, EventClassification type) {
 		this.id = id;
@@ -24,18 +29,18 @@ public class Event {
 		this.type = type;
 	}
 
-	public Event(int id, String name, String description, String title, List<Image> images, Date date,
-			LocalTime startHours, LocalTime endHours, Address address) {
-
+	public Event(int id, String name, String description, String title, EventClassification type, Date date,
+			LocalTime startHours, LocalTime endHours, Cep cep) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.title = title;
-		this.images = images;
+		this.type = type;
 		this.date = date;
 		this.startHours = startHours;
 		this.endHours = endHours;
-		this.address = address;
+		this.cep = cep;
 	}
 
 	public Event() {
@@ -56,6 +61,18 @@ public class Event {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Cep getCep() {
+		return cep;
+	}
+
+	public void setCep(Cep cep) {
+		this.cep = cep;
+	}
+
+	public void setName(Cep cep) {
+		this.cep = cep;
 	}
 
 	public String getDescription() {

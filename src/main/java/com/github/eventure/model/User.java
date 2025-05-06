@@ -1,21 +1,35 @@
 package com.github.eventure.model;
 
+import java.util.List;
+
+import com.github.eventure.model.passwords.Password;
+
 public class User {
 
 	private String name;
 	private String email;
 	private String userName;
-	private byte[] passwordSalt;
-	private byte[] passwordHash;
+	private Password password;
 	private int userId;
 	private String cpf;
-
+    private boolean organazador = false;
+    private List<Integer> eventsList;  // lista de eventos que o usuario partocipa
+    private List<Integer> communityList; // lista de comunidades que o usuario participa
 	public String getName() {
 		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+
+	public Password getPassword() {
+		return password;
+	}
+
+	public void setPassword(Password password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -34,22 +48,6 @@ public class User {
 		this.userName = userName;
 	}
 
-	public byte[] getPasswordHash() {
-		return passwordHash;
-	}
-
-	public void setPasswordHash(byte[] passwordHash) {
-		this.passwordHash = passwordHash;
-	}
-
-	public byte[] getPasswordSalt() {
-		return passwordSalt;
-	}
-
-	public void setPasswordSalt(byte[] passwordSalt) {
-		this.passwordSalt = passwordSalt;
-	}
-
 	public int getUserId() {
 		return this.userId;
 	}
@@ -65,4 +63,17 @@ public class User {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+
+	public boolean isOrganazador() {
+		return organazador;
+	}
+
+	public void setOrganazador(boolean organazador) {
+		this.organazador = organazador;
+	}
+	public void addListaEventos(int id)
+	{
+		eventsList.add(id);
+	}
+	
 }

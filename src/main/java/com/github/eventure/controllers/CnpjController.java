@@ -46,8 +46,12 @@ public class CnpjController {
         return true;
     }
 
+
     public boolean isCnpjValid(long cnpj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'isCnpjValid'");
     }
 }
+
+
+

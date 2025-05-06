@@ -1,37 +1,40 @@
 package com.github.eventure.controllers;
 
-import com.github.eventure.model.Address;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.lang.reflect.Type;
+
+
+
+import com.github.eventure.model.address.Address;
+import com.github.eventure.model.address.Cep;
 import com.github.eventure.storage.Storage;
+import com.github.eventure.web.Requests;
+import com.google.gson.reflect.TypeToken;
 
 public class AddressController {
-	
-	private Storage<Address> addressStorage;
-	public AddressController()
-	{
-		if(addressStorage == null)
-		{
-			addressStorage = new Storage<Address>();	
-		}
-	}
-	public void createAddres(String localName , String city , String state ,String district , String street , String cep , String address , int idUser)
-	{
-		 Address ad = new Address(localName,city , state , district ,  street , cep ,  address , idUser);
-		 addressStorage.add(ad);
-	}
-	
-	public void print ()
-	{
-		for(Address a : addressStorage)
-		{
-			System.out.println("nome local" + a.getLocalName());
-			System.out.println("cidade : " + a.getCity());
-			System.out.println("estado : " + a.getState());
-			System.out.println("bairro : " + a.getDistrict());
-			System.out.println("rua :" + a.getStreet());
-			System.out.println("cep :" + a.getCep());
-			System.out.println("endereco :" + a.getAdress());	
-			System.out.println("-------------------------");
-		}
-	}
+    private Storage<Address> addresses;
 
+    private List<Address> findAddressByStreet(String street) {
+        return addresses.find(address -> address.getStreet().equals(street)).toList();
+    }
+
+    public Cep getFromViacep(String cep) {
+        if (cep.length() != 8) {
+            return null;
+        }
+
+        return Requests.get(Cep.VIACEP_URL + "/" + cep + "/json", Cep.class);
+    }
+
+    public ArrayList<Cep> searchAddressOnViacep(String uf, String city, String street) {
+        if (uf.length() < 2 || city.length() < 3 || street.length() < 3) {
+            return null;
+        }
+
+        Type cepListType = new TypeToken<List<Cep>>(){}.getType();
+
+        return Requests.get(String.format("%s/%s/%s/%s/json/", Cep.VIACEP_URL, uf, city.replace(" ", "+"), street.replace(" ", "+")), cepListType);
+    }
 }

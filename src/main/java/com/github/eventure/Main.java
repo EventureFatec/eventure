@@ -1,5 +1,6 @@
 package com.github.eventure;
 
+
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.view.MainFrame;
