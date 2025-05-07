@@ -21,12 +21,12 @@ public class WelcomePage extends JPanel {
         this.setBackground(new Color(0x330065));
         this.setLayout(null);
 
-        this.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                System.out.println("Mouse position: " + e.getX() + ", " + e.getY());
-            }
-        });
+//        this.addMouseMotionListener(new MouseMotionAdapter() {
+//            @Override
+//            public void mouseMoved(MouseEvent e) {
+//                System.out.println("Mouse position: " + e.getX() + ", " + e.getY());
+//            }
+//        });
 
         var bg = new JLabel();
 //        var bgIcon = new ImageIcon("src/main/java/com/github/eventure/view/pages/BOASVINDAS.png");

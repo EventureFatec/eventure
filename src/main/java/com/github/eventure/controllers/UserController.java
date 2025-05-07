@@ -2,6 +2,9 @@ package com.github.eventure.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.swing.JOptionPane;
+
 import java.util.Arrays;
 
 import com.github.eventure.encryption.Encryption;
@@ -14,34 +17,56 @@ import com.github.eventure.storage.Storage;
 public class UserController {
     private Storage<User> userStorage;
     private static int lastGeneratedId = 0;
-
-    public UserController() {
-        if (userStorage == null) {
-            userStorage = new Storage<User>();
-        }
+    private static UserController instance;
+    private UserController() {
+            userStorage = new Storage<User>(); 
     }
-
-    public User createUser(String firstName, String lastName, String password, String email) {
+    public static UserController getInstance() {
+        if (instance == null) {
+            instance = new UserController();
+        }
+        return instance;
+    }
+    public User createUser(String firstName, String username, String password, String email) {
         // Instantiate the user
         var u = new User();
-        u.setName(firstName + " " + lastName);
+        u.setName(firstName);
         EmailController emailTest = new EmailController();
         boolean verdade_ou_nao = emailTest.ValidateEmail(email);
-
+        u.setEmail(email);
         if (verdade_ou_nao && !emailRegister(email)) {
             u.setEmail(emailTest.getEmail());
+        }else {
+        	if(!verdade_ou_nao) {
+        	JOptionPane.showMessageDialog(null, "Email digitado invalido.");}
+        	else {
+        		JOptionPane.showMessageDialog(null, "Email ja cadastrado digite outro ou faça o login.");}
+        	
+        	}
+    
+        if(!usernameRegister(username)) {
+        u.setUsername(username);
+        }else {
+        	JOptionPane.showMessageDialog(null, "Usuario ja cadastrado.");
         }
         // Create the password hash
-        var salt = Encryption.generateSalt();
-        var hash = Encryption.generateHash(password, salt);
-        var passwordClass = new Password();
-        passwordClass.setPasswordSalt(salt);
-        passwordClass.setPasswordHash(hash);
-        u.setPassword(passwordClass);
-        if (u.getName() != null && u.getPassword() != null && u.getEmail() != null) {
+        if(validarSenha(password))
+        {
+            var salt = Encryption.generateSalt();
+            var hash = Encryption.generateHash(password, salt);
+            var passwordClass = new Password();
+            passwordClass.setPasswordSalt(salt);
+            passwordClass.setPasswordHash(hash);
+            u.setPassword(passwordClass);
+        }else {
+        	JOptionPane.showMessageDialog(null, "Senha invalida preencha corretamente");
+        }
+        
+        if (!u.getName().isEmpty() && u.getPassword() != null && !u.getEmail().isEmpty() && !u.getUsername().isEmpty()) {
             int id = UserController.generateId();
             u.setUserId(id);
             userStorage.add(u);
+            JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
         }
         // Return the user
         return u;
@@ -94,13 +119,22 @@ public class UserController {
         }
     }
 
-    public Boolean emailRegister(String email) {
-        var u = userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
-        if (u != null) {
-            return true;
-        } else {
+    public boolean emailRegister(String email) {
+        return userStorage.stream().anyMatch(user -> user.getEmail().equals(email));
+    }
+    public boolean usernameRegister(String username) {
+        return userStorage.stream().anyMatch(user -> user.getUsername().equals(username));
+    } 
+	public boolean validarSenha(String senha) {
+        if (senha == null || senha.length() < 8) {
             return false;
         }
+
+        boolean temMaiuscula = senha.matches(".*[A-Z].*");
+        boolean temNumero = senha.matches(".*\\d.*");
+        boolean temEspecial = senha.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
+
+        return temMaiuscula && temNumero && temEspecial;
     }
 
     public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
@@ -142,7 +176,12 @@ public class UserController {
     public void deleteUser(User u) {
         userStorage.remove(u);
     }
-
+    public User findUserByEmail(String email) {
+        return userStorage.find(user -> user.getEmail().equals(email)).findFirst().orElse(null);
+    }
+    public User findUserByUsername(String username) {
+        return userStorage.find(user -> user.getUsername().equals(username)).findFirst().orElse(null);
+    }
     public User findUserById(int id) {
         return userStorage.find(user -> user.getUserId() == id).findFirst().orElse(null);
     }
@@ -160,32 +199,53 @@ public class UserController {
         }
     }
 
-    public boolean login(String username, String password) {
+    public boolean login(String emailOrusername, String password) {
     // Procura o usuário no storage
-    User user = userStorage.find(u -> u.getName().equals(username)).findFirst().orElse(null);
-    
+    	print();
+    User user = findUserByEmail(emailOrusername);
+    System.out.println("usuario = "+user);
+    if(user == null)
+    {
+    	user = findUserByUsername(emailOrusername);
+    }  
     if (user != null) {
         // Verifica a senha
         Password userPassword = user.getPassword();
-        byte[] salt = userPassword.getPasswordSalt();
+        System.out.println(user.getPassword().getPasswordSalt().toString());
+        byte[] salt = user.getPassword().getPasswordSalt();
         byte[] hash = Encryption.generateHash(password, salt);
-
+        boolean loginValido = Encryption.checkHashes(hash, user.getPassword().getPasswordHash());
         // Se o hash gerado com a senha inserida for igual ao hash armazenado
-        return Arrays.equals(hash, userPassword.getPasswordHash());
+//        return Arrays.equals(hash, userPassword.getPasswordHash());
+        if(loginValido) {
+        	System.out.println("Hash gerado: " + bytesToHex(hash));
+        	System.out.println("Hash salvo:   " + bytesToHex(user.getPassword().getPasswordHash()));
+        	System.out.println("logado com sucesso");
+        	return true;
+        }else {
+        	return false;
+        }
     }
 
     // Caso o usuário não seja encontrado
     return false;
 }
 
-
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
     public void print() {
         for (User u : userStorage) {
-            System.out.println(u.getUserId());
-            System.out.println(u.getName());
-            System.out.println(u.getEmail());
-            System.out.println(u.getCpf());
-            System.out.println(u.getPassword().getPasswordHash().toString());
+            System.out.println("id = "+u.getUserId());
+            System.out.println("nome = "+u.getName());
+            System.out.println("email = "+u.getEmail());
+//            System.out.println(u.getCpf());
+            System.out.println("hash = "+u.getPassword().getPasswordHash().toString());
+            System.out.println("salt = "+u.getPassword().getPasswordSalt().toString());
         }
 
     }

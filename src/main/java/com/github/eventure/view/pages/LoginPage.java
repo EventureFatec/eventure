@@ -23,6 +23,7 @@ public class LoginPage extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerBtn;
+    private UserController userController = UserController.getInstance();
 
     public LoginPage(MainFrame frame) {
         this.frame = frame;
@@ -36,6 +37,9 @@ public class LoginPage extends JPanel {
         label1.setIcon(icon);
         label1.setBounds(0, 0, 1200, 720);
         this.add(label1);
+        
+//        userController.createUser("allisson" , "thomas" , "Allisson7787@" , "allisson@gmail.com");
+//        userController.print();
     }
 
     private void initComponents() {
@@ -70,13 +74,14 @@ public class LoginPage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String username = loginField.getText();
                 String password = new String(passwordField.getPassword());
-
+                
                 if (username.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
                     return;
                 }
 
-                UserController userController = new UserController();
+                userController = UserController.getInstance();
+//                userController.createUser("allisson" , "thomas" , "Allisson7787@" , "allisson@gmail.com");
                 boolean loginSuccessful = userController.login(username, password);
                 if (loginSuccessful) {
                     frame.showPanel("welcome");

@@ -25,7 +25,7 @@ public class RegisterPage extends JPanel {
 	private JPasswordField campoSenha;
 	private JPasswordField campoRepetirSenha;
 	private MainFrame mainFrame;
-    private UserController userController = new UserController();
+    private UserController userController = UserController.getInstance();
     public RegisterPage(MainFrame mainFrame) {
             this.mainFrame = mainFrame;
             this.setPreferredSize(new Dimension(1280, 720));
