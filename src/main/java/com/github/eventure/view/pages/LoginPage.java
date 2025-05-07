@@ -1,6 +1,5 @@
 package com.github.eventure.view.pages;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -17,11 +16,10 @@ import com.github.eventure.model.User;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.encryption.Encryption;
 import com.github.eventure.view.MainFrame;
-import java.util.Optional;
 
 public class LoginPage extends JPanel {
     private MainFrame frame;
-    private JTextField usernameField;
+    private JTextField loginField;  // Corrigido nome da variável
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerBtn;
@@ -42,8 +40,8 @@ public class LoginPage extends JPanel {
 
     private void initComponents() {
         // Inicializa os campos e botões
-        usernameField = new JTextField();
-        usernameField.setBounds(247, 227, 240, 36);
+        loginField = new JTextField();
+        loginField.setBounds(247, 227, 240, 36);
 
         passwordField = new JPasswordField();
         passwordField.setBounds(247, 331, 240, 36);
@@ -59,49 +57,33 @@ public class LoginPage extends JPanel {
         registerBtn.setContentAreaFilled(false);
         registerBtn.setBorderPainted(false);
         registerBtn.setFocusPainted(false);
-        registerBtn.addActionListener(e -> {frame.showPanel("register");});
+        registerBtn.addActionListener(e -> { frame.showPanel("register"); });
 
-        this.add(usernameField);
+        this.add(loginField);
         this.add(passwordField);
         this.add(loginButton);
         this.add(registerBtn);
 
+        // Corrigido ActionListener
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String loginInput = usernameField.getText().trim();
-                char[] passwordInput = passwordField.getPassword();
+                String username = loginField.getText();
+                String password = new String(passwordField.getPassword());
 
-                // Verifica se os campos estão vazios
-                if (loginInput.isEmpty() || passwordInput.length == 0) {
-                    JOptionPane.showMessageDialog(LoginPage.this, "Todos os campos devem estar preenchidos!");
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
                     return;
                 }
 
-                // Procura o usuário no UserStorage
-//                Optional<User> userOptional = userStorage.getUsers().stream()
-//                    .filter(u -> u.getUsername().equalsIgnoreCase(loginInput) || 
-//                                 u.getEmail().equalsIgnoreCase(loginInput) || 
-//                                 u.getName().equalsIgnoreCase(loginInput))
-//                    .findFirst();
-                 Boolean t = true;
-                if (t) {
-//                    User user = userOptional.get();
-                    // Gera o hash da senha inserida
-//                    byte[] hashedPassword = Encryption.generateHash(new String(passwordInput), user.getPasswordSalt());
-
-                    // Compara as senhas
-                    if (10 > 2) {
-                        JOptionPane.showMessageDialog(frame, "Login bem-sucedido!");
-                        frame.showPanel("welcome");  // Aqui você chama o método correto do frame
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Senha incorreta");
-                    }
+                UserController userController = new UserController();
+                boolean loginSuccessful = userController.login(username, password);
+                if (loginSuccessful) {
+                    frame.showPanel("welcome");
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Usuário não encontrado");
+                    JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
                 }
             }
         });
     }
 }
-
