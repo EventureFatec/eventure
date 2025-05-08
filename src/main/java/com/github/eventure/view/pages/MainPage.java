@@ -132,13 +132,13 @@ public class MainPage extends JPanel {
         JButton btnPresenceSB = new JButton(sbpresenceIcn);
         configurarBotaoSidebar(btnPresenceSB);
 
-        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB"));
-        JButton btnHelpCenterSB = new JButton();
+        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
+        JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
         configurarBotaoSidebar(btnHelpCenterSB);
-	
-	ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
-	JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
-	configurarBotaoSidebar(btnSocialMediaSB);
+		
+		ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
+		JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
+		configurarBotaoSidebar(btnSocialMediaSB);
 
         // Separador
         JPanel separator = new JPanel();
@@ -167,7 +167,7 @@ public class MainPage extends JPanel {
         sidebar.add(separator2);
         sidebar.add(Box.createVerticalStrut(12));
         sidebar.add(btnHelpCenterSB);
-	sidebar.add(btnSocialMediaSB);
+		sidebar.add(btnSocialMediaSB);
 
         sidebar.addMouseListener(new MouseAdapter() {
             @Override
