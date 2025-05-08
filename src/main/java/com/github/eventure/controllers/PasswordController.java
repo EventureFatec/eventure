@@ -91,4 +91,14 @@ public class PasswordController {
 
         return activeRules;
     }
+
+  public boolean isValid(String password) {
+       short flags = validatePasswordRules(password);
+        return (flags & PasswordRules.HAS_INVALID_CHARACTERS) == 0 &&
+           (flags & PasswordRules.HAS_ENOUGH_CHARACTERS) != 0 &&
+           (flags & PasswordRules.HAS_LOWERCASE_CHARACTERS) != 0 &&
+           (flags & PasswordRules.HAS_UPPERCASE_CHARACTERS) != 0 &&
+           (flags & PasswordRules.HAS_NUMBERS) != 0 &&
+           (flags & PasswordRules.HAS_SYMBOLS) != 0;
+}
 }
