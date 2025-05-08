@@ -84,7 +84,7 @@ public class LoginPage extends JPanel {
 //                userController.createUser("allisson" , "thomas" , "Allisson7787@" , "allisson@gmail.com");
                 boolean loginSuccessful = userController.login(username, password);
                 if (loginSuccessful) {
-                    frame.showPanel("welcome");
+                    frame.showPanel("home");
                 } else {
                     JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
                 }
