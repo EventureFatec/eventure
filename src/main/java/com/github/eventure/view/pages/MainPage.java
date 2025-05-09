@@ -43,6 +43,13 @@ public class MainPage extends JPanel {
         topbar.setBackground(new Color(0xe5d8fd));
         topbar.setPreferredSize(new Dimension(0, 48));
 
+        // Galeria de fundo
+        galleryPanel = new JPanel();
+        galleryPanel.setLayout(null);
+        galleryPanel.setBackground(new Color(0x330065));
+        galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, topbar.getHeight(), 1920, 1080);
+        layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
+
         ImageIcon icon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
         JLabel logo = new JLabel(icon);
         topbar.add(logo, BorderLayout.WEST);
