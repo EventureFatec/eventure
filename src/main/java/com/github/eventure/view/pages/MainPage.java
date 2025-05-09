@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import com.github.eventure.controllers.ImageController;
 import com.github.eventure.view.MainFrame;
 
 public class MainPage extends JPanel {
@@ -87,7 +88,28 @@ public class MainPage extends JPanel {
         bellButton.setFocusPainted(false);      
         bellButton.setOpaque(false);            
         bellButton.addActionListener(e ->{
-            JOptionPane.showMessageDialog(frame, "Botão Notificação clicado!", "Notificação", JOptionPane.INFORMATION_MESSAGE);
+//            JOptionPane.showMessageDialog(frame, "Botão Notificação clicado!", "Notificação", JOptionPane.INFORMATION_MESSAGE);
+        	System.out.println("clicado bell");
+        	var i = new ImageController();
+        	String imagePath = i.selecionarImagem();
+        	String titulo = "evento do google";
+        	String locale = "sao paulo bairro da paz";
+        	String date = "19:20";
+        	var e2 = new EventPanel(titulo,locale,date,imagePath);
+        	galleryPanel.add(e2, JLayeredPane.POPUP_LAYER);
+        	e2.setBounds(SIDEBAR_COLLAPSED_WIDTH + 20, 20, 300, 240);
+            e2.revalidate();
+            e2.repaint();
+            titulo = "test";
+            locale = "rio de janeiro";
+            date = "22:30";
+            String imagePath2 = i.selecionarImagem();
+            var e3 = new EventPanel(titulo,locale,date,imagePath2);
+            galleryPanel.add(e3, JLayeredPane.POPUP_LAYER);
+            e3.setBounds(90+300, 20, 300, 240);
+            e3.revalidate();
+            e3.repaint();
+        	
         });
         rightButtonsPanel.add(bellButton);
 
