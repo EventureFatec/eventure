@@ -39,7 +39,6 @@ public class MainPage extends JPanel {
         galleryPanel.setLayout(null);
         galleryPanel.setBackground(new Color(0x330065));
 
-        // Inicialmente cobre toda a tela
         galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH, frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
         
@@ -64,8 +63,22 @@ public class MainPage extends JPanel {
         createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         createEventButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Botão Criar Evento clicado!", "Criar Evento", JOptionPane.INFORMATION_MESSAGE);
-        });
+            System.out.println("clicado bell");
+            
+            var i = new ImageController();
+            String imagePath = i.selecionarImagem();
+            
+            String titulo = "evento do google";
+            String locale = "sao paulo bairro da paz";
+            String date = "19:20";
+            
+            var e2 = new EventPanel(titulo,locale,date,imagePath);
+            galleryPanel.add(e2, JLayeredPane.POPUP_LAYER);
+            
+            e2.setBounds(SIDEBAR_COLLAPSED_WIDTH + 20, 20, 300, 240);
+            e2.revalidate();
+            e2.repaint();
+                    });
         rightButtonsPanel.add(createEventButton);
 
         // Botão Chat
@@ -74,7 +87,8 @@ public class MainPage extends JPanel {
         chatButton.setContentAreaFilled(false); 
         chatButton.setBorderPainted(false);     
         chatButton.setFocusPainted(false);      
-        chatButton.setOpaque(false);            
+        chatButton.setOpaque(false);
+        chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
         chatButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(frame, "Botão Chat clicado!", "Chat", JOptionPane.INFORMATION_MESSAGE);
         });
@@ -86,30 +100,9 @@ public class MainPage extends JPanel {
         bellButton.setContentAreaFilled(false); 
         bellButton.setBorderPainted(false);     
         bellButton.setFocusPainted(false);      
-        bellButton.setOpaque(false);            
-        bellButton.addActionListener(e ->{
-            System.out.println("clicado bell");
-            var i = new ImageController();
-            String imagePath = i.selecionarImagem();
-            String titulo = "evento do google";
-            String locale = "sao paulo bairro da paz";
-            String date = "19:20";
-            var e2 = new EventPanel(titulo,locale,date,imagePath);
-            galleryPanel.add(e2, JLayeredPane.POPUP_LAYER);
-            e2.setBounds(SIDEBAR_COLLAPSED_WIDTH + 20, 20, 300, 240);
-            e2.revalidate();
-            e2.repaint();
-            titulo = "test";
-            locale = "rio de janeiro";
-            date = "22:30";
-            String imagePath2 = i.selecionarImagem();
-            var e3 = new EventPanel(titulo,locale,date,imagePath2);
-            galleryPanel.add(e3, JLayeredPane.POPUP_LAYER);
-            e3.setBounds(90+300, 20, 300, 240);
-            e3.revalidate();
-            e3.repaint();
-            
-        });
+        bellButton.setOpaque(false);
+        bellButton.setCursor(new Cursor(Cursor.HAND_CURSOR));   
+        bellButton.addActionListener(e ->{});
         rightButtonsPanel.add(bellButton);
 
         // Botão Perfil
@@ -118,9 +111,10 @@ public class MainPage extends JPanel {
         profileButton.setContentAreaFilled(false); 
         profileButton.setBorderPainted(false);     
         profileButton.setFocusPainted(false);      
-        profileButton.setOpaque(false);            
+        profileButton.setOpaque(false);
+        profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
         profileButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Botão Perfil clicado!", "Perfil", JOptionPane.INFORMATION_MESSAGE);
+            showMainPanel();
         });
         rightButtonsPanel.add(profileButton);
 
@@ -133,54 +127,70 @@ public class MainPage extends JPanel {
 
         // Botões da barra lateral
 
-        // Botão "Início"
-        ImageIcon sbhomeIcon = new ImageIcon(getClass().getResource("/Home.png")); 
+        ImageIcon sbhomeIcon = new ImageIcon(getClass().getResource("/Sidebar/HomeButton.png"));
         JButton btnInicio = new JButton(sbhomeIcon);
-        
-        btnInicio.setHorizontalAlignment(SwingConstants.LEFT);       // Texto e ícone alinhados à esquerda
-        btnInicio.setAlignmentX(Component.LEFT_ALIGNMENT);           // Alinha o botão à esquerda dentro do BoxLayout
-        btnInicio.setIconTextGap(10);                                // Espaço entre ícone e texto
-        btnInicio.setOpaque(false);                                  // Torna o fundo transparente
-        btnInicio.setContentAreaFilled(false);                       // Remove preenchimento padrão
-        btnInicio.setBorderPainted(false);                           // Remove a borda
-        btnInicio.setFocusPainted(false);                            // Remove o destaque de foco
-        btnInicio.setCursor(new Cursor(Cursor.HAND_CURSOR));         // Mostra cursor de mão ao passar
-        btnInicio.setFont(new Font("SansSerif", Font.PLAIN, 14));    // Fonte personalizada (opcional)
-        btnInicio.setForeground(Color.BLACK);                        // Cor do texto
-        
-        ImageIcon sbprofileIcon = new ImageIcon(getClass().getResource("/Profile.png"));
-        JButton btnPerfil = new JButton(sbprofileIcon);
-    
-        btnPerfil.setHorizontalAlignment(SwingConstants.LEFT);       // Texto e ícone alinhados à esquerda
-        btnPerfil.setAlignmentX(Component.LEFT_ALIGNMENT);           // Alinha o botão à esquerda dentro do BoxLayout
-        btnPerfil.setIconTextGap(10);                                // Espaço entre ícone e texto
-        btnPerfil.setOpaque(false);                                  // Torna o fundo transparente
-        btnPerfil.setContentAreaFilled(false);                       // Remove preenchimento padrão
-        btnPerfil.setBorderPainted(false);                           // Remove a borda
-        btnPerfil.setFocusPainted(false);                            // Remove o destaque de foco
-        btnPerfil.setCursor(new Cursor(Cursor.HAND_CURSOR));         // Mostra cursor de mão ao passar
-        btnPerfil.setFont(new Font("SansSerif", Font.PLAIN, 14));    // Fonte personalizada (opcional)
-        btnPerfil.setForeground(Color.BLACK);                        // Cor do texto
-        
-        // Botão "Configurações"
-        ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Settings.png"));
-        JButton btnConfig = new JButton(sbsettingsIcon);
-        
-        btnConfig.setHorizontalAlignment(SwingConstants.LEFT);       // Texto e ícone alinhados à esquerda
-        btnConfig.setAlignmentX(Component.LEFT_ALIGNMENT);           // Alinha o botão à esquerda dentro do BoxLayout
-        btnConfig.setIconTextGap(10);                                // Espaço entre ícone e texto
-        btnConfig.setOpaque(false);                                  // Torna o fundo transparente
-        btnConfig.setContentAreaFilled(false);                       // Remove preenchimento padrão
-        btnConfig.setBorderPainted(false);                           // Remove a borda
-        btnConfig.setFocusPainted(false);                            // Remove o destaque de foco
-        btnConfig.setCursor(new Cursor(Cursor.HAND_CURSOR));         // Mostra cursor de mão ao passar
-        btnConfig.setFont(new Font("SansSerif", Font.PLAIN, 14));    // Fonte personalizada (opcional)
-        btnConfig.setForeground(Color.BLACK);                        // Cor do texto
+        configurarBotaoSidebar(btnInicio);
 
-        sidebar.add(Box.createVerticalStrut(8)); // Espaço acima, se quiser
+        ImageIcon sbprofileIcon = new ImageIcon(getClass().getResource("/Sidebar/Profile.png"));
+        JButton btnPerfil = new JButton(sbprofileIcon);
+        configurarBotaoSidebar(btnPerfil);
+
+        ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
+        JButton btnConfig = new JButton(sbsettingsIcon);
+        configurarBotaoSidebar(btnConfig);
+
+        ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
+        JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
+        configurarBotaoSidebar(btnCreateEventSB);
+
+        ImageIcon sbeditEventIcn = new ImageIcon(getClass().getResource("/Sidebar/EditEventSB.png"));
+        JButton btnEditEventSB = new JButton(sbeditEventIcn);
+        configurarBotaoSidebar(btnEditEventSB);
+
+        ImageIcon sbconsultEventIcn = new ImageIcon(getClass().getResource("/Sidebar/ConsultEventSB.png"));
+        JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
+        configurarBotaoSidebar(btnConsultEventSB);
+
+        ImageIcon sbpresenceIcn = new ImageIcon(getClass().getResource("/Sidebar/PresenceSB.png"));
+        JButton btnPresenceSB = new JButton(sbpresenceIcn);
+        configurarBotaoSidebar(btnPresenceSB);
+
+        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
+        JButton btnHelpCenterSB = new JButton();
+        configurarBotaoSidebar(btnHelpCenterSB);
+            
+        ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
+        JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
+        configurarBotaoSidebar(btnSocialMediaSB);
+
+        // Separador
+        JPanel separator = new JPanel();
+        separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 3));
+        separator.setBackground(new Color(0xCCCCCC)); // cor da linha
+        separator.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel separator2 = new JPanel();
+        separator2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 3));
+        separator2.setBackground(new Color(0xCCCCCC)); // cor da linha
+        separator2.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Itens barra lateral | Está em ordem de cima pra baixo
+        sidebar.add(Box.createVerticalStrut(8));
         sidebar.add(btnInicio);
         sidebar.add(btnPerfil);
         sidebar.add(btnConfig);
+        sidebar.add(Box.createVerticalStrut(12));
+        sidebar.add(separator);
+        sidebar.add(Box.createVerticalStrut(12));
+        sidebar.add(btnCreateEventSB);
+        sidebar.add(btnEditEventSB);
+        sidebar.add(btnConsultEventSB);
+        sidebar.add(btnPresenceSB);
+        sidebar.add(Box.createVerticalStrut(12));
+        sidebar.add(separator2);
+        sidebar.add(Box.createVerticalStrut(12));
+        sidebar.add(btnHelpCenterSB);
+        sidebar.add(btnSocialMediaSB);
 
         // Mouse Listener do Sidebar (Irá ler a posição do mouse)
         sidebar.addMouseListener(new MouseAdapter() {
@@ -191,6 +201,14 @@ public class MainPage extends JPanel {
                 btnInicio.setVisible(true);
                 btnPerfil.setVisible(true);
                 btnConfig.setVisible(true);
+                separator.setVisible(true);
+                btnCreateEventSB.setVisible(true);
+                btnEditEventSB.setVisible(true);
+                btnConsultEventSB.setVisible(true);
+                btnPresenceSB.setVisible(true);
+                separator2.setVisible(true);
+                btnHelpCenterSB.setVisible(true);
+                btnSocialMediaSB.setVisible(true);
             }
 
             // Ao tirar o mouse de cima do sidebar = colapsar
@@ -202,9 +220,17 @@ public class MainPage extends JPanel {
                     SwingUtilities.convertPointFromScreen(location, sidebar);
                     if (!sidebar.contains(location)) {
                         collapseSidebar();
-                        btnInicio.setVisible(false);
-                        btnPerfil.setVisible(false);
-                        btnConfig.setVisible(false);
+                        btnInicio.setVisible(true);
+                        btnPerfil.setVisible(true);
+                        btnConfig.setVisible(true);
+                        separator.setVisible(true);
+                        btnCreateEventSB.setVisible(true);
+                        btnEditEventSB.setVisible(true);
+                        btnConsultEventSB.setVisible(true);
+                        btnPresenceSB.setVisible(true);
+                        separator2.setVisible(true);
+                        btnHelpCenterSB.setVisible(true);
+                        btnSocialMediaSB.setVisible(true);
                     }
                 });
             }
@@ -222,6 +248,63 @@ public class MainPage extends JPanel {
                 sidebar.setBounds(0, 0, sidebar.getWidth(), height);
             }
         });
+    }
+
+    private void showMainPanel() {
+        galleryPanel.removeAll();
+
+        JPanel whitePanel = new JPanel();
+        whitePanel.setBackground(new Color(0xe5d8fd));
+        whitePanel.setSize(1130, 590); // Tamanho do retângulo
+
+        // Define margens fixas a partir da esquerda e do topo
+        int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
+        int margemTopo = 30;
+        whitePanel.setLocation(margemEsquerda, margemTopo);
+
+        // Botão de fechar
+        JButton closeButton = new JButton("X");
+        closeButton.setPreferredSize(new Dimension(30, 30));
+        closeButton.setBackground(new Color(0xe5d8fd));
+        closeButton.setBorderPainted(false);
+        closeButton.setFocusPainted(false);
+        closeButton.setFont(new Font("Arial", Font.BOLD, 12));
+        closeButton.setForeground(Color.RED);
+
+        // Posiciona o botão no canto superior direito do whitePanel
+        closeButton.setBounds(whitePanel.getWidth() - 40, 10, 30, 30);
+
+        closeButton.addActionListener(e -> {
+            // Ação para fechar ou ocultar o painel
+            whitePanel.setVisible(false);  // Ou pode usar galleryPanel.remove(whitePanel);
+            galleryPanel.repaint();
+            galleryPanel.revalidate();
+        });
+
+        // Adiciona o botão de fechar no painel branco
+        whitePanel.setLayout(null);
+        whitePanel.add(closeButton);
+
+        // Adiciona o whitePanel à galleryPanel
+        galleryPanel.setLayout(null);
+        galleryPanel.add(whitePanel);
+        galleryPanel.repaint();
+        galleryPanel.revalidate();
+    }
+
+
+    private void configurarBotaoSidebar(JButton button) {
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+        button.setIconTextGap(10);
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        button.setForeground(Color.BLACK);
+        button.addActionListener(e -> showMainPanel());
     }
 
     private void expandSidebar() {
