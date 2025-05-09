@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import com.github.eventure.view.MainFrame;
+import com.github.eventure.view.components.*;
 
 public class MainPage extends JPanel {
 
@@ -28,9 +29,12 @@ public class MainPage extends JPanel {
 
         // Galeria de fundo
         galleryPanel = new JPanel();
-        galleryPanel.setLayout(null);
+        galleryPanel.setLayout(new BoxLayout(galleryPanel, BoxLayout.Y_AXIS));
         galleryPanel.setBackground(new Color(0x330065));
         galleryPanel.setBounds(0, 0, 1920, 1080);
+		
+		galleryPanel.add(createCarousel("Música"));
+		
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
 
         // Barra superior
@@ -222,6 +226,25 @@ public class MainPage extends JPanel {
             }
         });
     }
+	
+	private void createCarousel() {
+		JPanel carouselPanel = new JPanel();
+		carouselPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		int numCards = 5; // Defina o número de cards que deseja exibir
+
+		// Cria e adiciona cards de exemplo
+		for (int i = 0; i < numCards; i++) {
+			ImageIcon imagemExemplo = new ImageIcon(getClass().getResource("/evento_exemplo.png")); // imagem fictícia
+			EventCard card = new EventCard("Evento " + (i + 1), "01/01/2025", "São Paulo", imagemExemplo);
+			carouselPanel.add(card);
+			carouselPanel.add(Box.createHorizontalStrut(10));  // Espaço entre os cards
+		}
+
+		// Adiciona o painel do carrossel ao layout principal
+		galleryPanel.add(carouselPanel);
+	}
+
 
     private void expandSidebar() {
         sidebar.setBounds(0, 0, SIDEBAR_EXPANDED_WIDTH, getHeight());
@@ -247,5 +270,6 @@ public class MainPage extends JPanel {
         button.setFont(new Font("SansSerif", Font.PLAIN, 14));
         button.setForeground(Color.BLACK);
     }
+	
 }
     
