@@ -9,7 +9,7 @@ import com.github.eventure.view.MainFrame;
 
 public class MainPage extends JPanel {
 
-    private MainFrame frame; // <- Adicionado aqui
+    private MainFrame frame;
 
     private JPanel sidebar;
     private JPanel topbar;
@@ -28,20 +28,20 @@ public class MainPage extends JPanel {
         layeredPane.setLayout(null);
         add(layeredPane, BorderLayout.CENTER);
 
+        // Barra superior
+        topbar = new JPanel();
+        topbar.setLayout(new BorderLayout());
+        topbar.setBackground(new Color(0xe5d8fd));
+        topbar.setPreferredSize(new Dimension(0, 48)); // Define a altura da barra superior
+
         // Galeria (plano de fundo)
         galleryPanel = new JPanel();
         galleryPanel.setLayout(null);
         galleryPanel.setBackground(new Color(0x330065));
 
         // Inicialmente cobre toda a tela
-        galleryPanel.setBounds(0, 0, 1920, 1080); // valores grandes por enquanto
+        galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH, frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
-
-        // Barra superior
-        topbar = new JPanel();
-        topbar.setLayout(new BorderLayout());
-        topbar.setBackground(new Color(0xe5d8fd));
-        topbar.setPreferredSize(new Dimension(0, 48)); // Define a altura da barra superior
         
         // Logo à esquerda
         ImageIcon icon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
@@ -88,16 +88,15 @@ public class MainPage extends JPanel {
         bellButton.setFocusPainted(false);      
         bellButton.setOpaque(false);            
         bellButton.addActionListener(e ->{
-//            JOptionPane.showMessageDialog(frame, "Botão Notificação clicado!", "Notificação", JOptionPane.INFORMATION_MESSAGE);
-        	System.out.println("clicado bell");
-        	var i = new ImageController();
-        	String imagePath = i.selecionarImagem();
-        	String titulo = "evento do google";
-        	String locale = "sao paulo bairro da paz";
-        	String date = "19:20";
-        	var e2 = new EventPanel(titulo,locale,date,imagePath);
-        	galleryPanel.add(e2, JLayeredPane.POPUP_LAYER);
-        	e2.setBounds(SIDEBAR_COLLAPSED_WIDTH + 20, 20, 300, 240);
+            System.out.println("clicado bell");
+            var i = new ImageController();
+            String imagePath = i.selecionarImagem();
+            String titulo = "evento do google";
+            String locale = "sao paulo bairro da paz";
+            String date = "19:20";
+            var e2 = new EventPanel(titulo,locale,date,imagePath);
+            galleryPanel.add(e2, JLayeredPane.POPUP_LAYER);
+            e2.setBounds(SIDEBAR_COLLAPSED_WIDTH + 20, 20, 300, 240);
             e2.revalidate();
             e2.repaint();
             titulo = "test";
@@ -109,7 +108,7 @@ public class MainPage extends JPanel {
             e3.setBounds(90+300, 20, 300, 240);
             e3.revalidate();
             e3.repaint();
-        	
+            
         });
         rightButtonsPanel.add(bellButton);
 
