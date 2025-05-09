@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.view.MainFrame;
+import com.github.eventure.view.components.*;
 
 public class MainPage extends JPanel {
 
@@ -63,22 +64,12 @@ public class MainPage extends JPanel {
         createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         createEventButton.addActionListener(e -> {
-            System.out.println("clicado bell");
+            showMainPanel();
             
-            var i = new ImageController();
-            String imagePath = i.selecionarImagem();
-            
-            String titulo = "evento do google";
-            String locale = "sao paulo bairro da paz";
-            String date = "19:20";
-            
-            var e2 = new EventPanel(titulo,locale,date,imagePath);
-            galleryPanel.add(e2, JLayeredPane.POPUP_LAYER);
-            
-            e2.setBounds(SIDEBAR_COLLAPSED_WIDTH + 20, 20, 300, 240);
-            e2.revalidate();
-            e2.repaint();
-                    });
+            CreateEventForm createEventForm = new CreateEventForm();
+            layeredPane.add(createEventForm, JLayeredPane.DEFAULT_LAYER);
+            createEventForm.setBounds
+        });
         rightButtonsPanel.add(createEventButton);
 
         // Botão Chat
