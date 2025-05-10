@@ -12,9 +12,9 @@ import com.github.eventure.web.Requests;
 import java.awt.*;
 
 
-public class DualPanelLayout extends JPanel {
+public class CreateEventPanel extends JPanel {
 
-    public DualPanelLayout() {
+    public CreateEventPanel() {
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
 

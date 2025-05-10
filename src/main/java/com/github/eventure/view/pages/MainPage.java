@@ -6,9 +6,9 @@ import java.awt.event.*;
 
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.view.MainFrame;
-import com.github.eventure.view.components.DualPanelLayout;
+import com.github.eventure.view.components.CreateEventPanel;
 
-import view.components.CreateEventForm;
+
 
 
 public class MainPage extends JPanel {
@@ -69,9 +69,9 @@ public class MainPage extends JPanel {
         createEventButton.addActionListener(e -> {
             
             
-            var d = new DualPanelLayout(); 
+            var createEventPanel = new CreateEventPanel(); 
 //            layeredPane.add(createEventForm, JLayeredPane.DEFAULT_LAYER);
-            showMainPanel(d);
+            showMainPanel(createEventPanel);
         });
         rightButtonsPanel.add(createEventButton);
 
