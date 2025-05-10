@@ -6,7 +6,10 @@ import java.awt.event.*;
 
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.view.MainFrame;
-import com.github.eventure.view.components.*;
+import com.github.eventure.view.components.DualPanelLayout;
+
+import view.components.CreateEventForm;
+
 
 public class MainPage extends JPanel {
 
@@ -64,11 +67,11 @@ public class MainPage extends JPanel {
         createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         createEventButton.addActionListener(e -> {
-            showMainPanel();
             
-            CreateEventForm createEventForm = new CreateEventForm();
-            layeredPane.add(createEventForm, JLayeredPane.DEFAULT_LAYER);
-            createEventForm.setBounds
+            
+            var d = new DualPanelLayout(); 
+//            layeredPane.add(createEventForm, JLayeredPane.DEFAULT_LAYER);
+            showMainPanel(d);
         });
         rightButtonsPanel.add(createEventButton);
 
@@ -105,7 +108,7 @@ public class MainPage extends JPanel {
         profileButton.setOpaque(false);
         profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
         profileButton.addActionListener(e -> {
-            showMainPanel();
+            showMainPanel(new JPanel());
         });
         rightButtonsPanel.add(profileButton);
 
@@ -241,10 +244,10 @@ public class MainPage extends JPanel {
         });
     }
 
-    private void showMainPanel() {
+    private void showMainPanel(JPanel x) {
         galleryPanel.removeAll();
 
-        JPanel whitePanel = new JPanel();
+        JPanel whitePanel = x;
         whitePanel.setBackground(new Color(0xe5d8fd));
         whitePanel.setSize(1130, 590); // Tamanho do retângulo
 
@@ -295,7 +298,7 @@ public class MainPage extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFont(new Font("SansSerif", Font.PLAIN, 14));
         button.setForeground(Color.BLACK);
-        button.addActionListener(e -> showMainPanel());
+        button.addActionListener(e -> showMainPanel(new JPanel()));
     }
 
     private void expandSidebar() {

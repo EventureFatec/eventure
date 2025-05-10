@@ -2,9 +2,13 @@ package com.github.eventure.view;
 
 import javax.swing.*;
 
+import com.github.eventure.view.components.DualPanelLayout;
 import com.github.eventure.view.pages.LoginPage;
 import com.github.eventure.view.pages.RegisterPage;
 import com.github.eventure.view.pages.WelcomePage;
+
+import view.components.CreateEventForm;
+
 import com.github.eventure.view.pages.MainPage;
 //import com.github.eventure.storage.UserStorage;
 
@@ -40,7 +44,12 @@ public class MainFrame extends JFrame {
 
         MainPage mainPage = new MainPage(this);
         contentPanel.add(mainPage, "home");
-
+        CreateEventForm createEventForm = new CreateEventForm();
+        contentPanel.add(createEventForm, "createEvent");
+        
+        var dual = new DualPanelLayout();
+        contentPanel.add(dual,"dual");
+        
         // Exibe explicitamente a tela de boas-vindas ao iniciar
         cardLayout.show(contentPanel, "home");
 

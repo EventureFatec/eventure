@@ -29,7 +29,7 @@ public class EventPanel extends JPanel {
         setMaximumSize(panelSize);
         setMinimumSize(panelSize);
 
-        setBackground(Color.WHITE);
+        this.setBackground(new Color(0xe5d8fd));
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
 
@@ -45,7 +45,7 @@ public class EventPanel extends JPanel {
         // ===== Informações =====
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBackground(new Color(0xe5d8fd));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         JLabel titleLabel = new JLabel("<html><b>" + title + "</b></html>");
