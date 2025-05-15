@@ -1,6 +1,7 @@
 package com.github.eventure.view.pages;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -47,6 +48,7 @@ public class WelcomePage extends JPanel {
         loginBtn.setOpaque(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setBorderPainted(false);
+        loginBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(loginBtn);
 
         var registerBtn = new JButton();
@@ -54,6 +56,7 @@ public class WelcomePage extends JPanel {
         registerBtn.setOpaque(false);
         registerBtn.setContentAreaFilled(false);
         registerBtn.setBorderPainted(false);
+        registerBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(registerBtn);
         // troquei a ordem dos botoes pois estavam ao contrario
         loginBtn.addActionListener(e -> {

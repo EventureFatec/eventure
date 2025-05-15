@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.ImageController;
+import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 
@@ -96,7 +98,48 @@ public class MainPage extends JPanel {
         bellButton.setFocusPainted(false);      
         bellButton.setOpaque(false);
         bellButton.setCursor(new Cursor(Cursor.HAND_CURSOR));   
-        bellButton.addActionListener(e ->{});
+        bellButton.addActionListener(e ->{
+        	var evt = EventController.getInstance();
+        	var eventClassification = EventClassification.GASTRONOMY;
+
+        	
+        	var img = new ImageController();
+        	String path = img.selecionarImagem();
+        	evt.createEvent(0,"feira de gastronomia" , "uma feira cheia de delicias" , eventClassification , "20/02/2021","15:30","16:00",path,"12760000","São paulo","lavrinhas","capela do jacu" , "geraldo nogueira de sa", "100" , "casa");
+        	   galleryPanel.removeAll();
+        	   var events = evt.getAllEvents();
+           	int currentPage = 0;
+           	int pageSize = 3;
+        	    int start = currentPage * pageSize;
+        	    int end = Math.min(start + pageSize, events.size());
+        	    int x = 200;
+        	    int y = 200;
+
+        	    for (int i = start; i < end; i++) {
+        	        var event = events.get(i);
+        	        EventPanel panel = new EventPanel(
+        	            event.getTitle(),
+        	            event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
+        	            event.getDate(),
+        	            event.getImagePath()
+        	        );
+        	        panel.setBounds(x, y, 300, 240);
+        	        galleryPanel.add(panel);
+        	        x += 400;
+        	    }
+
+        	    galleryPanel.revalidate();
+        	    galleryPanel.repaint();
+        	
+
+        	// Nos botões "Próximo" e "Anterior":
+//        	nextButton.addActionListener(e -> {
+//        	    if ((currentPage + 1) * pageSize < events.size()) {
+//        	        currentPage++;
+//        	        updateGallery();
+//        	    }
+        });
+        
         rightButtonsPanel.add(bellButton);
 
         // Botão Perfil

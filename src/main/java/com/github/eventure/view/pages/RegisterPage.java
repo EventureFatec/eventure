@@ -1,6 +1,7 @@
 package com.github.eventure.view.pages;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -78,12 +79,14 @@ public class RegisterPage extends JPanel {
          botao.setBorderPainted(false);
          botao.setFocusPainted(false);
          botao.setOpaque(false);
+         botao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
          
          var botaoEntrar = new JButton("");
          botaoEntrar.setBounds(475, 584, 85, 40);
          botaoEntrar.setContentAreaFilled(false);
          botaoEntrar.setBorderPainted(false);
          botaoEntrar.setFocusPainted(false);
+         botaoEntrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
          
          JLabel efeitoPressionado = new JLabel();
          efeitoPressionado.setBounds(402, 500, 230, 30);

@@ -1,90 +1,70 @@
 package com.github.eventure.model;
 
 public class Address {
-	private String localName;
-	private String adress;
-	private String street;
-	private String state;
-	private String district;
-	private String city;
 	private String cep;
-	private int idUser;
-
-	public Address(String localName, String adress, String street, String state, String district, String city,
-			String cep, int idUser) {
-
-		this.localName = localName;
-		this.adress = adress;
-		this.street = street;
-		this.state = state;
-		this.district = district;
-		this.city = city;
+	private String estado;
+	private String cidade;
+	private String bairro;
+	private String rua;
+	private String numero;
+	private String complemento;
+//	private int idUser;
+	public Address() {
+		
+	}
+	public Address(String cep, String estado, String cidade, String bairro, String rua, String numero,
+			String complemento) {
+		super();
 		this.cep = cep;
-		this.idUser = idUser;
+		this.estado = estado;
+		this.cidade = cidade;
+		this.bairro = bairro;
+		this.rua = rua;
+		this.numero = numero;
+		this.complemento = complemento;
 	}
-
-	public void setLocalName(String localName) {
-		this.localName = localName;
-	}
-
-	public String getLocalName() {
-		return this.localName;
-	}
-
-	public String getAdress() {
-		return adress;
-	}
-
-	public void setAdress(String adress) {
-		this.adress = adress;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
 	public String getCep() {
 		return cep;
 	}
-
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
-
-	public int getIdUser() {
-		return idUser;
+	public String getEstado() {
+		return estado;
 	}
-
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
+	public String getCidade() {
+		return cidade;
+	}
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+	public String getBairro() {
+		return bairro;
+	}
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	public String getRua() {
+		return rua;
+	}
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+	public String getNumero() {
+		return numero;
+	}
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+	public String getComplemento() {
+		return complemento;
+	}
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+  
 
 }

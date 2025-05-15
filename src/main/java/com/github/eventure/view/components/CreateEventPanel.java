@@ -1,8 +1,11 @@
 package com.github.eventure.view.components;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.PlainDocument;
 import org.jdesktop.swingx.JXDatePicker;
+
+import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.NumericDocumentFilter;
@@ -10,10 +13,28 @@ import com.github.eventure.model.address.Cep;
 import com.github.eventure.web.Requests;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class CreateEventPanel extends JPanel {
-
+  private String title;
+  private String description;
+  private String date;
+  private String starsHours;
+  private String endHours;
+  private Cep cep;
+  private String caminho;
+  private String cepAddress;
+  private String estado;
+  private String cidade;
+  private String bairro;
+  private String rua;
+  private String numero;
+  private String complemento;
+  private EventClassification selectedClassification;
     public CreateEventPanel() {
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
@@ -21,8 +42,9 @@ public class CreateEventPanel extends JPanel {
         // Painel esquerdo
         JPanel leftPanel = new JPanel(null);
         leftPanel.setBounds(0, 0, 426, 590);
-        leftPanel.setBackground(new Color(33, 150, 243));
-
+        leftPanel.setBackground(new Color(0xb10ef7));
+        //0xadd8e6 azul mais claro
+        //(33, 150, 243) azul mais forte
         JLabel leftLabel = new JLabel("<html><h1 style='color:white;'>Eventure</h1><p style='color:white;'>Criando conexões</p></html>");
         leftLabel.setBounds(50, 300, 300, 100);
         leftPanel.add(leftLabel);
@@ -30,7 +52,7 @@ public class CreateEventPanel extends JPanel {
         // Painel direito
         JPanel rightPanel = new JPanel(null); // Layout absoluto para mais controle
         rightPanel.setBounds(426, 0, 704, 590);
-        rightPanel.setBackground(Color.WHITE);
+        rightPanel.setBackground(new Color(0xe5d8fd));;
 
         // Título do formulário
         JLabel header = new JLabel("Vamos criar seu evento");
@@ -78,6 +100,7 @@ public class CreateEventPanel extends JPanel {
         y += 25;
         JXDatePicker datePicker = new JXDatePicker();
         datePicker.setBounds(xField, y, 300, 30);
+        datePicker.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         rightPanel.add(datePicker);
         
         y+=50;
@@ -128,6 +151,7 @@ public class CreateEventPanel extends JPanel {
             classificationBox.addItem(ec.getLabel());
         }
         classificationBox.setBounds(xField, y, 300, 30);
+        classificationBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         rightPanel.add(classificationBox);
         y += 50;
 //        JLabel dateLabel = new JLabel("data");
@@ -162,9 +186,39 @@ public class CreateEventPanel extends JPanel {
 
         // Botão Criar Evento (inferior direito)
         JButton proximoButton = new JButton("Continuar");
+        proximoButton.setBackground(new Color(0x330065));
+        proximoButton.setForeground(Color.WHITE);
+        proximoButton.setFocusPainted(false);
+        proximoButton.setBorderPainted(false);
+        proximoButton.setOpaque(true);
+        proximoButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         proximoButton.setBounds(704 - 150 - 20, 590 - 50, 150, 30); // Largura 150, margem 20 da borda
+        proximoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         rightPanel.add(proximoButton);
         proximoButton.addActionListener(e -> {
+        	title = titleField.getText();
+        	description = descriptionArea.getText();
+        	String type = (String) classificationBox.getSelectedItem(); 
+        	 selectedClassification = null;
+        	for (EventClassification ec : EventClassification.values()) {
+        	    if (ec.getLabel().equals(type)) {
+        	        selectedClassification = ec;
+        	        break;
+        	    }
+        	}
+            Date selectedDate = datePicker.getDate();
+            
+            if (selectedDate != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                date = sdf.format(selectedDate);
+            }
+             
+            
+        	starsHours = startHourField.getText();
+        	endHours = endHourField.getText();
+             if(!title.isEmpty() && !description.isEmpty() && !starsHours.isEmpty() && !endHours.isEmpty() && !date.isEmpty() && selectedClassification != null) {
+            	 
+             
             rightPanel.removeAll();
 
             int y2 = 20;
@@ -185,16 +239,20 @@ public class CreateEventPanel extends JPanel {
 
             JLabel imagemPreview = new JLabel();
             imagemPreview.setBounds((panelWidth - 300) / 2, y2, 300, 200);
-            imagemPreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+//            imagemPreview.setBorder(null);
+            imagemPreview.setBorder(new LineBorder(Color.BLACK, 1));
+            ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
+            imagemPreview.setIcon(icon03);
             rightPanel.add(imagemPreview);
             y2 += 210;
 
             JButton selectImageBtn = new JButton(" ");
             
             selectImageBtn.setBounds((panelWidth - 300) / 2, y2, 35, 40);
-            selectImageBtn.setBackground(Color.WHITE); 
+            selectImageBtn.setBackground(new Color(0xe5d8fd)); 
             selectImageBtn.setBorder(null);
-            ImageIcon icon02 = new ImageIcon(getClass().getResource("/iconFoto04.png"));
+            selectImageBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            ImageIcon icon02 = new ImageIcon(getClass().getResource("/iconFotoRosa.png"));
             selectImageBtn.setIcon(icon02);
             rightPanel.add(selectImageBtn);
             y2 += 35;
@@ -217,6 +275,13 @@ public class CreateEventPanel extends JPanel {
 
             JButton buscarCepBtn = new JButton("Buscar CEP");
             buscarCepBtn.setBounds(alinhamentoX + 20 + campoLargura, y2, 120, campoAltura);
+            buscarCepBtn.setBackground(new Color(0x330065));
+            buscarCepBtn.setForeground(Color.WHITE);
+            buscarCepBtn.setFocusPainted(false);
+            buscarCepBtn.setBorderPainted(false);
+            buscarCepBtn.setOpaque(true);
+            buscarCepBtn.setFont(new Font("SansSerif", Font.BOLD, 14));
+            buscarCepBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             rightPanel.add(buscarCepBtn);
             y2 += espacamentoY;
             
@@ -279,7 +344,8 @@ public class CreateEventPanel extends JPanel {
             //selecionar imagem 
             selectImageBtn.addActionListener(e2 -> {
             	ImageController imageController = new ImageController();
-            	String caminho = imageController.selecionarImagem();
+            	 caminho = imageController.selecionarImagem();
+            	 if(!caminho.isEmpty() && caminho != null) {
                 ImageIcon icon = new ImageIcon(caminho);
 
                 // Redimensiona para caber no JLabel
@@ -288,10 +354,38 @@ public class CreateEventPanel extends JPanel {
                     imagemPreview.getHeight(),
                     Image.SCALE_SMOOTH
                 );
-
+                 
                 // Define a imagem no JLabel
                 imagemPreview.setIcon(new ImageIcon(imagemRedimensionada));
                 imagemPreview.repaint(); 
+            	 }
+            });
+            
+            imagemPreview.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                  	ImageController imageController = new ImageController();
+                	 caminho = imageController.selecionarImagem();
+                	 if(!caminho.isEmpty() && caminho != null) {
+                    ImageIcon icon = new ImageIcon(caminho);
+
+                    // Redimensiona para caber no JLabel
+                    Image imagemRedimensionada = icon.getImage().getScaledInstance(
+                        imagemPreview.getWidth(),
+                        imagemPreview.getHeight(),
+                        Image.SCALE_SMOOTH
+                    );
+
+                    // Define a imagem no JLabel
+                    imagemPreview.setIcon(new ImageIcon(imagemRedimensionada));
+                    imagemPreview.repaint();
+                	 }
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    imagemPreview.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                }
             });
             // buscar cep
             buscarCepBtn.addActionListener(e2 -> {
@@ -300,16 +394,77 @@ public class CreateEventPanel extends JPanel {
                 Cep cep = Requests.get(url, Cep.class);
                 if(cep != null)
                 {
-               	 cidadeField.setText(cep.getLocality());
+                	estadoField.setText(cep.getStateShorthand());
+                	cidadeField.setText(cep.getLocality());
+                	bairroField.setText(cep.getNeighborhood());
+                	ruaField.setText(cep.getStreet());
+                	complementoField.setText(cep.getComplement());
                 }
                });
             // Botão final
             JButton concluirButton = new JButton("Criar Evento");
             concluirButton.setBounds(704 - 150 - 20, 590 - 50, 150, 30);
+            concluirButton.setBackground(new Color(0x330065));
+            concluirButton.setForeground(Color.WHITE);
+            concluirButton.setFocusPainted(false);
+            concluirButton.setBorderPainted(false);
+            concluirButton.setOpaque(true);
+            concluirButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+            concluirButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             rightPanel.add(concluirButton);
-
+            concluirButton.addActionListener(e2 -> {
+            	cepAddress = cepField.getText();
+            	estado = estadoField.getText();
+            	cidade = cidadeField.getText();
+            	bairro = bairroField.getText();
+            	rua = ruaField.getText();
+            	numero = numeroField.getText();
+            	complemento = complementoField.getText();
+            	if(!caminho.isEmpty()  && !cepAddress.isEmpty() && !estado.isEmpty() && !cidade.isEmpty() && !bairro.isEmpty() && !rua.isEmpty() && !numero.isEmpty()) {
+            		var eventController = EventController.getInstance();
+            		System.out.println("dentro do if");
+            		eventController.createEvent(0, title, description,  selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);
+            	}
+            	});
+            JButton voltarButton = new JButton("Voltar");
+            voltarButton.setBounds(20, 590 - 50, 150, 30);
+            voltarButton.setBackground(new Color(0x330065));
+            voltarButton.setForeground(Color.WHITE);
+            voltarButton.setFocusPainted(false);
+            voltarButton.setBorderPainted(false);
+            voltarButton.setOpaque(true);
+            voltarButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+            voltarButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            rightPanel.add(voltarButton);
+            
             rightPanel.revalidate();
             rightPanel.repaint();
+            
+            voltarButton.addActionListener(e2 -> {
+            	rightPanel.removeAll();
+                rightPanel.add(header);
+                rightPanel.add(titleLabel);
+                rightPanel.add(titleField);
+                titleField.setText(title);
+                rightPanel.add(descLabel);
+                rightPanel.add(scrollPane);
+                descriptionArea.setText(description);
+                rightPanel.add(labeldate);
+                rightPanel.add(datePicker); 
+                rightPanel.add(hourLabel);
+                rightPanel.add(startHourField);
+                startHourField.setText(starsHours);
+                rightPanel.add(endHourField);
+                endHourField.setText(endHours);
+                rightPanel.add(categoryLabel);
+                rightPanel.add(classificationBox);
+                rightPanel.add(proximoButton);
+                rightPanel.revalidate();
+                rightPanel.repaint();
+            });
+             }else {
+            	//messageBox
+             }
         });
 
         this.add(leftPanel);

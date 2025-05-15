@@ -5,41 +5,67 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.swing.JOptionPane;
+
+import com.github.eventure.model.Address;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
-import com.github.eventure.model.address.Address;
 import com.github.eventure.model.address.Cep;
 import com.github.eventure.storage.Storage;
 
 public class EventController {
 	private Storage<Event> eventController;
+	private static EventController instance;
 	private static int lastGeneratedId = 0;
 
-	public EventController() {
+	private EventController() {
 		if (eventController == null) {
 			eventController = new Storage<Event>();
 		}
 	}
+	public static EventController getInstance() {
+		if (instance == null) {
+			instance = new EventController();
+		}
+		return instance;
+	}
 
-	public void createEvent(String name, String description, String title, EventClassification type, Date date,
-			LocalTime startHours, LocalTime endHours, Cep cep) {
+	public void createEvent(int idMaker ,String title, String description, EventClassification type, String date,
+			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
+		System.out.println("dentro do controller");
 		var e = new Event();
-		e.setName(name);
-		e.setDescription(description);
+		var address = new Address();
 		e.setTitle(title);
+		e.setDescription(description);
 		e.setType(type);
 		e.setDate(date);
 		e.setStartHours(startHours);
 		e.setEndHours(endHours);
-		e.setCep(cep);
-		e.setId(generateId());
-		eventController.add(e);
-
+		e.setImagePath(caminho);
+		address.setCep(cep);
+		address.setEstado(estado);
+		address.setCidade(cidade);
+		address.setBairro(bairro);
+		address.setRua(rua);
+		address.setNumero(numero);
+		if(!complemento.isEmpty()) {
+			address.setComplemento(complemento);
+		}
+		e.setAddress(address);
+		if(!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getTitle().isEmpty() && !e.getStartHours().isEmpty() && !e.getImagePath().isEmpty() && e.getAddress() != null) {
+			e.setId(generateId());
+			eventController.add(e);
+			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
+		}
+		
 	}
 
-	public void createEvent(int id, String name, String description, String title, EventClassification type) {
-		var e = new Event(id, name, description, title, type);
-		eventController.add(e);
+	public void createEvent(int id,  String description, String title, EventClassification type) {
+		
+		
 		System.out.println("deu certo");
 	}
 
@@ -57,12 +83,11 @@ public class EventController {
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
 
-	public void eventClone(String name, String description, String title, EventClassification type, Date date,
-			LocalTime startHours, LocalTime endHours, Cep cep, int id) {
+	public void eventClone(String title, String description,  EventClassification type, String date,
+			String startHours, String endHours, Cep cep, int id) {
 		var eventClone = new Event();
-		eventClone.setName(name);
-		eventClone.setDescription(description);
 		eventClone.setTitle(title);
+		eventClone.setDescription(description);
 		eventClone.setType(type);
 		eventClone.setDate(date);
 		eventClone.setStartHours(startHours);
@@ -77,9 +102,9 @@ public class EventController {
 		if (event == null) {
 			return;
 		}
-		if (eventClone.getName() != null && !eventClone.getName().trim().isEmpty()
-				&& !eventClone.getName().equals(event.getName())) {
-			event.setName(eventClone.getName());
+		if (eventClone.getTitle() != null && !eventClone.getTitle().trim().isEmpty()
+				&& !eventClone.getTitle().equals(event.getTitle())) {
+			event.setTitle(eventClone.getTitle());
 		}
 
 		if (eventClone.getDescription() != null && !eventClone.getDescription().trim().isEmpty()
@@ -107,9 +132,8 @@ public class EventController {
 	public void print(List<Event> eventos) {
 		for (Event eb : eventos) {
 			System.out.println(eb.getId());
-			System.out.println(eb.getName());
-			System.out.println(eb.getDescription());
 			System.out.println(eb.getTitle());
+			System.out.println(eb.getDescription());
 			System.out.println(eb.getType().getLabel());
 			System.out.println(eb.getDate().toString());
 			System.out.println(eb.getEndHours().toString());
@@ -126,9 +150,8 @@ public class EventController {
 	public void print() {
 		for (Event eb : eventController) {
 			System.out.println(eb.getId());
-			System.out.println(eb.getName());
-			System.out.println(eb.getDescription());
 			System.out.println(eb.getTitle());
+			System.out.println(eb.getDescription());
 			System.out.println(eb.getType().getLabel());
 			System.out.println(eb.getDate().toString());
 			System.out.println(eb.getEndHours().toString());
@@ -147,6 +170,11 @@ public class EventController {
 				.collect(Collectors.toList());
 		print(eventos);
 	}
+	
+	public List<Event> getAllEvents() {
+	    return eventController.toList();
+	}
+
 
 	public List<Event> filterEventByPesquisa(String pesquisa) {
 		List<Event> eventos = eventController.find(event -> event.getTitle().toLowerCase().contains(pesquisa))

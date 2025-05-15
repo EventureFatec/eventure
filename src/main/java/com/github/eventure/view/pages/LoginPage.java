@@ -1,6 +1,7 @@
 package com.github.eventure.view.pages;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -55,12 +56,14 @@ public class LoginPage extends JPanel {
         loginButton.setContentAreaFilled(false);
         loginButton.setBorderPainted(false);
         loginButton.setFocusPainted(false);
+        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         registerBtn = new JButton();
         registerBtn.setBounds(245, 543, 229, 45);
         registerBtn.setContentAreaFilled(false);
         registerBtn.setBorderPainted(false);
         registerBtn.setFocusPainted(false);
+        registerBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         registerBtn.addActionListener(e -> { frame.showPanel("register"); });
 
         this.add(loginField);
