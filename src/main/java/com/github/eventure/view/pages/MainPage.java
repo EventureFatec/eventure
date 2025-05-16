@@ -44,7 +44,8 @@ public class MainPage extends JPanel {
         galleryPanel = new JPanel();
         galleryPanel.setLayout(null);
         galleryPanel.setBackground(new Color(0x330065));
-
+        System.out.println(frame.getWidth());
+        System.out.println(topbar.getHeight());
         galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH, frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
         
@@ -112,8 +113,8 @@ public class MainPage extends JPanel {
            	int pageSize = 3;
         	    int start = currentPage * pageSize;
         	    int end = Math.min(start + pageSize, events.size());
-        	    int x = 200;
-        	    int y = 200;
+        	    int x = 160;
+        	    int y = 30;
 
         	    for (int i = start; i < end; i++) {
         	        var event = events.get(i);
