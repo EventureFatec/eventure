@@ -27,7 +27,7 @@ public class UserController {
         }
         return instance;
     }
-    public User createUser(String firstName, String username, String password, String email) {
+    public boolean createUser(String firstName, String username, String password, String email) {
         // Instantiate the user
         var u = new User();
         u.setName(firstName);
@@ -67,9 +67,11 @@ public class UserController {
             u.setUserId(id);
             userStorage.add(u);
             JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
+            IdController.setIdUser(u.getUserId());
+            return true;
         }
-        // Return the user
-        return u;
+        
+        return false;
     }
 
     public User createUser(String firstName, String lastName, String password, String email, String cpf) {
@@ -218,9 +220,7 @@ public class UserController {
         // Se o hash gerado com a senha inserida for igual ao hash armazenado
 //        return Arrays.equals(hash, userPassword.getPasswordHash());
         if(loginValido) {
-        	System.out.println("Hash gerado: " + bytesToHex(hash));
-        	System.out.println("Hash salvo:   " + bytesToHex(user.getPassword().getPasswordHash()));
-        	System.out.println("logado com sucesso");
+        	IdController.setIdUser(lastGeneratedId);
         	return true;
         }else {
         	return false;

@@ -1,6 +1,7 @@
 package com.github.eventure.model;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.github.eventure.model.address.Cep;
 
 public class Event {
 	private int id;
+	private int idMaker;
 	private String title;
 	private String description;
 	private EventClassification type;
@@ -19,7 +21,7 @@ public class Event {
 	private String endHours;
 	private Address address;
 	private Cep cep;
-	private List<Integer> usersParticipantes;
+	private List<Integer> usersParticipantes = new ArrayList<>();
 
 	public Event(int id, String description, String title, EventClassification type) {
 		this.id = id;
@@ -52,6 +54,14 @@ public class Event {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getIdMaker() {
+		return idMaker;
+	}
+
+	public void setIdMaker(int idMaker) {
+		this.idMaker = idMaker;
 	}
 
 	public Cep getCep() {
@@ -136,5 +146,11 @@ public class Event {
 
 	public void setType(EventClassification type) {
 		this.type = type;
+	}
+	public void addUsersParticipantes(int id) {
+		usersParticipantes.add(id);
+	}
+	public void removeUsersParticipantes(int id) {
+		usersParticipantes.remove(id);
 	}
 }

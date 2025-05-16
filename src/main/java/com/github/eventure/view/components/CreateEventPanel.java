@@ -6,6 +6,7 @@ import javax.swing.text.PlainDocument;
 import org.jdesktop.swingx.JXDatePicker;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.NumericDocumentFilter;
@@ -124,23 +125,6 @@ public class CreateEventPanel extends JPanel {
         JFormattedTextField endHourField = new JFormattedTextField(timeMask);
         endHourField.setBounds(xField + 160, y, 140, 30);
         rightPanel.add(endHourField);
-//        JLabel hourLabel = new JLabel("Horário (início/término):");
-//        hourLabel.setBounds(xLabel, y, 300, 20);
-//        rightPanel.add(hourLabel);
-//        y += 25;
-
-//        JTextField startHourField = new JTextField();
-//        PlainDocument doc1 = (PlainDocument) startHourField.getDocument();
-//        doc1.setDocumentFilter(new NumericDocumentFilter(4));
-//        startHourField.setBounds(xField, y, 140, 30);
-//        rightPanel.add(startHourField);
-//
-//        JTextField endHourField = new JTextField();
-//        PlainDocument doc2 = (PlainDocument) endHourField.getDocument();
-//        doc2.setDocumentFilter(new NumericDocumentFilter(4));
-//        endHourField.setBounds(xField + 160, y, 140, 30);
-//        rightPanel.add(endHourField);
-//
         y += 50;
         JLabel categoryLabel = new JLabel("Classificação:");
         categoryLabel.setBounds(xLabel, y, 300, 20);
@@ -154,35 +138,6 @@ public class CreateEventPanel extends JPanel {
         classificationBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         rightPanel.add(classificationBox);
         y += 50;
-//        JLabel dateLabel = new JLabel("data");
-//        dateLabel.setBounds(xLabel, y+20, 300, 20);
-//        rightPanel.add(dateLabel);
-//        y += 25;
-//        JTextField dateField = new JTextField();
-//        dateField.setBounds(xField, y + 20, 300, 30);
-//        rightPanel.add(dateField);
-        // Imagem
-//        JLabel imgLabel = new JLabel("Imagem:");
-//        imgLabel.setBounds(xLabel, y, 300, 20);
-//        rightPanel.add(imgLabel);
-//        y += 25;
-//
-//        JPanel imagePanel = new JPanel();
-//        imagePanel.setBackground(new Color(240, 240, 240));
-//        imagePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-//        imagePanel.setBounds(xMargin, y, 300, 120);
-//        rightPanel.add(imagePanel);
-//        y += 130;
-
-//        JButton imageButton = new JButton("Selecionar Imagem");
-//        imageButton.setBounds(xLabel, y, 300, 30);
-//        rightPanel.add(imageButton);
-//
-//        imageButton.addActionListener(e -> {
-//            var i = new ImageController();
-//            String caminho = i.selecionarImagem();
-//            System.out.println("caminho = " + caminho);
-//        });
 
         // Botão Criar Evento (inferior direito)
         JButton proximoButton = new JButton("Continuar");
@@ -420,10 +375,13 @@ public class CreateEventPanel extends JPanel {
             	rua = ruaField.getText();
             	numero = numeroField.getText();
             	complemento = complementoField.getText();
-            	if(!caminho.isEmpty()  && !cepAddress.isEmpty() && !estado.isEmpty() && !cidade.isEmpty() && !bairro.isEmpty() && !rua.isEmpty() && !numero.isEmpty()) {
+            	boolean cepValido =  cepAddress.matches("\\d{8}");
+            	if(!caminho.isEmpty()  && !cepAddress.isEmpty() && cepValido && !estado.isEmpty() && !cidade.isEmpty() && !bairro.isEmpty() && !rua.isEmpty() && !numero.isEmpty()) {
             		var eventController = EventController.getInstance();
-            		System.out.println("dentro do if");
-            		eventController.createEvent(0, title, description,  selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);
+            		eventController.createEvent(IdController.getIdUser(), title, description,  selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);           		
+                    this.setVisible(false);
+            	}else {
+            		JOptionPane.showMessageDialog(null, "Erro ao criar evento preencha as informações com valores validos");
             	}
             	});
             JButton voltarButton = new JButton("Voltar");

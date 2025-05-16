@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.github.eventure.controllers.UserController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.PasswordController;
 import com.github.eventure.view.MainFrame;
 
@@ -40,13 +41,8 @@ public class RegisterPage extends JPanel {
 //            });
             initComponents();
             var label1 = new JLabel();
-//            var icon = new ImageIcon("C:/Users/User/Downloads/CADASTRO.png");
             var icon = new ImageIcon(getClass().getResource("/CADASTRO02.png"));
             label1.setIcon(icon);
-            
-            // Define posição e tamanho do label manualmente
-//            label1.setBounds(50, 10, icon.getIconWidth(), icon.getIconHeight());
-            
             label1.setBounds(83, 24, 1200, 720);
             this.add(label1);
     }
@@ -148,13 +144,25 @@ public class RegisterPage extends JPanel {
     
 private void botaoCadastrarClicado(String name, String email, String username, String password, String password2) {
     if (password.equals(password2) && !name.isEmpty() && !email.isEmpty() && !username.isEmpty() && !password.isEmpty() && !password2.isEmpty()) {
-            userController.createUser(name, username, password, email);
+    	    boolean success = userController.createUser(name, username, password, email);
+            if(success) {
+            	campoNome.setText("");
+            	campoEmail.setText("");
+            	campoUsuario.setText("");
+            	campoSenha.setText("");
+            	campoRepetirSenha.setText("");
+            	mainFrame.showPanel("home");
+            }
         } 
         else {JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");}
 }
     
     private void botaoEntrarClicado() {
-    	System.out.println("botao para logar usuario");
+    	campoNome.setText("");
+    	campoEmail.setText("");
+    	campoUsuario.setText("");
+    	campoSenha.setText("");
+    	campoRepetirSenha.setText("");
     	mainFrame.showPanel("login");
     }
 

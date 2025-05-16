@@ -17,6 +17,7 @@ public class User {
     private int userId;
     private String cpf;
     private boolean organazador = false;
+    private List<Integer> myEventsList = new ArrayList<>(); // salva uma lista com todos os eventos que ele criou
     private List<Integer> eventsList = new ArrayList<>();  // Inicializando a lista de eventos
     private List<Integer> communityList = new ArrayList<>(); // Inicializando a lista de comunidades
 
@@ -102,13 +103,10 @@ public class User {
     public void addCommunity(int communityId) {
         communityList.add(communityId);
     }
-
-    // Métodos para acessar o hash da senha e salt como String em base64
-    public String getPasswordHashAsString() {
-        return password.getPasswordHashAsString();
+    public void addListMyEvents(int idEvento) {
+    	myEventsList.add(idEvento);
     }
-
-    public String getPasswordSaltAsString() {
-        return password.getPasswordSaltAsString();
+    public void removeListMyEvents(int idEvento) {
+    	myEventsList.remove(idEvento);
     }
 }

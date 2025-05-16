@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
         contentPanel.add(mainPage, "home");
         
         // Exibe explicitamente a tela de boas-vindas ao iniciar
-        cardLayout.show(contentPanel, "home");
+        cardLayout.show(contentPanel, "welcome");
 
         // Faz a janela aparecer
         setContentPane(contentPanel);

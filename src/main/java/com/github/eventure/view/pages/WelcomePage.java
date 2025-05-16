@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.github.eventure.controllers.UserController;
 import com.github.eventure.view.MainFrame;
 
 public class WelcomePage extends JPanel {
@@ -27,8 +28,6 @@ public class WelcomePage extends JPanel {
 //            public void mouseMoved(MouseEvent e) {
 //                System.out.println("Mouse position: " + e.getX() + ", " + e.getY());
 //            }
-//        });
-
         var bg = new JLabel();
 //        var bgIcon = new ImageIcon("src/main/java/com/github/eventure/view/pages/BOASVINDAS.png");
         var bgIcon = new ImageIcon(getClass().getResource("/BOASVINDAS.png"));

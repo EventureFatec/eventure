@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import com.github.eventure.model.User;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.encryption.Encryption;
 import com.github.eventure.view.MainFrame;
@@ -64,7 +65,11 @@ public class LoginPage extends JPanel {
         registerBtn.setBorderPainted(false);
         registerBtn.setFocusPainted(false);
         registerBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        registerBtn.addActionListener(e -> { frame.showPanel("register"); });
+        registerBtn.addActionListener(e -> { 
+        	loginField.setText(" ");
+        	passwordField.setText(" ");
+        	frame.showPanel("register");
+        	});
 
         this.add(loginField);
         this.add(passwordField);
@@ -82,11 +87,12 @@ public class LoginPage extends JPanel {
                     JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
                     return;
                 }
-
                 userController = UserController.getInstance();
-//                userController.createUser("allisson" , "thomas" , "Allisson7787@" , "allisson@gmail.com");
                 boolean loginSuccessful = userController.login(username, password);
                 if (loginSuccessful) {
+                	JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
+                	loginField.setText(" ");
+                	passwordField.setText(" ");
                     frame.showPanel("home");
                 } else {
                     JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");

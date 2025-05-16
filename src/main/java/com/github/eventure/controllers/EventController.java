@@ -31,9 +31,8 @@ public class EventController {
 		return instance;
 	}
 
-	public void createEvent(int idMaker ,String title, String description, EventClassification type, String date,
+	public void createEvent(int idMaker,String title, String description, EventClassification type, String date,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
-		System.out.println("dentro do controller");
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
@@ -53,8 +52,13 @@ public class EventController {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if(!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getTitle().isEmpty() && !e.getStartHours().isEmpty() && !e.getImagePath().isEmpty() && e.getAddress() != null) {
+		if(!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty() && !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
+			e.setIdMaker(idMaker);
+			e.addUsersParticipantes(idMaker);
+			var userController = UserController.getInstance();
+			var user = userController.findUserById(idMaker);
+			user.addListMyEvents(e.getId());
 			eventController.add(e);
 			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
 		}else {

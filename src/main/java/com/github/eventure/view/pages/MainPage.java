@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
@@ -44,8 +45,6 @@ public class MainPage extends JPanel {
         galleryPanel = new JPanel();
         galleryPanel.setLayout(null);
         galleryPanel.setBackground(new Color(0x330065));
-        System.out.println(frame.getWidth());
-        System.out.println(topbar.getHeight());
         galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH, frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
         
@@ -55,7 +54,9 @@ public class MainPage extends JPanel {
         topbar.add(logo, BorderLayout.WEST);
 
         add(topbar, BorderLayout.NORTH);
-
+        // metodo para exibir os eventos na tela
+//        ExibirEvents();
+        
         // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtonsPanel.setOpaque(false);
@@ -179,6 +180,11 @@ public class MainPage extends JPanel {
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
+        btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCreateEventSB.addActionListener(e -> { 
+            var createEventPanel = new CreateEventPanel(); 
+            showMainPanel(createEventPanel);
+        });
         configurarBotaoSidebar(btnCreateEventSB);
 
         ImageIcon sbeditEventIcn = new ImageIcon(getClass().getResource("/Sidebar/EditEventSB.png"));
@@ -355,5 +361,32 @@ public class MainPage extends JPanel {
         sidebar.setBounds(0, 0, SIDEBAR_COLLAPSED_WIDTH, getHeight());
         sidebar.revalidate();
         sidebar.repaint();
+    }
+    public void ExibirEvents() {
+    	var evt = EventController.getInstance();
+    	   galleryPanel.removeAll();
+    	   var events = evt.getAllEvents();
+       	int currentPage = 0;
+       	int pageSize = 3;
+    	    int start = currentPage * pageSize;
+    	    int end = Math.min(start + pageSize, events.size());
+    	    int x = 160;
+    	    int y = 30;
+
+    	    for (int i = start; i < end; i++) {
+    	        var event = events.get(i);
+    	        EventPanel panel = new EventPanel(
+    	            event.getTitle(),
+    	            event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
+    	            event.getDate(),
+    	            event.getImagePath()
+    	        );
+    	        panel.setBounds(x, y, 300, 240);
+    	        galleryPanel.add(panel);
+    	        x += 400;
+    	    }
+
+    	    galleryPanel.revalidate();
+    	    galleryPanel.repaint();
     }
 }
