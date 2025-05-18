@@ -10,19 +10,17 @@ import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
-
-
-
+import com.github.eventure.view.components.DisplayEvent;
 
 public class MainPage extends JPanel {
 
     private MainFrame frame;
-
+    private int currentPage = 0;
+    private final int pageSize = 3;
     private JPanel sidebar;
     private JPanel topbar;
     private JPanel galleryPanel;
     private JLayeredPane layeredPane;
-
     private final int SIDEBAR_COLLAPSED_WIDTH = 45;
     private final int SIDEBAR_EXPANDED_WIDTH = 300;
 
@@ -55,12 +53,45 @@ public class MainPage extends JPanel {
 
         add(topbar, BorderLayout.NORTH);
         // metodo para exibir os eventos na tela
-//        ExibirEvents();
+        
+//        ImageIcon iconSeta = new ImageIcon(getClass().getResource("/seta.png"));
+//        JButton btnPrev = new JButton("Anterior");
+//        btnPrev.setIcon(iconSeta);
+//        btnPrev.setBounds(160, 300, 40, 40);
+//        btnPrev.setEnabled((currentPage + 1) * pageSize < EventController.getInstance().getAllEvents().size());
+//        btnPrev.addActionListener(e -> {
+//            currentPage++;
+//            ExibirEvents();
+//        });
+//        galleryPanel.add(btnPrev);
+//        JButton btnNext = new JButton("Próximo");
+//        btnNext.setBounds(580, 300, 120, 30);
+//        btnNext.setEnabled((currentPage + 1) * pageSize < EventController.getInstance().getAllEvents().size());
+//        btnNext.addActionListener(e -> {
+//            currentPage++;
+//            ExibirEvents();
+//        });
+//        galleryPanel.add(btnNext);
+
+        ExibirEvents();
         
         // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtonsPanel.setOpaque(false);
-
+        
+        JButton refreshEventButton = new JButton("Recarregar Eventos");
+        refreshEventButton.setBackground(new Color(0x330065));
+        refreshEventButton.setForeground(Color.WHITE);
+        refreshEventButton.setFocusPainted(false);
+        refreshEventButton.setBorderPainted(false);
+        refreshEventButton.setOpaque(true);
+        refreshEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        refreshEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshEventButton.addActionListener(e -> {
+            ExibirEvents();
+        });
+        rightButtonsPanel.add(refreshEventButton);
+        
         // Botão Criar Evento
         JButton createEventButton = new JButton("Criar Evento");
         createEventButton.setBackground(new Color(0x330065));
@@ -71,10 +102,7 @@ public class MainPage extends JPanel {
         createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         createEventButton.addActionListener(e -> {
-            
-            
             var createEventPanel = new CreateEventPanel(); 
-//            layeredPane.add(createEventForm, JLayeredPane.DEFAULT_LAYER);
             showMainPanel(createEventPanel);
         });
         rightButtonsPanel.add(createEventButton);
@@ -89,6 +117,7 @@ public class MainPage extends JPanel {
         chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
         chatButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(frame, "Botão Chat clicado!", "Chat", JOptionPane.INFORMATION_MESSAGE);
+            ExibirEvents();
         });
         rightButtonsPanel.add(chatButton);
 
@@ -108,38 +137,7 @@ public class MainPage extends JPanel {
         	var img = new ImageController();
         	String path = img.selecionarImagem();
         	evt.createEvent(0,"feira de gastronomia" , "uma feira cheia de delicias" , eventClassification , "20/02/2021","15:30","16:00",path,"12760000","São paulo","lavrinhas","capela do jacu" , "geraldo nogueira de sa", "100" , "casa");
-        	   galleryPanel.removeAll();
-        	   var events = evt.getAllEvents();
-           	int currentPage = 0;
-           	int pageSize = 3;
-        	    int start = currentPage * pageSize;
-        	    int end = Math.min(start + pageSize, events.size());
-        	    int x = 160;
-        	    int y = 30;
-
-        	    for (int i = start; i < end; i++) {
-        	        var event = events.get(i);
-        	        EventPanel panel = new EventPanel(
-        	            event.getTitle(),
-        	            event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
-        	            event.getDate(),
-        	            event.getImagePath()
-        	        );
-        	        panel.setBounds(x, y, 300, 240);
-        	        galleryPanel.add(panel);
-        	        x += 400;
-        	    }
-
-        	    galleryPanel.revalidate();
-        	    galleryPanel.repaint();
-        	
-
-        	// Nos botões "Próximo" e "Anterior":
-//        	nextButton.addActionListener(e -> {
-//        	    if ((currentPage + 1) * pageSize < events.size()) {
-//        	        currentPage++;
-//        	        updateGallery();
-//        	    }
+        	ExibirEvents();
         });
         
         rightButtonsPanel.add(bellButton);
@@ -182,7 +180,7 @@ public class MainPage extends JPanel {
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCreateEventSB.addActionListener(e -> { 
-            var createEventPanel = new CreateEventPanel(); 
+            var createEventPanel = new CreateEventPanel();
             showMainPanel(createEventPanel);
         });
         configurarBotaoSidebar(btnCreateEventSB);
@@ -294,7 +292,7 @@ public class MainPage extends JPanel {
         });
     }
 
-    private void showMainPanel(JPanel x) {
+    public void showMainPanel(JPanel x) {
         galleryPanel.removeAll();
 
         JPanel whitePanel = x;
@@ -363,30 +361,65 @@ public class MainPage extends JPanel {
         sidebar.repaint();
     }
     public void ExibirEvents() {
-    	var evt = EventController.getInstance();
-    	   galleryPanel.removeAll();
-    	   var events = evt.getAllEvents();
-       	int currentPage = 0;
-       	int pageSize = 3;
-    	    int start = currentPage * pageSize;
-    	    int end = Math.min(start + pageSize, events.size());
-    	    int x = 160;
-    	    int y = 30;
+        var evt = EventController.getInstance();
+        var events = evt.getAllEvents();
 
-    	    for (int i = start; i < end; i++) {
-    	        var event = events.get(i);
-    	        EventPanel panel = new EventPanel(
-    	            event.getTitle(),
-    	            event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
-    	            event.getDate(),
-    	            event.getImagePath()
-    	        );
-    	        panel.setBounds(x, y, 300, 240);
-    	        galleryPanel.add(panel);
-    	        x += 400;
-    	    }
+        galleryPanel.removeAll();
+        
+        int start = currentPage * pageSize;
+        int end = Math.min(start + pageSize, events.size());
+        int x = 160;
+        int y = 30;
 
-    	    galleryPanel.revalidate();
-    	    galleryPanel.repaint();
+        for (int i = start; i < end; i++) {
+            var event = events.get(i);
+            EventPanel panel = new EventPanel(
+                event.getTitle(),
+                event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
+                event.getDate(),
+                event.getImagePath(),
+                event.getId(),
+                this
+            );
+            panel.setBounds(x, y, 300, 240);
+            galleryPanel.add(panel);
+            x += 400;
+        }
+
+        // Botão Anterior
+        JButton btnPrev = new JButton("");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/setaAnterior.png"));
+//        ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
+        Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        btnPrev.setIcon(new ImageIcon(scaled));
+        btnPrev.setBounds(80, 130, 40, 40);
+//        btnPrev.setBorder(null);
+        btnPrev.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnPrev.setEnabled(currentPage > 0);
+        btnPrev.addActionListener(e -> {
+            if (currentPage > 0) {
+                currentPage--;
+                ExibirEvents();
+            }
+        });
+        galleryPanel.add(btnPrev);
+//
+//        // Botão Próximo
+        JButton btnNext = new JButton("");
+        btnNext.setBounds(1290, 130, 40, 40);
+        ImageIcon icon02 = new ImageIcon(getClass().getResource("/setaProxima.png"));
+//      ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
+        Image scaled02 = icon02.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        btnNext.setIcon(new ImageIcon(scaled02));
+        btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnNext.setEnabled((currentPage + 1) * pageSize < events.size());
+        btnNext.addActionListener(e -> {
+            currentPage++;
+            ExibirEvents();
+        });
+        galleryPanel.add(btnNext);
+
+        galleryPanel.revalidate();
+        galleryPanel.repaint();
     }
 }

@@ -13,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
+import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.User;
+import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.encryption.Encryption;
@@ -92,7 +94,7 @@ public class LoginPage extends JPanel {
                 if (loginSuccessful) {
                 	JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
                 	loginField.setText(" ");
-                	passwordField.setText(" ");
+                	passwordField.setText("");
                     frame.showPanel("home");
                 } else {
                     JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");

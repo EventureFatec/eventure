@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -13,16 +15,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.github.eventure.view.MainFrame;
+import com.github.eventure.view.components.CreateEventPanel;
+import com.github.eventure.view.components.DisplayEvent;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class EventPanel extends JPanel {
-    private MainFrame mainFrame;
-
-    public EventPanel(String title, String location, String date, String imagePath) {
+    private int idEvento;
+    public EventPanel(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
-
+        idEvento = id;
         // Tamanho fixo do painel
         Dimension panelSize = new Dimension(300, 240);
         setPreferredSize(panelSize);
@@ -63,7 +66,16 @@ public class EventPanel extends JPanel {
         infoPanel.add(locationLabel);
         infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         infoPanel.add(dateTimeLabel);
-
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Clicou no evento com ID: " + idEvento);
+                var displayEvent = new DisplayEvent(idEvento);
+                // chamar a tela exibir evento completo
+                mainPage.showMainPanel(displayEvent);
+            }
+        });
         add(infoPanel, BorderLayout.CENTER);
     }
  public void initComponets()

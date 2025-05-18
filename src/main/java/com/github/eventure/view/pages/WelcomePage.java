@@ -59,6 +59,8 @@ public class WelcomePage extends JPanel {
         add(registerBtn);
         // troquei a ordem dos botoes pois estavam ao contrario
         loginBtn.addActionListener(e -> {
+//        	var userController = UserController.getInstance();
+//        	userController.createUser("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
             mainFrame.showPanel("login");
         });
 

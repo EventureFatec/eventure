@@ -38,16 +38,19 @@ public class UserController {
             u.setEmail(emailTest.getEmail());
         }else {
         	if(!verdade_ou_nao) {
-        	JOptionPane.showMessageDialog(null, "Email digitado invalido.");}
+        	JOptionPane.showMessageDialog(null, "Email digitado invalido.");
+        	return false;
+        	} 	
         	else {
         		JOptionPane.showMessageDialog(null, "Email ja cadastrado digite outro ou faça o login.");}
-        	
+        	     return false;
         	}
     
         if(!usernameRegister(username)) {
         u.setUsername(username);
         }else {
         	JOptionPane.showMessageDialog(null, "Usuario ja cadastrado.");
+        	return false;
         }
         // Create the password hash
         if(validarSenha(password))
@@ -66,8 +69,10 @@ public class UserController {
             int id = UserController.generateId();
             u.setUserId(id);
             userStorage.add(u);
+            System.out.println("user id = "+u.getUserId());
             JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
             IdController.setIdUser(u.getUserId());
+            System.out.println("user idController = "+IdController.getIdUser());
             return true;
         }
         
@@ -217,10 +222,9 @@ public class UserController {
         byte[] salt = user.getPassword().getPasswordSalt();
         byte[] hash = Encryption.generateHash(password, salt);
         boolean loginValido = Encryption.checkHashes(hash, user.getPassword().getPasswordHash());
-        // Se o hash gerado com a senha inserida for igual ao hash armazenado
-//        return Arrays.equals(hash, userPassword.getPasswordHash());
         if(loginValido) {
-        	IdController.setIdUser(lastGeneratedId);
+        	IdController.logoffUser();
+        	IdController.setIdUser(user.getUserId());
         	return true;
         }else {
         	return false;
@@ -333,6 +337,57 @@ public class UserController {
             storedUser.setPassword(userCloned.getPassword());
         }
 
+    }
+    public boolean createUserSemMessageBox(String firstName, String username, String password, String email) {
+        // Instantiate the user
+        var u = new User();
+        u.setName(firstName);
+        EmailController emailTest = new EmailController();
+        boolean verdade_ou_nao = emailTest.ValidateEmail(email);
+        u.setEmail(email);
+        if (verdade_ou_nao && !emailRegister(email)) {
+            u.setEmail(emailTest.getEmail());
+        }else {
+        	if(!verdade_ou_nao) {
+        	JOptionPane.showMessageDialog(null, "Email digitado invalido.");
+        	return false;
+        	} 	
+        	else {
+        		JOptionPane.showMessageDialog(null, "Email ja cadastrado digite outro ou faça o login.");}
+        	     return false;
+        	}
+    
+        if(!usernameRegister(username)) {
+        u.setUsername(username);
+        }else {
+        	JOptionPane.showMessageDialog(null, "Usuario ja cadastrado.");
+        	return false;
+        }
+        // Create the password hash
+        if(validarSenha(password))
+        {
+            var salt = Encryption.generateSalt();
+            var hash = Encryption.generateHash(password, salt);
+            var passwordClass = new Password();
+            passwordClass.setPasswordSalt(salt);
+            passwordClass.setPasswordHash(hash);
+            u.setPassword(passwordClass);
+        }else {
+        	JOptionPane.showMessageDialog(null, "Senha invalida preencha corretamente");
+        }
+        
+        if (!u.getName().isEmpty() && u.getPassword() != null && !u.getEmail().isEmpty() && !u.getUsername().isEmpty()) {
+            int id = UserController.generateId();
+            u.setUserId(id);
+            userStorage.add(u);
+            System.out.println("user id = "+u.getUserId());
+//            JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
+            IdController.setIdUser(u.getUserId());
+            System.out.println("user idController = "+IdController.getIdUser());
+            return true;
+        }
+        
+        return false;
     }
 
     public static int generateId() {

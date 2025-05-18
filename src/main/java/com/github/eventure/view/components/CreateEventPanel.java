@@ -378,6 +378,7 @@ public class CreateEventPanel extends JPanel {
             	boolean cepValido =  cepAddress.matches("\\d{8}");
             	if(!caminho.isEmpty()  && !cepAddress.isEmpty() && cepValido && !estado.isEmpty() && !cidade.isEmpty() && !bairro.isEmpty() && !rua.isEmpty() && !numero.isEmpty()) {
             		var eventController = EventController.getInstance();
+            		System.out.println("id controller no create event = "+IdController.getIdUser());
             		eventController.createEvent(IdController.getIdUser(), title, description,  selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);           		
                     this.setVisible(false);
             	}else {
