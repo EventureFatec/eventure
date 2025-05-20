@@ -11,6 +11,8 @@ import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
+import com.github.eventure.view.components.EditEventPanel;
+import com.github.eventure.view.components.EventPanelEdit;
 
 public class MainPage extends JPanel {
 
@@ -187,6 +189,11 @@ public class MainPage extends JPanel {
 
         ImageIcon sbeditEventIcn = new ImageIcon(getClass().getResource("/Sidebar/EditEventSB.png"));
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
+        btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEditEventSB.addActionListener(e -> { 
+            var editPanel = new EventPanelEdit(this);
+            showMainPanel(editPanel);
+        });
         configurarBotaoSidebar(btnEditEventSB);
 
         ImageIcon sbconsultEventIcn = new ImageIcon(getClass().getResource("/Sidebar/ConsultEventSB.png"));
