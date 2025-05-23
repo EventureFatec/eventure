@@ -11,6 +11,7 @@ import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
+import com.github.eventure.view.components.ProfilePage;
 
 public class MainPage extends JPanel {
 
@@ -78,20 +79,7 @@ public class MainPage extends JPanel {
         // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtonsPanel.setOpaque(false);
-        
-        JButton refreshEventButton = new JButton("Recarregar Eventos");
-        refreshEventButton.setBackground(new Color(0x330065));
-        refreshEventButton.setForeground(Color.WHITE);
-        refreshEventButton.setFocusPainted(false);
-        refreshEventButton.setBorderPainted(false);
-        refreshEventButton.setOpaque(true);
-        refreshEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-        refreshEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        refreshEventButton.addActionListener(e -> {
-            ExibirEvents();
-        });
-        rightButtonsPanel.add(refreshEventButton);
-        
+               
         // Botão Criar Evento
         JButton createEventButton = new JButton("Criar Evento");
         createEventButton.setBackground(new Color(0x330065));
@@ -151,7 +139,8 @@ public class MainPage extends JPanel {
         profileButton.setOpaque(false);
         profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
         profileButton.addActionListener(e -> {
-            showMainPanel(new JPanel());
+            ProfilePage profilePage = new ProfilePage();
+            showMainPanel(profilePage);
         });
         rightButtonsPanel.add(profileButton);
 
@@ -171,6 +160,10 @@ public class MainPage extends JPanel {
         ImageIcon sbprofileIcon = new ImageIcon(getClass().getResource("/Sidebar/Profile.png"));
         JButton btnPerfil = new JButton(sbprofileIcon);
         configurarBotaoSidebar(btnPerfil);
+        btnPerfil.addActionListener(e -> {
+            var profilePage = new ProfilePage();
+            showMainPanel(profilePage);
+        });
 
         ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
         JButton btnConfig = new JButton(sbsettingsIcon);
@@ -292,47 +285,41 @@ public class MainPage extends JPanel {
         });
     }
 
-    public void showMainPanel(JPanel x) {
+   public void showMainPanel(JPanel x) {
+    galleryPanel.removeAll();
+
+    JPanel whitePanel = x;
+    whitePanel.setBackground(new Color(0xe5d8fd));
+    whitePanel.setSize(1130, 590);
+
+    int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
+    int margemTopo = 30;
+    whitePanel.setLocation(margemEsquerda, margemTopo);
+    whitePanel.setLayout(null); // Importante para posicionamento absoluto do botão de fechar
+
+    // Botão de fechar
+    JButton closeButton = new JButton("X");
+    closeButton.setBounds(whitePanel.getWidth() - 35, 5, 30, 30);
+    closeButton.setBackground(new Color(0xe5d8fd));
+    closeButton.setBorderPainted(false);
+    closeButton.setFocusPainted(false);
+    closeButton.setFont(new Font("Arial", Font.BOLD, 12));
+    closeButton.setForeground(Color.RED);
+
+    closeButton.addActionListener(e -> {
         galleryPanel.removeAll();
-
-        JPanel whitePanel = x;
-        whitePanel.setBackground(new Color(0xe5d8fd));
-        whitePanel.setSize(1130, 590); // Tamanho do retângulo
-
-        // Define margens fixas a partir da esquerda e do topo
-        int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
-        int margemTopo = 30;
-        whitePanel.setLocation(margemEsquerda, margemTopo);
-
-        // Botão de fechar
-        JButton closeButton = new JButton("X");
-        closeButton.setPreferredSize(new Dimension(30, 30));
-        closeButton.setBackground(new Color(0xe5d8fd));
-        closeButton.setBorderPainted(false);
-        closeButton.setFocusPainted(false);
-        closeButton.setFont(new Font("Arial", Font.BOLD, 12));
-        closeButton.setForeground(Color.RED);
-
-        // Posiciona o botão no canto superior direito do whitePanel
-        closeButton.setBounds(whitePanel.getWidth() - 40, 10, 30, 30);
-
-        closeButton.addActionListener(e -> {
-            // Ação para fechar ou ocultar o painel
-            whitePanel.setVisible(false);  // Ou pode usar galleryPanel.remove(whitePanel);
-            galleryPanel.repaint();
-            galleryPanel.revalidate();
-        });
-
-        // Adiciona o botão de fechar no painel branco
-        whitePanel.setLayout(null);
-        whitePanel.add(closeButton);
-
-        // Adiciona o whitePanel à galleryPanel
-        galleryPanel.setLayout(null);
-        galleryPanel.add(whitePanel);
-        galleryPanel.repaint();
+        ExibirEvents(); // Volta para o conteúdo principal
         galleryPanel.revalidate();
-    }
+        galleryPanel.repaint();
+    });
+
+    whitePanel.add(closeButton);
+    galleryPanel.add(whitePanel);
+
+    galleryPanel.revalidate();
+    galleryPanel.repaint();
+}
+
 
 
     private void configurarBotaoSidebar(JButton button) {
