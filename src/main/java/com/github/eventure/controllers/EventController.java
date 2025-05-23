@@ -87,8 +87,8 @@ public class EventController {
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
 
-	public void eventClone(String title, String description,  EventClassification type, String date,
-			String startHours, String endHours, Cep cep, int id) {
+	public void eventClone(int idEvent ,String title, String description,  EventClassification type, String date,
+			String startHours, String endHours, String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
 		var eventClone = new Event();
 		eventClone.setTitle(title);
 		eventClone.setDescription(description);
@@ -96,9 +96,17 @@ public class EventController {
 		eventClone.setDate(date);
 		eventClone.setStartHours(startHours);
 		eventClone.setEndHours(endHours);
-		eventClone.setCep(cep);
-		eventClone.setId(id);
-		applyChanges(id, eventClone);
+		var address = new Address();
+		address.setCep(cep);
+		address.setEstado(estado);
+		address.setCidade(cidade);
+		address.setBairro(bairro);
+		address.setComplemento(complemento);
+		address.setNumero(numero);
+		address.setRua(rua);
+		eventClone.setAddress(address);
+		eventClone.setId(idEvent);
+		applyChanges(idEvent, eventClone);
 	}
 
 	public void applyChanges(int id, Event eventClone) {

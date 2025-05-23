@@ -37,7 +37,7 @@ public class MainFrame extends JFrame {
     	userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
     	var eventos  = EventController.getInstance();
     	String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
-    	eventos.createEventSemMessageBox(IdController.getIdUser(),"evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS, "20/02/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20", "orlando novaes", "300", "casa");
+    	eventos.createEventSemMessageBox(0,"evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS, "20/02/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20", "orlando novaes", "300", "casa");
 
         // Adiciona as telas (pages) no contentPanel
         WelcomePage welcomePage = new WelcomePage(this);

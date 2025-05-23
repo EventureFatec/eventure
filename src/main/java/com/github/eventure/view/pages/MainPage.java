@@ -79,21 +79,7 @@ public class MainPage extends JPanel {
         
         // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightButtonsPanel.setOpaque(false);
-        
-        JButton refreshEventButton = new JButton("Recarregar Eventos");
-        refreshEventButton.setBackground(new Color(0x330065));
-        refreshEventButton.setForeground(Color.WHITE);
-        refreshEventButton.setFocusPainted(false);
-        refreshEventButton.setBorderPainted(false);
-        refreshEventButton.setOpaque(true);
-        refreshEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-        refreshEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        refreshEventButton.addActionListener(e -> {
-            ExibirEvents();
-        });
-        rightButtonsPanel.add(refreshEventButton);
-        
+        rightButtonsPanel.setOpaque(false);  
         // Botão Criar Evento
         JButton createEventButton = new JButton("Criar Evento");
         createEventButton.setBackground(new Color(0x330065));
@@ -328,6 +314,7 @@ public class MainPage extends JPanel {
             whitePanel.setVisible(false);  // Ou pode usar galleryPanel.remove(whitePanel);
             galleryPanel.repaint();
             galleryPanel.revalidate();
+            ExibirEvents();
         });
 
         // Adiciona o botão de fechar no painel branco
