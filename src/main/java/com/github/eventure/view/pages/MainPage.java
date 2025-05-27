@@ -1,16 +1,39 @@
 package com.github.eventure.view.pages;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
-import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.ProfilePage;
 
 public class MainPage extends JPanel {
@@ -285,21 +308,26 @@ public class MainPage extends JPanel {
         });
     }
 
-   public void showMainPanel(JPanel x) {
+public void showMainPanel(JPanel contentPanel) {
     galleryPanel.removeAll();
+    galleryPanel.setLayout(new GridBagLayout()); // Centraliza o conteúdo
 
-    JPanel whitePanel = x;
+    // Cria painel branco (container)
+    JPanel whitePanel = new JPanel(new BorderLayout());
     whitePanel.setBackground(new Color(0xe5d8fd));
-    whitePanel.setSize(1130, 590);
 
-    int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
-    int margemTopo = 30;
-    whitePanel.setLocation(margemEsquerda, margemTopo);
-    whitePanel.setLayout(null); // Importante para posicionamento absoluto do botão de fechar
+    // Define o tamanho com base no conteúdo
+    Dimension preferredSize = contentPanel.getPreferredSize();
+    int width = preferredSize.width + 60;  // Margem extra para botão de fechar
+    int height = preferredSize.height + 40;
+    whitePanel.setPreferredSize(new Dimension(width, height));
 
-    // Botão de fechar
+    // Topo com botão de fechar
+    JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    topPanel.setOpaque(false);
+
     JButton closeButton = new JButton("X");
-    closeButton.setBounds(whitePanel.getWidth() - 35, 5, 30, 30);
+    closeButton.setPreferredSize(new Dimension(30, 30));
     closeButton.setBackground(new Color(0xe5d8fd));
     closeButton.setBorderPainted(false);
     closeButton.setFocusPainted(false);
@@ -308,18 +336,26 @@ public class MainPage extends JPanel {
 
     closeButton.addActionListener(e -> {
         galleryPanel.removeAll();
-        ExibirEvents(); // Volta para o conteúdo principal
+        galleryPanel.setLayout(null); // Volta ao estado original se necessário
+        ExibirEvents();
         galleryPanel.revalidate();
         galleryPanel.repaint();
     });
 
-    whitePanel.add(closeButton);
-    galleryPanel.add(whitePanel);
+    topPanel.add(closeButton);
+    whitePanel.add(topPanel, BorderLayout.NORTH);
+    whitePanel.add(contentPanel, BorderLayout.CENTER);
 
+    // Centraliza no painel
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.anchor = GridBagConstraints.CENTER;
+
+    galleryPanel.add(whitePanel, gbc);
     galleryPanel.revalidate();
     galleryPanel.repaint();
 }
-
 
 
     private void configurarBotaoSidebar(JButton button) {
