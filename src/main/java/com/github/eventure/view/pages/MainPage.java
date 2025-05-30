@@ -12,7 +12,7 @@ import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EditEventPanel;
-import com.github.eventure.view.components.EventPanelEdit;
+
 
 public class MainPage extends JPanel {
 
@@ -43,7 +43,7 @@ public class MainPage extends JPanel {
 
         // Galeria (plano de fundo)
         galleryPanel = new JPanel();
-        galleryPanel.setLayout(null);
+        galleryPanel.setLayout(null); // hbox layout 
         galleryPanel.setBackground(new Color(0x330065));
         galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH, frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
@@ -177,8 +177,8 @@ public class MainPage extends JPanel {
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
         btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEditEventSB.addActionListener(e -> { 
-            var editPanel = new EventPanelEdit(this);
-            showMainPanel(editPanel);
+//            var editPanel = new EventPanelEdit();
+//            showMainPanel(editPanel);
         });
         configurarBotaoSidebar(btnEditEventSB);
 

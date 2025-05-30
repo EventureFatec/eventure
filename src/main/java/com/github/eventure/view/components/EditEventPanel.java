@@ -416,7 +416,7 @@ public class EditEventPanel extends JPanel {
 	            		var eventController = EventController.getInstance();
 	            		System.out.println("id controller no create event = "+IdController.getIdUser());
 	            		// metodo de editar
-	            		eventController.createEvent(IdController.getIdUser(), title, description,  selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);           		
+	            		eventController.eventClone(id, title, description, selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);          		
 	                    this.setVisible(false);
 	            	}else {
 	            		JOptionPane.showMessageDialog(null, "Erro ao criar evento preencha as informações com valores validos");

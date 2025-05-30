@@ -88,7 +88,7 @@ public class EventController {
 	}
 
 	public void eventClone(int idEvent ,String title, String description,  EventClassification type, String date,
-			String startHours, String endHours, String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
+			String startHours, String endHours, String caminho,String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
 		var eventClone = new Event();
 		eventClone.setTitle(title);
 		eventClone.setDescription(description);
@@ -96,6 +96,7 @@ public class EventController {
 		eventClone.setDate(date);
 		eventClone.setStartHours(startHours);
 		eventClone.setEndHours(endHours);
+		eventClone.setImagePath(caminho);
 		var address = new Address();
 		address.setCep(cep);
 		address.setEstado(estado);
@@ -136,9 +137,31 @@ public class EventController {
 		if (eventClone.getEndHours() != null && !(eventClone.getEndHours().equals(event.getEndHours()))) {
 			event.setEndHours(eventClone.getEndHours());
 		}
-		if (eventClone.getCep() != null && !(eventClone.getCep().equals(event.getCep()))) {
-			event.setCep(eventClone.getCep());
+		if (eventClone.getImagePath() != null && !(eventClone.getImagePath().equals(event.getImagePath()))) {
+			event.setImagePath(eventClone.getImagePath());
 		}
+		if (eventClone.getAddress().getCep() != null && !(eventClone.getAddress().getCep().equals(event.getAddress().getCep()))) {
+			event.getAddress().setCep(eventClone.getAddress().getCep());
+		}
+		if (eventClone.getAddress().getEstado() != null && !(eventClone.getAddress().getEstado().equals(event.getAddress().getEstado()))) {
+			event.getAddress().setEstado(eventClone.getAddress().getEstado());
+		}
+		if (eventClone.getAddress().getCidade() != null && !(eventClone.getAddress().getCidade().equals(event.getAddress().getCidade()))) {
+			event.getAddress().setCidade(eventClone.getAddress().getCidade());
+		}
+		if (eventClone.getAddress().getBairro() != null && !(eventClone.getAddress().getBairro().equals(event.getAddress().getBairro()))) {
+			event.getAddress().setBairro(eventClone.getAddress().getBairro());
+		}
+		if (eventClone.getAddress().getRua() != null && !(eventClone.getAddress().getRua().equals(event.getAddress().getRua()))) {
+			event.getAddress().setRua(eventClone.getAddress().getRua());
+		}
+		if (eventClone.getAddress().getComplemento() != null && !(eventClone.getAddress().getComplemento().equals(event.getAddress().getComplemento()))) {
+			event.getAddress().setComplemento(eventClone.getAddress().getComplemento());
+		}
+		if (eventClone.getAddress().getNumero() != null && !(eventClone.getAddress().getNumero().equals(event.getAddress().getNumero()))) {
+			event.getAddress().setNumero(eventClone.getAddress().getNumero());
+		}
+		
 	}
 
 	public void print(List<Event> eventos) {
