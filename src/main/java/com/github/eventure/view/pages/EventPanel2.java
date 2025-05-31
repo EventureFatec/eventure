@@ -71,7 +71,7 @@ public class EventPanel2 extends JPanel {
                 System.out.println("Clicou no evento com ID: " + idEvento);
                 var editEvent = new EditEventPanel(idEvento);
                 // chamar a tela exibir evento completo
-                mainPage.showMainPanel(editEvent);
+                mainPage.showMainPanel(editEvent,0);
             }
         });
         add(infoPanel, BorderLayout.CENTER);

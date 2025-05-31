@@ -35,6 +35,7 @@ public class MainFrame extends JFrame {
     	var userController = UserController.getInstance();
     	userController.createUserSemMessageBox("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
     	userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
+    	userController.createUserSemMessageBox("luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
     	var eventos  = EventController.getInstance();
     	String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
     	eventos.createEventSemMessageBox(0,"evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS, "20/02/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20", "orlando novaes", "300", "casa");

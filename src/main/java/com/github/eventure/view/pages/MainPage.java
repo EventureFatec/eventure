@@ -1,18 +1,43 @@
 package com.github.eventure.view.pages;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EditEventPanel;
-
+import com.github.eventure.view.components.EventPanelEdit;
+import com.github.eventure.view.components.ProfilePage;
 
 public class MainPage extends JPanel {
 
@@ -91,7 +116,7 @@ public class MainPage extends JPanel {
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         createEventButton.addActionListener(e -> {
             var createEventPanel = new CreateEventPanel(); 
-            showMainPanel(createEventPanel);
+            showMainPanel(createEventPanel,0);
         });
         rightButtonsPanel.add(createEventButton);
 
@@ -139,7 +164,8 @@ public class MainPage extends JPanel {
         profileButton.setOpaque(false);
         profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
         profileButton.addActionListener(e -> {
-            showMainPanel(new JPanel());
+            ProfilePage profilePage = new ProfilePage();
+            showMainPanel(profilePage,1);
         });
         rightButtonsPanel.add(profileButton);
 
@@ -159,6 +185,10 @@ public class MainPage extends JPanel {
         ImageIcon sbprofileIcon = new ImageIcon(getClass().getResource("/Sidebar/Profile.png"));
         JButton btnPerfil = new JButton(sbprofileIcon);
         configurarBotaoSidebar(btnPerfil);
+        btnPerfil.addActionListener(e -> {
+            var profilePage = new ProfilePage();
+            showMainPanel(profilePage,1);
+        });
 
         ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
         JButton btnConfig = new JButton(sbsettingsIcon);
@@ -169,7 +199,7 @@ public class MainPage extends JPanel {
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCreateEventSB.addActionListener(e -> { 
             var createEventPanel = new CreateEventPanel();
-            showMainPanel(createEventPanel);
+            showMainPanel(createEventPanel,0);
         });
         configurarBotaoSidebar(btnCreateEventSB);
 
@@ -177,8 +207,8 @@ public class MainPage extends JPanel {
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
         btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEditEventSB.addActionListener(e -> { 
-//            var editPanel = new EventPanelEdit();
-//            showMainPanel(editPanel);
+            var editPanel = new EventPanelEdit(this);
+            showMainPanel(editPanel,0);
         });
         configurarBotaoSidebar(btnEditEventSB);
 
@@ -284,50 +314,178 @@ public class MainPage extends JPanel {
             }
         });
     }
-
-    public void showMainPanel(JPanel x) {
+    private void configurarBotaoFechar(JButton botao) {
+        botao.setFocusPainted(false);
+        botao.setBorderPainted(false);
+        botao.setContentAreaFilled(false);
+        botao.setOpaque(true);
+        botao.setBackground(new Color(0x990000));
+        botao.setForeground(Color.WHITE);
+        botao.setFont(new Font("SansSerif", Font.BOLD, 12));
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+    public void showMainPanel(JPanel contentPanel, int modo) {
         galleryPanel.removeAll();
 
-        JPanel whitePanel = x;
-        whitePanel.setBackground(new Color(0xe5d8fd));
-        whitePanel.setSize(1130, 590); // Tamanho do retângulo
+        if (modo == 1) {
+            // Modo BoxLayout (como na branch Profile Page)
+            galleryPanel.setLayout(new GridBagLayout()); // Centraliza o conteúdo
 
-        // Define margens fixas a partir da esquerda e do topo
-        int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
-        int margemTopo = 30;
-        whitePanel.setLocation(margemEsquerda, margemTopo);
+            JPanel whitePanel = new JPanel(new BorderLayout());
+            whitePanel.setBackground(new Color(0xe5d8fd));
 
-        // Botão de fechar
-        JButton closeButton = new JButton("X");
-        closeButton.setPreferredSize(new Dimension(30, 30));
-        closeButton.setBackground(new Color(0xe5d8fd));
-        closeButton.setBorderPainted(false);
-        closeButton.setFocusPainted(false);
-        closeButton.setFont(new Font("Arial", Font.BOLD, 12));
-        closeButton.setForeground(Color.RED);
+            Dimension preferredSize = contentPanel.getPreferredSize();
+            int width = preferredSize.width + 60;
+            int height = preferredSize.height + 40;
+            whitePanel.setPreferredSize(new Dimension(width, height));
 
-        // Posiciona o botão no canto superior direito do whitePanel
-        closeButton.setBounds(whitePanel.getWidth() - 40, 10, 30, 30);
+            JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            topPanel.setOpaque(false);
 
-        closeButton.addActionListener(e -> {
-            // Ação para fechar ou ocultar o painel
-            whitePanel.setVisible(false);  // Ou pode usar galleryPanel.remove(whitePanel);
-            galleryPanel.repaint();
-            galleryPanel.revalidate();
-            ExibirEvents();
-        });
+            JButton closeButton = new JButton("X");
+            configurarBotaoFechar(closeButton);
 
-        // Adiciona o botão de fechar no painel branco
-        whitePanel.setLayout(null);
-        whitePanel.add(closeButton);
+            closeButton.addActionListener(e -> {
+                galleryPanel.removeAll();
+                galleryPanel.setLayout(null);
+                ExibirEvents();
+                galleryPanel.revalidate();
+                galleryPanel.repaint();
+            });
 
-        // Adiciona o whitePanel à galleryPanel
-        galleryPanel.setLayout(null);
-        galleryPanel.add(whitePanel);
-        galleryPanel.repaint();
+            topPanel.add(closeButton);
+            whitePanel.add(topPanel, BorderLayout.NORTH);
+            whitePanel.add(contentPanel, BorderLayout.CENTER);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.CENTER;
+            galleryPanel.add(whitePanel, gbc);
+        } else {
+            // Modo layout nulo (como na branch Carousel)
+            galleryPanel.setLayout(null);
+
+            JPanel whitePanel = contentPanel;
+            whitePanel.setBackground(new Color(0xe5d8fd));
+            whitePanel.setSize(1130, 590);
+
+            int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
+            int margemTopo = 30;
+            whitePanel.setLocation(margemEsquerda, margemTopo);
+
+            whitePanel.setLayout(null);
+
+            JButton closeButton = new JButton("X");
+            configurarBotaoFechar(closeButton);
+            closeButton.setBounds(whitePanel.getWidth() - 40, 10, 30, 30);
+
+            closeButton.addActionListener(e -> {
+                whitePanel.setVisible(false);
+                galleryPanel.repaint();
+                galleryPanel.revalidate();
+                ExibirEvents();
+            });
+
+            whitePanel.add(closeButton);
+            galleryPanel.add(whitePanel);
+        }
+
         galleryPanel.revalidate();
+        galleryPanel.repaint();
     }
-
+    // metodo showMainPanel da branch Profile Page
+//    public void showMainPanel(JPanel contentPanel) {
+//        galleryPanel.removeAll();
+//        galleryPanel.setLayout(new GridBagLayout()); // Centraliza o conteúdo
+//
+//        // Cria painel branco (container)
+//        JPanel whitePanel = new JPanel(new BorderLayout());
+//        whitePanel.setBackground(new Color(0xe5d8fd));
+//
+//        // Define o tamanho com base no conteúdo
+//        Dimension preferredSize = contentPanel.getPreferredSize();
+//        int width = preferredSize.width + 60;  // Margem extra para botão de fechar
+//        int height = preferredSize.height + 40;
+//        whitePanel.setPreferredSize(new Dimension(width, height));
+//
+//        // Topo com botão de fechar
+//        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+//        topPanel.setOpaque(false);
+//
+//        JButton closeButton = new JButton("X");
+//        closeButton.setPreferredSize(new Dimension(30, 30));
+//        closeButton.setBackground(new Color(0xe5d8fd));
+//        closeButton.setBorderPainted(false);
+//        closeButton.setFocusPainted(false);
+//        closeButton.setFont(new Font("Arial", Font.BOLD, 12));
+//        closeButton.setForeground(Color.RED);
+//
+//        closeButton.addActionListener(e -> {
+//            galleryPanel.removeAll();
+//            galleryPanel.setLayout(null); // Volta ao estado original se necessário
+//            ExibirEvents();
+//            galleryPanel.revalidate();
+//            galleryPanel.repaint();
+//        });
+//
+//        topPanel.add(closeButton);
+//        whitePanel.add(topPanel, BorderLayout.NORTH);
+//        whitePanel.add(contentPanel, BorderLayout.CENTER);
+//
+//        // Centraliza no painel
+//        GridBagConstraints gbc = new GridBagConstraints();
+//        gbc.gridx = 0;
+//        gbc.gridy = 0;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//
+//        galleryPanel.add(whitePanel, gbc);
+//        galleryPanel.revalidate();
+//        galleryPanel.repaint();
+//    }
+    // showMainPanel da branch frontend/carousel
+//    public void showMainPanel(JPanel x) {
+//        galleryPanel.removeAll();
+//
+//        JPanel whitePanel = x;
+//        whitePanel.setBackground(new Color(0xe5d8fd));
+//        whitePanel.setSize(1130, 590); // Tamanho do retângulo
+//
+//        // Define margens fixas a partir da esquerda e do topo
+//        int margemEsquerda = SIDEBAR_COLLAPSED_WIDTH + 30;
+//        int margemTopo = 30;
+//        whitePanel.setLocation(margemEsquerda, margemTopo);
+//
+//        // Botão de fechar
+//        JButton closeButton = new JButton("X");
+//        closeButton.setPreferredSize(new Dimension(30, 30));
+//        closeButton.setBackground(new Color(0xe5d8fd));
+//        closeButton.setBorderPainted(false);
+//        closeButton.setFocusPainted(false);
+//        closeButton.setFont(new Font("Arial", Font.BOLD, 12));
+//        closeButton.setForeground(Color.RED);
+//
+//        // Posiciona o botão no canto superior direito do whitePanel
+//        closeButton.setBounds(whitePanel.getWidth() - 40, 10, 30, 30);
+//
+//        closeButton.addActionListener(e -> {
+//            // Ação para fechar ou ocultar o painel
+//            whitePanel.setVisible(false);  // Ou pode usar galleryPanel.remove(whitePanel);
+//            galleryPanel.repaint();
+//            galleryPanel.revalidate();
+//            ExibirEvents();
+//        });
+//
+//        // Adiciona o botão de fechar no painel branco
+//        whitePanel.setLayout(null);
+//        whitePanel.add(closeButton);
+//
+//        // Adiciona o whitePanel à galleryPanel
+//        galleryPanel.setLayout(null);
+//        galleryPanel.add(whitePanel);
+//        galleryPanel.repaint();
+//        galleryPanel.revalidate();
+//    }
 
     private void configurarBotaoSidebar(JButton button) {
         button.setHorizontalAlignment(SwingConstants.LEFT);
@@ -340,7 +498,7 @@ public class MainPage extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFont(new Font("SansSerif", Font.PLAIN, 14));
         button.setForeground(Color.BLACK);
-        button.addActionListener(e -> showMainPanel(new JPanel()));
+        button.addActionListener(e -> showMainPanel(new JPanel(), 1));
     }
 
     private void expandSidebar() {
