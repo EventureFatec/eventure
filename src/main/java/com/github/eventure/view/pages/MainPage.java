@@ -226,13 +226,20 @@ createEventButton.addActionListener(e -> {
 
         ImageIcon sbhomeIcon = new ImageIcon(getClass().getResource("/Sidebar/HomeButton.png"));
         JButton btnInicio = new JButton(sbhomeIcon);
+        btnInicio.addActionListener(e -> {
+            galleryPanel.removeAll();
+            galleryPanel.setLayout(null); // Volta ao estado original se necessário
+            ExibirEvents();
+            galleryPanel.revalidate();
+            galleryPanel.repaint();
+        });
         configurarBotaoSidebar(btnInicio);
 
         ImageIcon sbprofileIcon = new ImageIcon(getClass().getResource("/Sidebar/Profile.png"));
         JButton btnPerfil = new JButton(sbprofileIcon);
         configurarBotaoSidebar(btnPerfil);
         btnPerfil.addActionListener(e -> {
-            var profilePage = new ProfilePage();
+            ProfilePage profilePage = new ProfilePage();
             showMainPanel(profilePage);
         });
 
@@ -251,6 +258,9 @@ createEventButton.addActionListener(e -> {
 
         ImageIcon sbeditEventIcn = new ImageIcon(getClass().getResource("/Sidebar/EditEventSB.png"));
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
+        btnEditEventSB.addActionListener(e -> {
+            // Implementando...
+        });
         configurarBotaoSidebar(btnEditEventSB);
 
         ImageIcon sbconsultEventIcn = new ImageIcon(getClass().getResource("/Sidebar/ConsultEventSB.png"));
@@ -262,7 +272,7 @@ createEventButton.addActionListener(e -> {
         configurarBotaoSidebar(btnPresenceSB);
 
         ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
-        JButton btnHelpCenterSB = new JButton();
+        JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
         configurarBotaoSidebar(btnHelpCenterSB);
             
         ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
@@ -416,7 +426,6 @@ public void showMainPanel(JPanel contentPanel) {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFont(new Font("SansSerif", Font.PLAIN, 14));
         button.setForeground(Color.BLACK);
-        button.addActionListener(e -> showMainPanel(new JPanel()));
     }
 
     private void expandSidebar() {
