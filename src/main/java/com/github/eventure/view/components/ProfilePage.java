@@ -31,6 +31,7 @@ import com.github.eventure.view.MainFrame;
 public class ProfilePage extends JPanel {
     private JTextField name;
     private JTextField email;
+    private JTextField cpf;
     private JTextField username;
     private JPasswordField Password;
     private JPasswordField Password2;
@@ -96,6 +97,11 @@ public class ProfilePage extends JPanel {
         username.setText(loggedUser.getUsername());
         add(username);
 
+        add(label("CPF"));
+        cpf = textField();
+        cpf.setText(loggedUser.getCpf());
+        add(cpf);
+
         add(label("Email"));
         email = textField();
         email.setText(loggedUser.getEmail());
@@ -121,19 +127,21 @@ public class ProfilePage extends JPanel {
         saveButton.addActionListener(e -> {           
             String newName = name.getText();
             String newUsername = username.getText();
+            String newCpf = cpf.getText();
             String newEmail = email.getText();
             String newPassword = new String(Password.getPassword());
             String newPassword2 = new String(Password2.getPassword());
 
             System.out.println(newName);
             System.out.println(newUsername);
+            System.out.println(newCpf);
             System.out.println(newEmail);
             System.out.println(newPassword);
             System.out.println(newPassword2);
 
             if (newPassword.equals(newPassword2)){
                 System.out.println("Modificando usuário...");
-                ApplyChanges(newName, newUsername, newEmail, newPassword);
+                ApplyChanges(newName, newUsername, newCpf, newEmail, newPassword);
             }    
         });
 
@@ -178,11 +186,10 @@ public class ProfilePage extends JPanel {
         return field;
     }
 
-    private void ApplyChanges(String name, String username, String email, String password) {
+    private void ApplyChanges(String name, String username, String cpf, String email, String password) {
         var userController = UserController.getInstance();
 
         int id = loggedUser.getUserId();
-        String cpf = loggedUser.getCpf();
 
         userController.cloneUser(name, username, password, email, cpf, id);
         System.out.println("Usuário modificado!");
