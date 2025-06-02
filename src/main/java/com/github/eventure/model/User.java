@@ -18,12 +18,13 @@ public class User {
     private String cpf;
 	private String profilePic;
     private boolean organazador = false;
+    private boolean isLogged = false;
     private List<Integer> myEventsList = new ArrayList<>(); // salva uma lista com todos os eventos que ele criou
     private List<Integer> eventsList = new ArrayList<>();  // Inicializando a lista de eventos
     private List<Integer> communityList = new ArrayList<>(); // Inicializando a lista de comunidades
 
     // Construtor
-    public User(String name, String email, String username, Password password, int userId, String cpf, String profilePic) {
+    public User(String name, String email, String username, Password password, int userId, String cpf, String profilePic, boolean isLogged) {
         this.name = name;
         this.email = email;
         this.username = username;
@@ -31,6 +32,7 @@ public class User {
         this.userId = userId;
         this.cpf = cpf;
 		this.profilePic = profilePic;
+        this.isLogged = isLogged;
     }
 
     // Getters e Setters
@@ -80,6 +82,14 @@ public class User {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public boolean getIsLogged(boolean isLogged) {
+        return this.isLogged;
+    }
+
+    public void setIsLogged(boolean isLogged) {
+        this.isLogged = isLogged;
     }
 
 	public String getProfilePic(String profilePic) {

@@ -10,6 +10,7 @@ import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.NumericDocumentFilter;
+import com.github.eventure.model.User;
 import com.github.eventure.model.address.Cep;
 import com.github.eventure.web.Requests;
 
@@ -36,7 +37,11 @@ public class CreateEventPanel extends JPanel {
   private String numero;
   private String complemento;
   private EventClassification selectedClassification;
-    public CreateEventPanel() {
+
+  private User user;
+
+    public CreateEventPanel(User user) {
+        this.user = user;
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
 

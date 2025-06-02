@@ -7,6 +7,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -15,23 +17,29 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.ImageController;
+import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.Session;
+import com.github.eventure.model.User;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.ProfilePage;
@@ -112,10 +120,50 @@ public class MainPage extends JPanel {
         createEventButton.setOpaque(true);
         createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        createEventButton.addActionListener(e -> {
-            var createEventPanel = new CreateEventPanel(); 
-            showMainPanel(createEventPanel);
-        });
+createEventButton.addActionListener(e -> {
+    User user = Session.getLoggedUser();
+
+    if (user == null) {
+        JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser exibido!
+        return;
+    }
+
+    if (user.getCpf() == null) {
+        int opcao = JOptionPane.showConfirmDialog(null,
+                "Deseja se tornar um organizador?", "Confirmação", JOptionPane.YES_NO_OPTION);
+
+        if (opcao == JOptionPane.YES_OPTION) {
+            JTextField cpfField = new JTextField(15);
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(new JLabel("Digite seu CPF:"));
+            panel.add(cpfField);
+
+            int result = JOptionPane.showConfirmDialog(null, panel,
+                    "Cadastro de CPF", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String cpf = cpfField.getText().trim();
+                if (!UserController.getInstance().validateCpf(cpf) || !cpf.isEmpty()) {
+                    Session.getLoggedUser().setCpf(cpf);
+                    JOptionPane.showMessageDialog(null, "Você agora é um organizador!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "CPF inválido!");
+                    return;
+                }
+            } else {
+                return; // cancelou o cadastro
+            }
+        } else {
+            return; // não quis se tornar organizador
+        }
+    }
+
+    // Continua para criação do evento
+    var createEventPanel = new CreateEventPanel(user);
+    showMainPanel(createEventPanel);
+});
+
         rightButtonsPanel.add(createEventButton);
 
         // Botão Chat
@@ -196,8 +244,8 @@ public class MainPage extends JPanel {
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCreateEventSB.addActionListener(e -> { 
-            var createEventPanel = new CreateEventPanel();
-            showMainPanel(createEventPanel);
+//          var createEventPanel = new CreateEventPanel(User user);
+//          showMainPanel(createEventPanel);
         });
         configurarBotaoSidebar(btnCreateEventSB);
 
@@ -356,6 +404,44 @@ public void showMainPanel(JPanel contentPanel) {
     galleryPanel.revalidate();
     galleryPanel.repaint();
 }
+
+public class BecomeOrganizerDialog extends JDialog {
+    public BecomeOrganizerDialog(JFrame parent, Consumer<String> onConfirm) {
+        super(parent, "Tornar-se Organizador", true);
+        setLayout(new BorderLayout());
+        setSize(300, 150);
+        setLocationRelativeTo(parent);
+
+        JTextField cpfField = new JTextField();
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        inputPanel.add(new JLabel("Digite seu CPF:"), BorderLayout.NORTH);
+        inputPanel.add(cpfField, BorderLayout.CENTER);
+
+        JButton confirmButton = new JButton("Confirmar");
+        JButton closeButton = new JButton("Fechar");
+
+        confirmButton.addActionListener(e -> {
+            String cpf = cpfField.getText().trim();
+            if (!cpf.isEmpty()) {
+                onConfirm.accept(cpf);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "CPF não pode estar vazio.");
+            }
+        });
+
+        closeButton.addActionListener(e -> dispose());
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(confirmButton);
+        buttonPanel.add(closeButton);
+
+        add(inputPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+}
+
 
 
     private void configurarBotaoSidebar(JButton button) {

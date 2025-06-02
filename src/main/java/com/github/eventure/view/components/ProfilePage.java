@@ -4,53 +4,33 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+import com.github.eventure.controllers.ImageController;
+import com.github.eventure.controllers.UserController;
+import com.github.eventure.encryption.Encryption;
+import com.github.eventure.model.Session;
+import com.github.eventure.model.User;
+import com.github.eventure.model.passwords.Password;
+
 public class ProfilePage extends JPanel {
     private JTextField name;
     private JTextField email;
     private JTextField username;
-    private JPasswordField newPassword;
-    private JPasswordField newPassword2;
+    private JPasswordField Password;
+    private JPasswordField Password2;
     private JLabel imagePreview;
-    private JButton saveChangesBtn;
     private JButton selectImgBtn;
+    private String path;
+    private User loggedUser = Session.getLoggedUser();
 
     public ProfilePage() {
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(240, 240, 240)); // fundo claro neutro
-
-        // Painel principal centralizado horizontalmente
-        JPanel wrapperPanel = new JPanel();
-        wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.X_AXIS));
-        wrapperPanel.setOpaque(false);
-
-        // Espaço esquerdo (para centralizar)
-        wrapperPanel.add(Box.createHorizontalGlue());
-
-        // LEFT PANEL (Foto simples - se quiser manter separado, pode deixar vazio ou colocar algo)
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setOpaque(false);
-        leftPanel.setMaximumSize(new Dimension(160, Integer.MAX_VALUE));
-        leftPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-        wrapperPanel.add(leftPanel);
-
-        // Espaço entre leftPanel e rightPanel
-        wrapperPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-
-        // RIGHT PANEL (imagem + formulário empilhados verticalmente)
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setOpaque(false);
-        rightPanel.setMaximumSize(new Dimension(360, Integer.MAX_VALUE));
-        rightPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-
-        // --- Começa a montagem da imagem + botão em cima ---
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Label "Imagem:"
         JLabel imageLabel = new JLabel("Imagem:");
         imageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rightPanel.add(imageLabel);
+        add(imageLabel);
 
         // Preview da imagem
         imagePreview = new JLabel();
@@ -60,7 +40,7 @@ public class ProfilePage extends JPanel {
         ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rightPanel.add(imagePreview);
+        add(imagePreview);
 
         // Botão de selecionar imagem
         selectImgBtn = new JButton(" ");
@@ -70,42 +50,85 @@ public class ProfilePage extends JPanel {
         ImageIcon icon02 = new ImageIcon(getClass().getResource("/iconFotoRosa.png"));
         selectImgBtn.setIcon(icon02);
         selectImgBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rightPanel.add(selectImgBtn);
+        selectImgBtn.addActionListener(e -> {
+            ImageController imageController = new ImageController();
+            path = imageController.selecionarImagem();
+            if (path != null && !path.isEmpty()) {
+                var icontemp = new ImageIcon(path);
+                Image resizedImg = icontemp.getImage().getScaledInstance(
+                        imagePreview.getWidth(),
+                        imagePreview.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                imagePreview.setIcon(new ImageIcon(resizedImg));
+                imagePreview.repaint();
+            }
+        });
+        add(selectImgBtn);
 
-        // Espaço após o botão
-        rightPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        add(Box.createRigidArea(new Dimension(0, 15))); // espaço vertical
 
-        // --- Agora os campos do formulário ---
-
-        rightPanel.add(label("Nome"));
+        // Campos do formulário
+        add(label("Nome"));
         name = textField();
-        rightPanel.add(name);
+        name.setText(loggedUser.getName());
+        add(name);
 
-        rightPanel.add(label("User Name"));
+        add(label("User Name"));
         username = textField();
-        rightPanel.add(username);
+        username.setText(loggedUser.getUsername());
+        add(username);
 
-        rightPanel.add(label("Email"));
+        add(label("Email"));
         email = textField();
-        rightPanel.add(email);
+        email.setText(loggedUser.getEmail());
+        add(email);
 
-        rightPanel.add(label("Nova Senha"));
-        newPassword = passwordField();
-        rightPanel.add(newPassword);
+        add(label("Nova Senha"));
+        Password = passwordField();
+        add(Password);
 
-        rightPanel.add(label("Repita a Nova Senha"));
-        newPassword2 = passwordField();
-        rightPanel.add(newPassword2);
+        add(label("Repita a Nova Senha"));
+        Password2 = passwordField();
+        add(Password2);
 
-        // Finaliza montagem adicionando rightPanel ao wrapperPanel
-        wrapperPanel.add(rightPanel);
+        add(Box.createRigidArea(new Dimension(0, 30))); // espaço antes dos botões
 
-        // Espaço direito para centralizar
-        wrapperPanel.add(Box.createHorizontalGlue());
+        // Painel horizontal para os botões lado a lado
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+        buttonsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        buttonsPanel.setOpaque(false);
 
-        add(Box.createVerticalGlue(), BorderLayout.NORTH);
-        add(wrapperPanel, BorderLayout.CENTER);
-        add(Box.createVerticalGlue(), BorderLayout.SOUTH);
+        JButton saveButton = new JButton("Salvar");
+        saveButton.addActionListener(e -> {           
+            String newName = name.getText();
+            String newUsername = username.getText();
+            String newEmail = email.getText();
+            String newPassword = new String(Password.getPassword());
+            String newPassword2 = new String(Password2.getPassword());
+
+            System.out.println(newName);
+            System.out.println(newUsername);
+            System.out.println(newEmail);
+            System.out.println(newPassword);
+            System.out.println(newPassword2);
+
+            if (newPassword.equals(newPassword2)){
+                System.out.println("Modificando usuário...");
+                ApplyChanges(newName, newUsername, newEmail, newPassword);
+            }    
+        });
+        JButton closeButton = new JButton("Cancelar");
+        JButton logoutButton = new JButton("Sair");
+
+        buttonsPanel.add(saveButton);
+        buttonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        buttonsPanel.add(closeButton);
+        buttonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        buttonsPanel.add(logoutButton);
+
+        add(buttonsPanel);
     }
 
     private JLabel label(String text) {
@@ -128,4 +151,15 @@ public class ProfilePage extends JPanel {
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         return field;
     }
+
+    private void ApplyChanges(String name, String username, String email, String password) {
+        var userController = UserController.getInstance();
+
+        int id = loggedUser.getUserId();
+        String cpf = loggedUser.getCpf();
+
+        userController.cloneUser(name, username, password, email, cpf, id);
+        System.out.println("Usuário modificado!");
+    }
+
 }
