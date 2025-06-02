@@ -1,15 +1,32 @@
 package com.github.eventure.view.components;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Image;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
-import java.awt.*;
 
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
-import com.github.eventure.encryption.Encryption;
+// import com.github.eventure.encryption.Encryption;
 import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
-import com.github.eventure.model.passwords.Password;
+// import com.github.eventure.model.passwords.Password;
+import com.github.eventure.view.MainFrame;
 
 public class ProfilePage extends JPanel {
     private JTextField name;
@@ -119,12 +136,21 @@ public class ProfilePage extends JPanel {
                 ApplyChanges(newName, newUsername, newEmail, newPassword);
             }    
         });
-        JButton closeButton = new JButton("Cancelar");
+
         JButton logoutButton = new JButton("Sair");
+        logoutButton.addActionListener(e -> {
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja sair da conta?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            if (opcao == JOptionPane.YES_OPTION) {
+                Session.logout();
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                if (frame instanceof MainFrame mainFrame) {
+                mainFrame.showPanel("welcome");
+                }
+            }
+        });
+
 
         buttonsPanel.add(saveButton);
-        buttonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        buttonsPanel.add(closeButton);
         buttonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonsPanel.add(logoutButton);
 

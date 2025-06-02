@@ -405,45 +405,6 @@ public void showMainPanel(JPanel contentPanel) {
     galleryPanel.repaint();
 }
 
-public class BecomeOrganizerDialog extends JDialog {
-    public BecomeOrganizerDialog(JFrame parent, Consumer<String> onConfirm) {
-        super(parent, "Tornar-se Organizador", true);
-        setLayout(new BorderLayout());
-        setSize(300, 150);
-        setLocationRelativeTo(parent);
-
-        JTextField cpfField = new JTextField();
-        JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        inputPanel.add(new JLabel("Digite seu CPF:"), BorderLayout.NORTH);
-        inputPanel.add(cpfField, BorderLayout.CENTER);
-
-        JButton confirmButton = new JButton("Confirmar");
-        JButton closeButton = new JButton("Fechar");
-
-        confirmButton.addActionListener(e -> {
-            String cpf = cpfField.getText().trim();
-            if (!cpf.isEmpty()) {
-                onConfirm.accept(cpf);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "CPF não pode estar vazio.");
-            }
-        });
-
-        closeButton.addActionListener(e -> dispose());
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(confirmButton);
-        buttonPanel.add(closeButton);
-
-        add(inputPanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-    }
-}
-
-
-
     private void configurarBotaoSidebar(JButton button) {
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
