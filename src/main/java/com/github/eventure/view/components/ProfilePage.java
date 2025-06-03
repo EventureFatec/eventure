@@ -85,7 +85,7 @@ public class ProfilePage extends JPanel {
         });
         add(selectImgBtn);
 
-        add(Box.createRigidArea(new Dimension(0, 15))); // espaço vertical
+        add(Box.createRigidArea(new Dimension(0, 15))); // espaço vertical 
 
         // Campos do formulário
         add(label("Nome"));
