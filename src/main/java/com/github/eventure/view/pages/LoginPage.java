@@ -3,22 +3,20 @@ package com.github.eventure.view.pages;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
 
-import com.github.eventure.model.EventClassification;
-import com.github.eventure.model.User;
-import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
-import com.github.eventure.encryption.Encryption;
+import com.github.eventure.model.Session;
+import com.github.eventure.model.User;
 import com.github.eventure.view.MainFrame;
 
 public class LoginPage extends JPanel {
@@ -28,6 +26,7 @@ public class LoginPage extends JPanel {
     private JButton loginButton;
     private JButton registerBtn;
     private UserController userController = UserController.getInstance();
+//  private User user;
 
     public LoginPage(MainFrame frame) {
         this.frame = frame;
@@ -80,26 +79,35 @@ public class LoginPage extends JPanel {
 
         // Corrigido ActionListener
         loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = loginField.getText();
-                String password = new String(passwordField.getPassword());
-                
-                if (username.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
-                    return;
-                }
-                userController = UserController.getInstance();
-                boolean loginSuccessful = userController.login(username, password);
-                if (loginSuccessful) {
-                	JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
-                	loginField.setText(" ");
-                	passwordField.setText("");
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String username = loginField.getText();
+            String password = new String(passwordField.getPassword());
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
+                return;
+            }
+        
+            userController = UserController.getInstance();
+            boolean loginSuccessful = userController.login(username, password);
+        
+            if (loginSuccessful) {
+                // Recupera o objeto User completo do controlador
+                User loggedUser = userController.findUserByUsername(username);
+                if (loggedUser != null) {
+                    Session.login(loggedUser);  // Salva o usuário logado na sessão
+                    JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
+                    loginField.setText("");
+                    passwordField.setText("");
                     frame.showPanel("home");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
+                    JOptionPane.showMessageDialog(null, "Erro ao recuperar dados do usuário.");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
             }
-        });
+        }
+    });
+
     }
 }

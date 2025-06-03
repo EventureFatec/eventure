@@ -144,10 +144,12 @@ public class UserController {
         return temMaiuscula && temNumero && temEspecial;
     }
 
-    public void cloneUser(String firstName, String lastName, String password, String email, String cpf, int id) {
+    public void cloneUser(String name, String username, String password, String email, String cpf, int id) {
         // Instantiate the user
         var userCloned = new User();
-        userCloned.setName(firstName + " " + lastName);
+        userCloned.setName(name);
+        userCloned.setUsername(username);
+
         EmailController emailTest = new EmailController();
         boolean verdade_ou_nao = emailTest.ValidateEmail(email);
 
@@ -177,6 +179,7 @@ public class UserController {
         }
 
         applyChanges(id, userCloned);
+        System.out.println("Modificado (cloneUser)");
 
     }
 
@@ -192,7 +195,6 @@ public class UserController {
     public User findUserById(int id) {
         return userStorage.find(user -> user.getUserId() == id).findFirst().orElse(null);
     }
-
     public boolean isUserRegistered(String username) {
         return userStorage.stream().anyMatch(user -> user.getName().equals(username));
     }
@@ -321,21 +323,20 @@ public class UserController {
         }
     }
 
-    public void applyChanges(int id, User userCloned) {
+    public boolean applyChanges(int id, User userCloned) {
         var storedUser = findUserById(id);
 
-        if (!(storedUser.getName() == userCloned.getName()) && userCloned.getName() != null) {
-            storedUser.setName(userCloned.getName());
-        }
-        if (!(storedUser.getEmail() == userCloned.getEmail()) && userCloned.getEmail() != null) {
-            storedUser.setEmail(userCloned.getEmail());
-        }
-        if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) {
-            storedUser.setCpf(userCloned.getCpf());
-        }
-        if (userCloned.getPassword() != null && !(storedUser.getPassword().equals(userCloned.getPassword()))) {
-            storedUser.setPassword(userCloned.getPassword());
-        }
+        if (!(storedUser.getName() == userCloned.getName()) && userCloned.getName() != null) storedUser.setName(userCloned.getName());
+
+        if (!(storedUser.getUsername() == userCloned.getUsername() && userCloned.getUsername() != null)) storedUser.setUsername(userCloned.getUsername());
+        
+        if (!(storedUser.getEmail() == userCloned.getEmail()) && userCloned.getEmail() != null) storedUser.setEmail(userCloned.getEmail());
+
+        if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) storedUser.setCpf(userCloned.getCpf());
+        
+        if (userCloned.getPassword() != null && !(storedUser.getPassword().equals(userCloned.getPassword()))) storedUser.setPassword(userCloned.getPassword());
+
+        return false;
 
     }
     public boolean createUserSemMessageBox(String firstName, String username, String password, String email) {
