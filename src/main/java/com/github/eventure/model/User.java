@@ -129,4 +129,13 @@ public class User {
     public void removeListMyEvents(int idEvento) {
     	myEventsList.remove(idEvento);
     }
+
+	public List<Integer> getMyEventsList() {
+		return myEventsList;
+	}
+
+	public void setMyEventsList(List<Integer> myEventsList) {
+		this.myEventsList = myEventsList;
+	}
+    
 }

@@ -1,6 +1,8 @@
 package com.github.eventure.view.pages;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -14,16 +16,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.github.eventure.view.MainFrame;
-import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
+import com.github.eventure.view.components.EditEventPanel;
 
-import javax.swing.*;
-import java.awt.*;
-
-public class EventPanel extends JPanel {
+public class EventPanel2 extends JPanel {
     private int idEvento;
-    public EventPanel(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
+    public EventPanel2(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
         // Tamanho fixo do painel
@@ -71,9 +69,9 @@ public class EventPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
-                var displayEvent = new DisplayEvent(idEvento);
+                var editEvent = new EditEventPanel(idEvento);
                 // chamar a tela exibir evento completo
-                mainPage.showMainPanel(displayEvent,0);
+                mainPage.showMainPanel(editEvent,0);
             }
         });
         add(infoPanel, BorderLayout.CENTER);
@@ -83,4 +81,3 @@ public class EventPanel extends JPanel {
 	 
  }
 }
-

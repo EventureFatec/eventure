@@ -21,6 +21,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 import com.github.eventure.controllers.ImageController;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import com.github.eventure.controllers.UserController;
 // import com.github.eventure.encryption.Encryption;
 import com.github.eventure.model.Session;
@@ -37,9 +40,9 @@ public class ProfilePage extends JPanel {
     private JPasswordField Password2;
     private JLabel imagePreview;
     private JButton selectImgBtn;
-    private String path;
+    private String imagePath;
     private User loggedUser = Session.getLoggedUser();
-
+  
     public ProfilePage() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -59,8 +62,34 @@ public class ProfilePage extends JPanel {
         ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(imagePreview);
+        rightPanel.add(imagePreview);
+        imagePreview.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+              	ImageController imageController = new ImageController();
+              	imagePath = imageController.selecionarImagem();
+            	 if(!imagePath.isEmpty() && imagePath != null) {
+                ImageIcon icon = new ImageIcon(imagePath);
 
+                // Redimensiona para caber no JLabel
+                Image imagemRedimensionada = icon.getImage().getScaledInstance(
+                    imagePreview.getWidth(),
+                    imagePreview.getHeight(),
+                    Image.SCALE_SMOOTH
+                );
+
+                // Define a imagem no JLabel
+                imagePreview.setIcon(new ImageIcon(imagemRedimensionada));
+                imagePreview.repaint();
+            	 }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                imagePreview.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            }
+        });
+      
         // Botão de selecionar imagem
         selectImgBtn = new JButton(" ");
         selectImgBtn.setBackground(new Color(0xe5d8fd));
@@ -71,9 +100,9 @@ public class ProfilePage extends JPanel {
         selectImgBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
         selectImgBtn.addActionListener(e -> {
             ImageController imageController = new ImageController();
-            path = imageController.selecionarImagem();
-            if (path != null && !path.isEmpty()) {
-                var icontemp = new ImageIcon(path);
+            imagePath = imageController.selecionarImagem();
+            if (imagePath != null && !imagePath.isEmpty()) {
+                var icontemp = new ImageIcon(imagePath);
                 Image resizedImg = icontemp.getImage().getScaledInstance(
                         imagePreview.getWidth(),
                         imagePreview.getHeight(),
