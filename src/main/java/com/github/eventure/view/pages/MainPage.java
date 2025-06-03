@@ -120,27 +120,27 @@ public class MainPage extends JPanel {
         createEventButton.setOpaque(true);
         createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-createEventButton.addActionListener(e -> {
-    User user = Session.getLoggedUser();
+        createEventButton.addActionListener(e -> {
+            User user = Session.getLoggedUser();
 
-    if (user == null) {
-        JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser exibido!
-        return;
-    }
+            if (user == null) {
+            JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser exibido!
+            return;
+        }
 
-    if (user.getCpf() == null) {
-        int opcao = JOptionPane.showConfirmDialog(null,
+        if (user.getCpf() == null) {
+          int opcao = JOptionPane.showConfirmDialog(null,
                 "Deseja se tornar um organizador?", "Confirmação", JOptionPane.YES_NO_OPTION);
 
-        if (opcao == JOptionPane.YES_OPTION) {
-            JTextField cpfField = new JTextField(15);
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-            panel.add(new JLabel("Digite seu CPF:"));
-            panel.add(cpfField);
+             if (opcao == JOptionPane.YES_OPTION) {
+                JTextField cpfField = new JTextField(15);
+                    JPanel panel = new JPanel();
+                    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                panel.add(new JLabel("Digite seu CPF:"));
+                panel.add(cpfField);
 
-            int result = JOptionPane.showConfirmDialog(null, panel,
-                    "Cadastro de CPF", JOptionPane.OK_CANCEL_OPTION);
+                int result = JOptionPane.showConfirmDialog(null, panel,
+                        "Cadastro de CPF", JOptionPane.OK_CANCEL_OPTION);
 
             if (result == JOptionPane.OK_OPTION) {
                 String cpf = cpfField.getText().trim();

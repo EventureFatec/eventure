@@ -42,8 +42,9 @@ public class ProfilePage extends JPanel {
 
     public ProfilePage() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(new Color(240, 240, 240)); // fundo claro neutro
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBackground(new Color(0xe5d8fd));
+
 
         // Label "Imagem:"
         JLabel imageLabel = new JLabel("Imagem:");
