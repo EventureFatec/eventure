@@ -1,12 +1,11 @@
 package com.github.eventure.model;
 
-import java.time.LocalTime;
+//import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 
 import com.github.eventure.model.address.Cep;
-
 
 public class Event {
 	private int id;
@@ -31,7 +30,7 @@ public class Event {
 	}
 
 	public Event(int id, String description, String title, EventClassification type, String date,
-			String startHours, String endHours,String imagePath, Address address) {
+			String startHours, String endHours, String imagePath, Address address) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -55,7 +54,7 @@ public class Event {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public int getIdMaker() {
 		return idMaker;
 	}
@@ -123,7 +122,7 @@ public class Event {
 	public void setEndHours(String endHours) {
 		this.endHours = endHours;
 	}
-    
+
 	public String getImagePath() {
 		return imagePath;
 	}
@@ -147,9 +146,11 @@ public class Event {
 	public void setType(EventClassification type) {
 		this.type = type;
 	}
+
 	public void addUsersParticipantes(int id) {
 		usersParticipantes.add(id);
 	}
+
 	public void removeUsersParticipantes(int id) {
 		usersParticipantes.remove(id);
 	}

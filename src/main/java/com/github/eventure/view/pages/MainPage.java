@@ -1,5 +1,6 @@
 package com.github.eventure.view.pages;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -7,12 +8,15 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -24,8 +28,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -42,8 +44,6 @@ import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
-import com.github.eventure.view.components.DisplayEvent;
-import com.github.eventure.view.components.EditEventPanel;
 import com.github.eventure.view.components.EventPanelEdit;
 import com.github.eventure.view.components.ProfilePage;
 
@@ -76,43 +76,81 @@ public class MainPage extends JPanel {
 
         // Galeria (plano de fundo)
         galleryPanel = new JPanel();
-        galleryPanel.setLayout(null); // hbox layout 
+        galleryPanel.setLayout(null); // hbox layout
         galleryPanel.setBackground(new Color(0x330065));
-        galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH, frame.getWidth() - topbar.getHeight());
+        galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH,
+                frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
-        
-        // Logo à esquerda
+
+        // Logo Topbar
         ImageIcon icon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
         JLabel logo = new JLabel(icon);
-        topbar.add(logo, BorderLayout.WEST);
+        var leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
+        leftPanel.add(logo);
+        topbar.add(leftPanel, BorderLayout.WEST);
 
         add(topbar, BorderLayout.NORTH);
-        // metodo para exibir os eventos na tela
-        
-//        ImageIcon iconSeta = new ImageIcon(getClass().getResource("/seta.png"));
-//        JButton btnPrev = new JButton("Anterior");
-//        btnPrev.setIcon(iconSeta);
-//        btnPrev.setBounds(160, 300, 40, 40);
-//        btnPrev.setEnabled((currentPage + 1) * pageSize < EventController.getInstance().getAllEvents().size());
-//        btnPrev.addActionListener(e -> {
-//            currentPage++;
-//            ExibirEvents();
-//        });
-//        galleryPanel.add(btnPrev);
-//        JButton btnNext = new JButton("Próximo");
-//        btnNext.setBounds(580, 300, 120, 30);
-//        btnNext.setEnabled((currentPage + 1) * pageSize < EventController.getInstance().getAllEvents().size());
-//        btnNext.addActionListener(e -> {
-//            currentPage++;
-//            ExibirEvents();
-//        });
-//        galleryPanel.add(btnNext);
 
         ExibirEvents();
-        
+
+        // Barra de pesquisa
+        var searchField = new JTextField() {
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g2.setColor(new Color(0xBDB2D2));
+                int arc = getHeight();
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+                super.paintComponent(g);
+                g2.dispose();
+            }
+
+            @Override
+            protected void paintBorder(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(180, 180, 180));
+                g2.setStroke(new BasicStroke(1));
+                int arc = getHeight();
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
+                g2.dispose();
+            }
+        };
+        searchField.setOpaque(false);
+        searchField.setPreferredSize(new Dimension(200, 35));
+        searchField.setMaximumSize(new Dimension(200, 35));
+        searchField.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        searchField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        // Placeholder visual
+        searchField.setToolTipText("Pesquisar...");
+        searchField.setForeground(Color.GRAY);
+
+        // Limpar o texto ao clicar na barra
+        searchField.addFocusListener(new java.awt.event.FocusListener() {
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (searchField.getText().equals("Pesquisar...")) {
+                    searchField.setText("");
+                    searchField.setForeground(Color.BLACK);
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (searchField.getText().isEmpty()) {
+                    searchField.setText("Pesquisar...");
+                    searchField.setForeground(Color.GRAY);
+                }
+            }
+        });
+
+        topbar.add(Box.createHorizontalGlue());
+        topbar.add(searchField);
+
         // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightButtonsPanel.setOpaque(false);  
+        rightButtonsPanel.setOpaque(false);
         // Botão Criar Evento
         JButton createEventButton = new JButton("Criar Evento");
         createEventButton.setBackground(new Color(0x330065));
@@ -126,56 +164,57 @@ public class MainPage extends JPanel {
             User user = Session.getLoggedUser();
 
             if (user == null) {
-            JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser exibido!
-            return;
-        }
+                JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser
+                                                                                     // exibido!
+                return;
+            }
 
-        if (user.getCpf() == null) {
-          int opcao = JOptionPane.showConfirmDialog(null,
-                "Deseja se tornar um organizador?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            if (user.getCpf() == null) {
+                int opcao = JOptionPane.showConfirmDialog(null,
+                        "Deseja se tornar um organizador?", "Confirmação", JOptionPane.YES_NO_OPTION);
 
-             if (opcao == JOptionPane.YES_OPTION) {
-                JTextField cpfField = new JTextField(15);
+                if (opcao == JOptionPane.YES_OPTION) {
+                    JTextField cpfField = new JTextField(15);
                     JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                panel.add(new JLabel("Digite seu CPF:"));
-                panel.add(cpfField);
+                    panel.add(new JLabel("Digite seu CPF:"));
+                    panel.add(cpfField);
 
-                int result = JOptionPane.showConfirmDialog(null, panel,
-                        "Cadastro de CPF", JOptionPane.OK_CANCEL_OPTION);
+                    int result = JOptionPane.showConfirmDialog(null, panel,
+                            "Cadastro de CPF", JOptionPane.OK_CANCEL_OPTION);
 
-            if (result == JOptionPane.OK_OPTION) {
-                String cpf = cpfField.getText().trim();
-                if (!UserController.getInstance().validateCpf(cpf) || !cpf.isEmpty()) {
-                    Session.getLoggedUser().setCpf(cpf);
-                    JOptionPane.showMessageDialog(null, "Você agora é um organizador!");
+                    if (result == JOptionPane.OK_OPTION) {
+                        String cpf = cpfField.getText().trim();
+                        if (!UserController.getInstance().validateCpf(cpf) || !cpf.isEmpty()) {
+                            Session.getLoggedUser().setCpf(cpf);
+                            JOptionPane.showMessageDialog(null, "Você agora é um organizador!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "CPF inválido!");
+                            return;
+                        }
+                    } else {
+                        return; // cancelou o cadastro
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "CPF inválido!");
-                    return;
+                    return; // não quis se tornar organizador
                 }
-            } else {
-                return; // cancelou o cadastro
             }
-        } else {
-            return; // não quis se tornar organizador
-        }
-    }
 
-    // Continua para criação do evento
-    var createEventPanel = new CreateEventPanel(user);
-    showMainPanel(createEventPanel);
-});
+            // Continua para criação do evento
+            var createEventPanel = new CreateEventPanel(user);
+            showMainPanel(createEventPanel, 0);
+        });
 
         rightButtonsPanel.add(createEventButton);
 
         // Botão Chat
         ImageIcon chatIcon = new ImageIcon(getClass().getResource("/ChatButton.png"));
         JButton chatButton = new JButton(chatIcon);
-        chatButton.setContentAreaFilled(false); 
-        chatButton.setBorderPainted(false);     
-        chatButton.setFocusPainted(false);      
+        chatButton.setContentAreaFilled(false);
+        chatButton.setBorderPainted(false);
+        chatButton.setFocusPainted(false);
         chatButton.setOpaque(false);
-        chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
+        chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         chatButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(frame, "Botão Chat clicado!", "Chat", JOptionPane.INFORMATION_MESSAGE);
             ExibirEvents();
@@ -185,35 +224,36 @@ public class MainPage extends JPanel {
         // Botão Notificação
         ImageIcon bellIcon = new ImageIcon(getClass().getResource("/BellButton.png"));
         JButton bellButton = new JButton(bellIcon);
-        bellButton.setContentAreaFilled(false); 
-        bellButton.setBorderPainted(false);     
-        bellButton.setFocusPainted(false);      
+        bellButton.setContentAreaFilled(false);
+        bellButton.setBorderPainted(false);
+        bellButton.setFocusPainted(false);
         bellButton.setOpaque(false);
-        bellButton.setCursor(new Cursor(Cursor.HAND_CURSOR));   
-        bellButton.addActionListener(e ->{
-        	var evt = EventController.getInstance();
-        	var eventClassification = EventClassification.GASTRONOMY;
+        bellButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        bellButton.addActionListener(e -> {
+            var evt = EventController.getInstance();
+            var eventClassification = EventClassification.GASTRONOMY;
 
-        	
-        	var img = new ImageController();
-        	String path = img.selecionarImagem();
-        	evt.createEvent(0,"feira de gastronomia" , "uma feira cheia de delicias" , eventClassification , "20/02/2021","15:30","16:00",path,"12760000","São paulo","lavrinhas","capela do jacu" , "geraldo nogueira de sa", "100" , "casa");
-        	ExibirEvents();
+            var img = new ImageController();
+            String path = img.selecionarImagem();
+            evt.createEvent(0, "feira de gastronomia", "uma feira cheia de delicias", eventClassification, "20/02/2021",
+                    "15:30", "16:00", path, "12760000", "São paulo", "lavrinhas", "capela do jacu",
+                    "geraldo nogueira de sa", "100", "casa");
+            ExibirEvents();
         });
-        
+
         rightButtonsPanel.add(bellButton);
 
         // Botão Perfil
         ImageIcon profileIcon = new ImageIcon(getClass().getResource("/UserButton.png"));
         JButton profileButton = new JButton(profileIcon);
-        profileButton.setContentAreaFilled(false); 
-        profileButton.setBorderPainted(false);     
-        profileButton.setFocusPainted(false);      
+        profileButton.setContentAreaFilled(false);
+        profileButton.setBorderPainted(false);
+        profileButton.setFocusPainted(false);
         profileButton.setOpaque(false);
-        profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));            
+        profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         profileButton.addActionListener(e -> {
             ProfilePage profilePage = new ProfilePage();
-            showMainPanel(profilePage,1);
+            showMainPanel(profilePage, 1);
         });
         rightButtonsPanel.add(profileButton);
 
@@ -242,7 +282,7 @@ public class MainPage extends JPanel {
         configurarBotaoSidebar(btnPerfil);
         btnPerfil.addActionListener(e -> {
             var profilePage = new ProfilePage();
-            showMainPanel(profilePage,1);
+            showMainPanel(profilePage, 1);
         });
 
         ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
@@ -252,18 +292,19 @@ public class MainPage extends JPanel {
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCreateEventSB.addActionListener(e -> { 
-            var createEventPanel = new CreateEventPanel();
-            showMainPanel(createEventPanel,0);
+        btnCreateEventSB.addActionListener(e -> {
+            User user = Session.getLoggedUser();
+            var createEventPanel = new CreateEventPanel(user);
+            showMainPanel(createEventPanel, 0);
         });
         configurarBotaoSidebar(btnCreateEventSB);
 
         ImageIcon sbeditEventIcn = new ImageIcon(getClass().getResource("/Sidebar/EditEventSB.png"));
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
         btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnEditEventSB.addActionListener(e -> { 
+        btnEditEventSB.addActionListener(e -> {
             var editPanel = new EventPanelEdit(this);
-            showMainPanel(editPanel,0);
+            showMainPanel(editPanel, 0);
         });
         configurarBotaoSidebar(btnEditEventSB);
 
@@ -278,7 +319,7 @@ public class MainPage extends JPanel {
         ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
         JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
         configurarBotaoSidebar(btnHelpCenterSB);
-            
+
         ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
         JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
         configurarBotaoSidebar(btnSocialMediaSB);
@@ -369,6 +410,7 @@ public class MainPage extends JPanel {
             }
         });
     }
+
     private void configurarBotaoFechar(JButton botao) {
         botao.setFocusPainted(false);
         botao.setBorderPainted(false);
@@ -379,6 +421,7 @@ public class MainPage extends JPanel {
         botao.setFont(new Font("SansSerif", Font.BOLD, 12));
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+
     public void showMainPanel(JPanel contentPanel, int modo) {
         galleryPanel.removeAll();
 
@@ -473,12 +516,13 @@ public class MainPage extends JPanel {
         sidebar.revalidate();
         sidebar.repaint();
     }
+
     public void ExibirEvents() {
         var evt = EventController.getInstance();
         var events = evt.getAllEvents();
 
         galleryPanel.removeAll();
-        
+
         int start = currentPage * pageSize;
         int end = Math.min(start + pageSize, events.size());
         int x = 160;
@@ -487,13 +531,12 @@ public class MainPage extends JPanel {
         for (int i = start; i < end; i++) {
             var event = events.get(i);
             EventPanel panel = new EventPanel(
-                event.getTitle(),
-                event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
-                event.getDate(),
-                event.getImagePath(),
-                event.getId(),
-                this
-            );
+                    event.getTitle(),
+                    event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
+                    event.getDate(),
+                    event.getImagePath(),
+                    event.getId(),
+                    this);
             panel.setBounds(x, y, 300, 240);
             galleryPanel.add(panel);
             x += 400;
@@ -502,11 +545,11 @@ public class MainPage extends JPanel {
         // Botão Anterior
         JButton btnPrev = new JButton("");
         ImageIcon icon = new ImageIcon(getClass().getResource("/setaAnterior.png"));
-//        ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
+        // ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
         Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         btnPrev.setIcon(new ImageIcon(scaled));
         btnPrev.setBounds(80, 130, 40, 40);
-//        btnPrev.setBorder(null);
+        // btnPrev.setBorder(null);
         btnPrev.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnPrev.setEnabled(currentPage > 0);
         btnPrev.addActionListener(e -> {
@@ -516,12 +559,12 @@ public class MainPage extends JPanel {
             }
         });
         galleryPanel.add(btnPrev);
-//
-//        // Botão Próximo
+        //
+        // // Botão Próximo
         JButton btnNext = new JButton("");
         btnNext.setBounds(1290, 130, 40, 40);
         ImageIcon icon02 = new ImageIcon(getClass().getResource("/setaProxima.png"));
-//      ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
+        // ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
         Image scaled02 = icon02.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         btnNext.setIcon(new ImageIcon(scaled02));
         btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
