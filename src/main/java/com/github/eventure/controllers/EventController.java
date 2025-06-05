@@ -1,8 +1,8 @@
 
 package com.github.eventure.controllers;
 
-import java.time.LocalTime;
-import java.util.Date;
+//import java.time.LocalTime;
+//import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +24,7 @@ public class EventController {
 			eventController = new Storage<Event>();
 		}
 	}
+
 	public static EventController getInstance() {
 		if (instance == null) {
 			instance = new EventController();
@@ -31,8 +32,9 @@ public class EventController {
 		return instance;
 	}
 
-	public void createEvent(int idMaker,String title, String description, EventClassification type, String date,
-			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
+	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,
+			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
+			String rua, String numero, String complemento) {
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
@@ -48,11 +50,12 @@ public class EventController {
 		address.setBairro(bairro);
 		address.setRua(rua);
 		address.setNumero(numero);
-		if(!complemento.isEmpty()) {
+		if (!complemento.isEmpty()) {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if(!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty() && !e.getImagePath().isEmpty() && e.getAddress() != null) {
+		if (!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
+				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
 			e.addUsersParticipantes(idMaker);
@@ -61,15 +64,14 @@ public class EventController {
 			user.addListMyEvents(e.getId());
 			eventController.add(e);
 			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
 		}
-		
+
 	}
 
-	public void createEvent(int id,  String description, String title, EventClassification type) {
-		
-		
+	public void createEvent(int id, String description, String title, EventClassification type) {
+
 		System.out.println("deu certo");
 	}
 
@@ -87,8 +89,13 @@ public class EventController {
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
 
-	public void eventClone(int idEvent ,String title, String description,  EventClassification type, String date,
-			String startHours, String endHours, String caminho,String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
+	public Event findEventByTitle(String title) {
+		return eventController.find(event -> event.getTitle().equals(title)).findFirst().orElse(null);
+	}
+
+	public void eventClone(int idEvent, String title, String description, EventClassification type, String date,
+			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
+			String rua, String numero, String complemento) {
 		var eventClone = new Event();
 		eventClone.setTitle(title);
 		eventClone.setDescription(description);
@@ -140,28 +147,35 @@ public class EventController {
 		if (eventClone.getImagePath() != null && !(eventClone.getImagePath().equals(event.getImagePath()))) {
 			event.setImagePath(eventClone.getImagePath());
 		}
-		if (eventClone.getAddress().getCep() != null && !(eventClone.getAddress().getCep().equals(event.getAddress().getCep()))) {
+		if (eventClone.getAddress().getCep() != null
+				&& !(eventClone.getAddress().getCep().equals(event.getAddress().getCep()))) {
 			event.getAddress().setCep(eventClone.getAddress().getCep());
 		}
-		if (eventClone.getAddress().getEstado() != null && !(eventClone.getAddress().getEstado().equals(event.getAddress().getEstado()))) {
+		if (eventClone.getAddress().getEstado() != null
+				&& !(eventClone.getAddress().getEstado().equals(event.getAddress().getEstado()))) {
 			event.getAddress().setEstado(eventClone.getAddress().getEstado());
 		}
-		if (eventClone.getAddress().getCidade() != null && !(eventClone.getAddress().getCidade().equals(event.getAddress().getCidade()))) {
+		if (eventClone.getAddress().getCidade() != null
+				&& !(eventClone.getAddress().getCidade().equals(event.getAddress().getCidade()))) {
 			event.getAddress().setCidade(eventClone.getAddress().getCidade());
 		}
-		if (eventClone.getAddress().getBairro() != null && !(eventClone.getAddress().getBairro().equals(event.getAddress().getBairro()))) {
+		if (eventClone.getAddress().getBairro() != null
+				&& !(eventClone.getAddress().getBairro().equals(event.getAddress().getBairro()))) {
 			event.getAddress().setBairro(eventClone.getAddress().getBairro());
 		}
-		if (eventClone.getAddress().getRua() != null && !(eventClone.getAddress().getRua().equals(event.getAddress().getRua()))) {
+		if (eventClone.getAddress().getRua() != null
+				&& !(eventClone.getAddress().getRua().equals(event.getAddress().getRua()))) {
 			event.getAddress().setRua(eventClone.getAddress().getRua());
 		}
-		if (eventClone.getAddress().getComplemento() != null && !(eventClone.getAddress().getComplemento().equals(event.getAddress().getComplemento()))) {
+		if (eventClone.getAddress().getComplemento() != null
+				&& !(eventClone.getAddress().getComplemento().equals(event.getAddress().getComplemento()))) {
 			event.getAddress().setComplemento(eventClone.getAddress().getComplemento());
 		}
-		if (eventClone.getAddress().getNumero() != null && !(eventClone.getAddress().getNumero().equals(event.getAddress().getNumero()))) {
+		if (eventClone.getAddress().getNumero() != null
+				&& !(eventClone.getAddress().getNumero().equals(event.getAddress().getNumero()))) {
 			event.getAddress().setNumero(eventClone.getAddress().getNumero());
 		}
-		
+
 	}
 
 	public void print(List<Event> eventos) {
@@ -205,20 +219,21 @@ public class EventController {
 				.collect(Collectors.toList());
 		print(eventos);
 	}
-	
-	public List<Event> getAllEvents() {
-	    return eventController.toList();
-	}
 
+	public List<Event> getAllEvents() {
+		return eventController.toList();
+	}
 
 	public List<Event> filterEventByPesquisa(String pesquisa) {
 		List<Event> eventos = eventController.find(event -> event.getTitle().toLowerCase().contains(pesquisa))
 				.collect(Collectors.toList());
 		return eventos;
 	}
-    
-	public void createEventSemMessageBox(int idMaker,String title, String description, EventClassification type, String date,
-			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro, String rua, String numero,String complemento) {
+
+	public void createEventSemMessageBox(int idMaker, String title, String description, EventClassification type,
+			String date,
+			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
+			String rua, String numero, String complemento) {
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
@@ -234,11 +249,12 @@ public class EventController {
 		address.setBairro(bairro);
 		address.setRua(rua);
 		address.setNumero(numero);
-		if(!complemento.isEmpty()) {
+		if (!complemento.isEmpty()) {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if(!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty() && !e.getImagePath().isEmpty() && e.getAddress() != null) {
+		if (!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
+				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
 			e.addUsersParticipantes(idMaker);
@@ -246,12 +262,13 @@ public class EventController {
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());
 			eventController.add(e);
-//			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
-		}else {
+			// JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
+		} else {
 			JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
 		}
-		
+
 	}
+
 	public static int generateId() {
 		return lastGeneratedId++;
 	}
