@@ -89,8 +89,13 @@ public class EventController {
 		return eventController.find(event -> event.getId() == id).findFirst().orElse(null);
 	}
 
-	public Event findEventByTitle(String title) {
+	public Event findEventByExactTitle(String title) {
 		return eventController.find(event -> event.getTitle().equals(title)).findFirst().orElse(null);
+	}
+
+	public List<Event> findEventsByTitleContaining(String title) {
+		return eventController.find(event -> event.getTitle().toLowerCase().contains(title.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 
 	public void eventClone(int idEvent, String title, String description, EventClassification type, String date,
