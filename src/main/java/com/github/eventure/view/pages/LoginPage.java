@@ -2,16 +2,12 @@ package com.github.eventure.view.pages;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,101 +28,115 @@ public class LoginPage extends JPanel {
     private JButton loginButton;
     private JButton registerBtn;
     private UserController userController = UserController.getInstance();
-    // private User user;
 
     public LoginPage(MainFrame frame) {
         this.frame = frame;
         this.setLayout(new BorderLayout());
-        // this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
-
-        initDesign();
         initComponents();
     }
 
     private void initComponents() {
+        this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0x330065));
+
+        JPanel wrapperPanel = new JPanel(new GridBagLayout());
+        wrapperPanel.setBackground(new Color(0x330065));
+        this.add(wrapperPanel, BorderLayout.CENTER);
+
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(0xcfcfcf));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new java.awt.Insets(10, 20, 10, 20); // Espaçamento entre componentes
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+
+        int y = 0;
+
+        // Logo
+        ImageIcon logoIcon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
+        Image logoImageScaled = logoIcon.getImage().getScaledInstance(360, 98, Image.SCALE_SMOOTH);
+        logoIcon = new ImageIcon(logoImageScaled);
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        gbc.gridy = y++;
+        gbc.weighty = 0.2;
+        mainPanel.add(logoLabel, gbc);
+
+        // Campo Login
+        JLabel loginLabel = new JLabel("Login:");
+        loginLabel.setHorizontalAlignment(JLabel.CENTER);
+        gbc.gridy = y++;
+        gbc.weighty = 0.05;
+        mainPanel.add(loginLabel, gbc);
 
         loginField = new JTextField();
-        // loginField.setBounds(247, 227, 240, 36);
+        gbc.gridy = y++;
+        gbc.weighty = 0.1;
+        mainPanel.add(loginField, gbc);
 
+        // Campo Senha
         passwordField = new JPasswordField();
-        // passwordField.setBounds(247, 331, 240, 36);
+        gbc.gridy = y++;
+        gbc.weighty = 0.1;
+        mainPanel.add(passwordField, gbc);
 
-        loginButton = new JButton();
-        loginButton.setBounds(203, 420, 314, 48);
-        loginButton.setContentAreaFilled(false);
-        loginButton.setBorderPainted(false);
-        loginButton.setFocusPainted(false);
-        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        // Botão Entrar
+        loginButton = new JButton("Entrar");
+        gbc.gridy = y++;
+        gbc.weighty = 0.1;
+        mainPanel.add(loginButton, gbc);
 
-        registerBtn = new JButton();
-        registerBtn.setBounds(245, 543, 229, 45);
-        registerBtn.setContentAreaFilled(false);
-        registerBtn.setBorderPainted(false);
-        registerBtn.setFocusPainted(false);
-        registerBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        // Botão Registrar
+        registerBtn = new JButton("Registrar-se");
+        gbc.gridy = y++;
+        gbc.weighty = 0.1;
+        mainPanel.add(registerBtn, gbc);
+
+        // Espaço inferior
+        gbc.gridy = y++;
+        gbc.weighty = 1.0; // Ocupa o espaço restante
+        mainPanel.add(Box.createVerticalGlue(), gbc);
+
+        // Centraliza o mainPanel
+        wrapperPanel.add(mainPanel);
+
+        // Ações
+        loginButton.addActionListener((ActionEvent e) -> {
+            String username = loginField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
+                return;
+            }
+
+            boolean loginSuccessful = userController.login(username, password);
+
+            if (loginSuccessful) {
+                User loggedUser = userController.findUserByEmailOrUsername(username);
+                if (loggedUser != null) {
+                    Session.login(loggedUser);
+                    JOptionPane.showMessageDialog(null, "Login realizado com sucesso.");
+                    loginField.setText("");
+                    passwordField.setText("");
+                    frame.showPanel("home");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Credenciais inválidas.");
+            }
+        });
+
         registerBtn.addActionListener(e -> {
-            loginField.setText(" ");
-            passwordField.setText(" ");
+            loginField.setText("");
+            passwordField.setText("");
             frame.showPanel("register");
         });
-
-        this.add(loginField);
-        this.add(passwordField);
-        this.add(loginButton);
-        this.add(registerBtn);
-
-        // Corrigido ActionListener
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = loginField.getText();
-                String password = new String(passwordField.getPassword());
-                if (username.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
-                    return;
-                }
-
-                userController = UserController.getInstance();
-                boolean loginSuccessful = userController.login(username, password);
-
-                if (loginSuccessful) {
-                    // Recupera o objeto User completo do controlador
-                    User loggedUser = userController.findUserByEmailOrUsername(username);
-                    if (loggedUser != null) {
-                        Session.login(loggedUser); // Salva o usuário logado na sessão
-                        JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
-                        loginField.setText("");
-                        passwordField.setText("");
-                        frame.showPanel("home");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
-                    }
-                }
-            };
-
-        });
     }
 
-    private void initDesign() {
-        var mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS)); // Conteúdos serão organizados verticalmente
-        mainPanel.setBackground(new Color(0xcfcfcf)); // Painel com a cor cinza
-
-        // Carrega a imagem
-        var logoIcon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
-
-        // Redimensiona a imagem
-        var logoImageScaled = logoIcon.getImage().getScaledInstance(360, 98, Image.SCALE_SMOOTH);
-        logoIcon = new ImageIcon(logoImageScaled);
-
-        // JLabel para exibir a imagem redimensionada
-        var logoLabel = new JLabel(logoIcon);
-        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centraliza no BoxLayout
-
-        // Adiciona o logoLabel
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Espaço acima
-        mainPanel.add(logoLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Espaço abaixo
-    }
 }
