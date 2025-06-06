@@ -80,32 +80,33 @@ public class LoginPage extends JPanel {
 
         // Corrigido ActionListener
         loginButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String username = loginField.getText();
-            String password = new String(passwordField.getPassword());
-            if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
-                return;
-            }
-        
-            userController = UserController.getInstance();
-            boolean loginSuccessful = userController.login(username, password);
-        
-            if (loginSuccessful) {
-                // Recupera o objeto User completo do controlador
-                User loggedUser = userController.findUserByEmailOrUsername(username);
-                if (loggedUser != null) {
-                    Session.login(loggedUser);  // Salva o usuário logado na sessão
-                    JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
-                    loginField.setText("");
-                    passwordField.setText("");
-                    frame.showPanel("home");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = loginField.getText();
+                String password = new String(passwordField.getPassword());
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
+                    return;
                 }
-            }
-        });
 
+                userController = UserController.getInstance();
+                boolean loginSuccessful = userController.login(username, password);
+
+                if (loginSuccessful) {
+                    // Recupera o objeto User completo do controlador
+                    User loggedUser = userController.findUserByEmailOrUsername(username);
+                    if (loggedUser != null) {
+                        Session.login(loggedUser); // Salva o usuário logado na sessão
+                        JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");
+                        loginField.setText("");
+                        passwordField.setText("");
+                        frame.showPanel("home");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
+                    }
+                }
+            };
+
+        });
     }
 }
