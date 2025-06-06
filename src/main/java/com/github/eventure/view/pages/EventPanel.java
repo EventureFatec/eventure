@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
+import com.github.eventure.view.components.DisplayEvent0;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,9 +72,9 @@ public class EventPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
-                var displayEvent = new DisplayEvent(idEvento);
+                var displayEvent = new DisplayEvent0(idEvento);
                 // chamar a tela exibir evento completo
-                mainPage.showMainPanel(displayEvent,0);
+                mainPage.showMainPanel(displayEvent,1);
             }
         });
         add(infoPanel, BorderLayout.CENTER);

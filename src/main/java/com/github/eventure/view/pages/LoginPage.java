@@ -93,7 +93,7 @@ public class LoginPage extends JPanel {
         
             if (loginSuccessful) {
                 // Recupera o objeto User completo do controlador
-                User loggedUser = userController.findUserByUsername(username);
+                User loggedUser = userController.findUserByEmailOrUsername(username);
                 if (loggedUser != null) {
                     Session.login(loggedUser);  // Salva o usuário logado na sessão
                     JOptionPane.showMessageDialog(null, "Login Realizado com sucesso.");

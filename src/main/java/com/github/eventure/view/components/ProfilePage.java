@@ -62,7 +62,6 @@ public class ProfilePage extends JPanel {
         ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rightPanel.add(imagePreview);
         imagePreview.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

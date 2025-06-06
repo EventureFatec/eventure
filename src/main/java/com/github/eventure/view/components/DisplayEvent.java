@@ -20,7 +20,7 @@ public class DisplayEvent extends JPanel{
 
         JLabel label = new JLabel("Exibir Evento", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));
-        label.setBounds(0, 200, 1130, 50); // posição absoluta centralizada verticalmente
+        label.setBounds(0, 200, 1130, 50); 
 
         add(label);
         var evento = EventController.getInstance();
