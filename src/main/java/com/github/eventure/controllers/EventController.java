@@ -274,6 +274,26 @@ public class EventController {
 
 	}
 
+	public void createMultipleTestEvents(int idMaker) {
+		createEventSemMessageBox(idMaker, "[TESTE] Evento de Teste 01", "Descrição do evento de teste 01",
+				EventClassification.CONFERENCE, "2025-07-01", "10:00", "12:00", "", "12345-678", "SP", "São Paulo",
+				"Centro", "Rua A", "100", "");
+		createEventSemMessageBox(idMaker, "[TESTE] Evento de Teste 02", "Descrição do evento de teste 02",
+				EventClassification.FESTIVALS, "2025-07-02", "14:00", "16:00", "", "23456-789", "RJ", "Rio de Janeiro",
+				"Copacabana", "Rua B", "200", "Sala 1");
+		createEventSemMessageBox(idMaker, "[TESTE] Evento de Teste 03", "Descrição do evento de teste 03",
+				EventClassification.SPORTS_AND_LEISURE, "2025-07-03", "09:00", "11:00", "", "34567-890", "MG",
+				"Belo Horizonte",
+				"Savassi", "Av. C", "300", "");
+		createEventSemMessageBox(idMaker, "[TESTE] Evento de Teste 04", "Descrição do evento de teste 04",
+				EventClassification.MUSICAL, "2025-07-04", "18:00", "20:00", "", "45678-901", "RS", "Porto Alegre",
+				"Moinhos", "Rua D", "400", "Auditório");
+		createEventSemMessageBox(idMaker, "[TESTE] Evento de Teste 05", "Descrição do evento de teste 05",
+				EventClassification.THEATERS_AND_SPECTACLES, "2025-07-05", "20:00", "22:00", "", "56789-012", "BA",
+				"Salvador",
+				"Pelourinho", "Rua E", "500", "");
+	}
+
 	public static int generateId() {
 		return lastGeneratedId++;
 	}

@@ -21,6 +21,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -35,10 +36,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
+import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
@@ -142,6 +146,18 @@ public class MainPage extends JPanel {
                     searchField.setText("Pesquisar...");
                     searchField.setForeground(Color.GRAY);
                 }
+            }
+        });
+
+        searchField.addActionListener(e -> {
+            String text = searchField.getText();
+            if (!text.isEmpty() && !text.equals("Pesquisar...")) {
+                List<Event> filteredEvents = EventController.getInstance().findEventsByTitleContaining(text);
+                currentPage = 0;
+                ExibirEvents(filteredEvents);
+            } else {
+                currentPage = 0;
+                ExibirEvents();
             }
         });
 
@@ -409,6 +425,14 @@ public class MainPage extends JPanel {
                 sidebar.setBounds(0, 0, sidebar.getWidth(), height);
             }
         });
+
+        var eventController = EventController.getInstance();
+        if (Session.isLoggedIn()) {
+            int userId = Session.getLoggedUser().getUserId();
+            eventController.createMultipleTestEvents(userId);
+        } else {
+            return;
+        }
     }
 
     private void configurarBotaoFechar(JButton botao) {
@@ -517,10 +541,14 @@ public class MainPage extends JPanel {
         sidebar.repaint();
     }
 
+    // Exibe todos os eventos com paginação
     public void ExibirEvents() {
-        var evt = EventController.getInstance();
-        var events = evt.getAllEvents();
+        var events = EventController.getInstance().getAllEvents();
+        ExibirEvents(events);
+    }
 
+    // Exibe os eventos da lista passada (pode ser todos, pode ser filtrados)
+    public void ExibirEvents(List<Event> events) {
         galleryPanel.removeAll();
 
         int start = currentPage * pageSize;
@@ -545,37 +573,35 @@ public class MainPage extends JPanel {
         // Botão Anterior
         JButton btnPrev = new JButton("");
         ImageIcon icon = new ImageIcon(getClass().getResource("/setaAnterior.png"));
-        // ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
         Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         btnPrev.setIcon(new ImageIcon(scaled));
         btnPrev.setBounds(80, 130, 40, 40);
-        // btnPrev.setBorder(null);
         btnPrev.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnPrev.setEnabled(currentPage > 0);
         btnPrev.addActionListener(e -> {
             if (currentPage > 0) {
                 currentPage--;
-                ExibirEvents();
+                ExibirEvents(events);
             }
         });
         galleryPanel.add(btnPrev);
-        //
-        // // Botão Próximo
+
+        // Botão Próximo
         JButton btnNext = new JButton("");
         btnNext.setBounds(1290, 130, 40, 40);
         ImageIcon icon02 = new ImageIcon(getClass().getResource("/setaProxima.png"));
-        // ImageIcon icon = new ImageIcon("C:/Users/User/Downloads/setaAnterior.png");
         Image scaled02 = icon02.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         btnNext.setIcon(new ImageIcon(scaled02));
         btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnNext.setEnabled((currentPage + 1) * pageSize < events.size());
         btnNext.addActionListener(e -> {
             currentPage++;
-            ExibirEvents();
+            ExibirEvents(events);
         });
         galleryPanel.add(btnNext);
 
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }
+
 }
