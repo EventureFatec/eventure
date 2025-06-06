@@ -21,7 +21,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 import com.github.eventure.controllers.ImageController;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import com.github.eventure.controllers.UserController;
@@ -42,12 +41,11 @@ public class ProfilePage extends JPanel {
     private JButton selectImgBtn;
     private String imagePath;
     private User loggedUser = Session.getLoggedUser();
-  
+
     public ProfilePage() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         setBackground(new Color(0xe5d8fd));
-
 
         // Label "Imagem:"
         JLabel imageLabel = new JLabel("Imagem:");
@@ -62,25 +60,26 @@ public class ProfilePage extends JPanel {
         ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(imagePreview);
+      
         imagePreview.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-              	ImageController imageController = new ImageController();
-              	imagePath = imageController.selecionarImagem();
-            	 if(!imagePath.isEmpty() && imagePath != null) {
-                ImageIcon icon = new ImageIcon(imagePath);
+                ImageController imageController = new ImageController();
+                imagePath = imageController.selecionarImagem();
+                if (!imagePath.isEmpty() && imagePath != null) {
+                    ImageIcon icon = new ImageIcon(imagePath);
 
-                // Redimensiona para caber no JLabel
-                Image imagemRedimensionada = icon.getImage().getScaledInstance(
-                    imagePreview.getWidth(),
-                    imagePreview.getHeight(),
-                    Image.SCALE_SMOOTH
-                );
+                    // Redimensiona para caber no JLabel
+                    Image imagemRedimensionada = icon.getImage().getScaledInstance(
+                            imagePreview.getWidth(),
+                            imagePreview.getHeight(),
+                            Image.SCALE_SMOOTH);
 
-                // Define a imagem no JLabel
-                imagePreview.setIcon(new ImageIcon(imagemRedimensionada));
-                imagePreview.repaint();
-            	 }
+                    // Define a imagem no JLabel
+                    imagePreview.setIcon(new ImageIcon(imagemRedimensionada));
+                    imagePreview.repaint();
+                }
             }
 
             @Override
@@ -88,7 +87,7 @@ public class ProfilePage extends JPanel {
                 imagePreview.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             }
         });
-      
+
         // Botão de selecionar imagem
         selectImgBtn = new JButton(" ");
         selectImgBtn.setBackground(new Color(0xe5d8fd));
@@ -105,15 +104,14 @@ public class ProfilePage extends JPanel {
                 Image resizedImg = icontemp.getImage().getScaledInstance(
                         imagePreview.getWidth(),
                         imagePreview.getHeight(),
-                        Image.SCALE_SMOOTH
-                );
+                        Image.SCALE_SMOOTH);
                 imagePreview.setIcon(new ImageIcon(resizedImg));
                 imagePreview.repaint();
             }
         });
         add(selectImgBtn);
 
-        add(Box.createRigidArea(new Dimension(0, 15))); // espaço vertical 
+        add(Box.createRigidArea(new Dimension(0, 15))); // espaço vertical
 
         // Campos do formulário
         add(label("Nome"));
@@ -153,7 +151,7 @@ public class ProfilePage extends JPanel {
         buttonsPanel.setOpaque(false);
 
         JButton saveButton = new JButton("Salvar");
-        saveButton.addActionListener(e -> {           
+        saveButton.addActionListener(e -> {
             String newName = name.getText();
             String newUsername = username.getText();
             String newCpf = cpf.getText();
@@ -168,24 +166,24 @@ public class ProfilePage extends JPanel {
             System.out.println(newPassword);
             System.out.println(newPassword2);
 
-            if (newPassword.equals(newPassword2)){
+            if (newPassword.equals(newPassword2)) {
                 System.out.println("Modificando usuário...");
                 ApplyChanges(newName, newUsername, newCpf, newEmail, newPassword);
-            }    
+            }
         });
 
         JButton logoutButton = new JButton("Sair");
         logoutButton.addActionListener(e -> {
-            int opcao = JOptionPane.showConfirmDialog(null, "Deseja sair da conta?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja sair da conta?", "Confirmação",
+                    JOptionPane.YES_NO_OPTION);
             if (opcao == JOptionPane.YES_OPTION) {
                 Session.logout();
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 if (frame instanceof MainFrame mainFrame) {
-                mainFrame.showPanel("welcome");
+                    mainFrame.showPanel("welcome");
                 }
             }
         });
-
 
         buttonsPanel.add(saveButton);
         buttonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));

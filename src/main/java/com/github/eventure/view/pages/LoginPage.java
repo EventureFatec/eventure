@@ -21,12 +21,12 @@ import com.github.eventure.view.MainFrame;
 
 public class LoginPage extends JPanel {
     private MainFrame frame;
-    private JTextField loginField;  // Corrigido nome da variável
+    private JTextField loginField; // Corrigido nome da variável
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerBtn;
     private UserController userController = UserController.getInstance();
-//  private User user;
+    // private User user;
 
     public LoginPage(MainFrame frame) {
         this.frame = frame;
@@ -34,15 +34,16 @@ public class LoginPage extends JPanel {
         this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
 
-        initComponents();  // Apenas chama o método de inicialização
+        initComponents(); // Apenas chama o método de inicialização
         var label1 = new JLabel();
         var icon = new ImageIcon(getClass().getResource("/LOGIN.png"));
         label1.setIcon(icon);
         label1.setBounds(0, 0, 1200, 720);
         this.add(label1);
-        
-//        userController.createUser("allisson" , "thomas" , "Allisson7787@" , "allisson@gmail.com");
-//        userController.print();
+
+        // userController.createUser("allisson" , "thomas" , "Allisson7787@" ,
+        // "allisson@gmail.com");
+        // userController.print();
     }
 
     private void initComponents() {
@@ -66,11 +67,11 @@ public class LoginPage extends JPanel {
         registerBtn.setBorderPainted(false);
         registerBtn.setFocusPainted(false);
         registerBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        registerBtn.addActionListener(e -> { 
-        	loginField.setText(" ");
-        	passwordField.setText(" ");
-        	frame.showPanel("register");
-        	});
+        registerBtn.addActionListener(e -> {
+            loginField.setText(" ");
+            passwordField.setText(" ");
+            frame.showPanel("register");
+        });
 
         this.add(loginField);
         this.add(passwordField);
@@ -101,13 +102,10 @@ public class LoginPage extends JPanel {
                     passwordField.setText("");
                     frame.showPanel("home");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Erro ao recuperar dados do usuário.");
+                    JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
             }
-        }
-    });
+        });
 
     }
 }
