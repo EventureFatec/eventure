@@ -1,123 +1,145 @@
 package com.github.eventure.view.components;
 
 import javax.swing.*;
-
-import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.ImageController;
-import com.github.eventure.model.Event;
-
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import java.awt.*;
+import com.github.eventure.controllers.EventController;
+import com.github.eventure.model.Event;
 
 public class DisplayEvent0 extends JPanel {
 	private int idEvento;
-	private JLabel titulo;
-	private String imagePath;
-	private JLabel imagePreview;
-	private JLabel descricao;
-	private JLabel data;
-	private JLabel horarioInicio;
-	private JLabel horarioTermino;
-	private JLabel cep;
-	private JLabel estado;
-	private JLabel cidade;
-	private JLabel numero;
-	private JLabel bairro;
-	private JLabel complemento;
-	private JButton btnConcluir;
-    public DisplayEvent0(int id) {
-    	setLayout(new BorderLayout());
-    	idEvento = id;
-    	EventController eventController = EventController.getInstance();
-    	Event event = eventController.findEventById(idEvento);
 
-    	JPanel contentPanel = new JPanel();
-    	contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.X_AXIS));
-    	contentPanel.setBackground(Color.WHITE);
+	public DisplayEvent0(int id) {
+		this.idEvento = id;
+		setLayout(new BorderLayout());
+		setBackground(new Color(0xf8f6fc));
+		setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        imagePreview = new JLabel();
-    	imagePreview.setPreferredSize(new Dimension(500,300));
+		Event event = EventController.getInstance().findEventById(idEvento);
 
-    	String imagePath = event.getImagePath();
-    	ImageIcon icon = new ImageIcon(imagePath);
-    	Image imagemRedimensionada = icon.getImage().getScaledInstance(500, 300, Image.SCALE_SMOOTH);
-    	RoundedImageLabel imagePreview = new RoundedImageLabel(imagemRedimensionada);
+		// --------- Left Panel: Image + Info ---------
+		JPanel leftPanel = new JPanel();
+		leftPanel.setBackground(Color.WHITE);
+		leftPanel.setPreferredSize(new Dimension(550, 640));
+		leftPanel.setLayout(new BorderLayout());
+		leftPanel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(new Color(0xdddddd), 1),
+				new EmptyBorder(15, 15, 15, 15)));
 
-    	    imagePreview.setIcon(new ImageIcon(imagemRedimensionada));
-    	    JPanel leftPanel = new JPanel();
-    	    leftPanel.setPreferredSize(new Dimension(565, 590));
-    	    
-    	    leftPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 520));
-    	    leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-    	    leftPanel.setBackground(new Color(0xe5d8fd));
-    	    titulo = new JLabel("<html><div style='font-family:Segoe UI; font-size:32px; font-weight:bold; margin:0;'>"
-                    + event.getTitle() + "</div></html>");
-    	    titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	    titulo.setFont(new Font("Segoe UI", Font.BOLD, 32));
-    	    titulo.setForeground(new Color(0x333333)); // Cor escura para contraste
-    	    leftPanel.add(Box.createVerticalStrut(20));
-    	    leftPanel.add(titulo);
+		// Image at the top
+		String imagePath = event.getImagePath();
+		ImageIcon originalIcon = new ImageIcon(imagePath);
+		Image scaledImage = originalIcon.getImage().getScaledInstance(520, 300, Image.SCALE_SMOOTH);
+		JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+		imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		imageLabel.setBorder(BorderFactory.createLineBorder(new Color(0xcccccc)));
+		leftPanel.add(imageLabel, BorderLayout.NORTH);
 
-    	    
-    	    String dataCompleta = String.format("%s - %s às %s", 
-    	        event.getDate(), event.getDate(), event.getStartHours());
-    	    JLabel dataHora = new JLabel("📅 " + dataCompleta);
-    	    dataHora.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	    dataHora.setFont(new Font("SansSerif", Font.PLAIN, 20));
-    	    dataHora.setForeground(Color.DARK_GRAY);
-    	    leftPanel.add(Box.createVerticalStrut(10));
-    	    leftPanel.add(dataHora);
+		// Info panel below image
+		JPanel infoPanel = new JPanel();
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+		infoPanel.setBackground(Color.WHITE);
+		infoPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-    	    
-    	    JLabel local = new JLabel("📍 " + "Rua "+event.getAddress().getRua() + ", " 
-    	        + event.getAddress().getNumero() + " - " + event.getAddress().getBairro()
-    	        + ", " + event.getAddress().getCidade() + " - " + event.getAddress().getEstado());
-    	    local.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	    local.setFont(new Font("SansSerif", Font.PLAIN, 20));
-    	    local.setForeground(Color.DARK_GRAY);
-    	    leftPanel.add(Box.createVerticalStrut(10));
-    	    leftPanel.add(local);
+		// Title
+		JLabel titleLabel = new JLabel(event.getTitle());
+		titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+		titleLabel.setForeground(new Color(0x2e1a47));
+		titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		infoPanel.add(titleLabel);
 
-    	    
-    	    JLabel descricaoLabel = new JLabel("Descrição:");
-    	    descricaoLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
-    	    leftPanel.add(descricaoLabel);
-    	    descricao = new JLabel("<html><p>" + event.getDescription() + "</p></html>");
-    	    descricao.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	    descricao.setFont(new Font("SansSerif", Font.PLAIN, 18));
-    	    descricao.setForeground(new Color(0x222222));
-    	    descricao.setMaximumSize(new Dimension(500, 100));
-    	    leftPanel.add(Box.createVerticalStrut(20));
-    	    leftPanel.add(descricao);
+		infoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-    	    // Observação (classificação etária ou aviso)
-    	    JLabel observacao = new JLabel("Classificação etária: 18 anos | Sujeito a alterações sem aviso prévio.");
-    	    observacao.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	    observacao.setFont(new Font("SansSerif", Font.ITALIC, 14));
-    	    observacao.setForeground(new Color(0x880000));
-    	    leftPanel.add(Box.createVerticalStrut(15));
-    	    leftPanel.add(observacao);
-    	    contentPanel.add(leftPanel);
-    	    JPanel rightPanel = new JPanel();
-    	    rightPanel.setPreferredSize(new Dimension(565, 590));
-    	    rightPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 520));
-    	    rightPanel.setBackground(new Color(0xe5d8fd));
-    	    rightPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-    	    rightPanel.add(imagePreview);
-    	    contentPanel.add(rightPanel);
-    	
+		// Date and Time (with emojis)
+		String dateTimeHtml = String.format(
+				"<html><span style='font-family:Segoe UI; font-size:12px; color:#555555;'>"
+						+ "📅 <b>Data:</b> %s<br/>"
+						+ "⏰ <b>Início:</b> %s - <b>Término:</b> %s"
+						+ "</span></html>",
+				event.getDate(), event.getStartHours(), event.getEndHours());
+		JLabel dateTimeLabel = new JLabel(dateTimeHtml);
+		dateTimeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		infoPanel.add(dateTimeLabel);
 
-    	
-    	contentPanel.setPreferredSize(new Dimension(820, 600));
+		infoPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-    	JScrollPane scrollPane = new JScrollPane(contentPanel);
-    	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    	scrollPane.setBorder(null);
+		// Location
+		String locationHtml = String.format(
+				"<html><span style='font-family:Segoe UI; font-size:14px; color:#555555;'>"
+						+ "📍 <b>Local:</b> Rua %s, %s - %s, %s - %s"
+						+ "</span></html>",
+				event.getAddress().getRua(),
+				event.getAddress().getNumero(),
+				event.getAddress().getBairro(),
+				event.getAddress().getCidade(),
+				event.getAddress().getEstado());
+		JLabel locationLabel = new JLabel(locationHtml);
+		locationLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		infoPanel.add(locationLabel);
 
-    	add(scrollPane, BorderLayout.CENTER);
-   }
+		infoPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(1130, 590); 
-    }
+		// Observation (age classification)
+		String obsHtml = "<html><span style='font-family:Segoe UI; font-size:13px; font-style:italic; color:#b22222;'>"
+				+ "⚠️ Classificação etária: 18 anos | Sujeito a alterações sem aviso prévio."
+				+ "</span></html>";
+		JLabel obsLabel = new JLabel(obsHtml);
+		obsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		infoPanel.add(obsLabel);
+
+		leftPanel.add(infoPanel, BorderLayout.CENTER);
+
+		// --------- Right Panel: Description ---------
+		JPanel rightPanel = new JPanel(new BorderLayout());
+		rightPanel.setBackground(Color.WHITE);
+		rightPanel.setPreferredSize(new Dimension(580, 640));
+		rightPanel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(new Color(0xdddddd), 1),
+				new EmptyBorder(15, 15, 15, 15)));
+
+		// JTextPane to render HTML description with scroll
+		JTextPane descriptionPane = new JTextPane();
+		descriptionPane.setEditable(false);
+		descriptionPane.setContentType("text/html");
+
+		// Style sheet to customize font-family, size and color
+		HTMLEditorKit kit = new HTMLEditorKit();
+		descriptionPane.setEditorKit(kit);
+
+		StyleSheet styleSheet = kit.getStyleSheet();
+		styleSheet.addRule("body {font-family: 'Segoe UI'; font-size: 14px; color: #333333;}");
+		styleSheet.addRule("b {color: #2e1a47;}");
+		styleSheet.addRule("span {line-height: 1.4;}");
+
+		// Format description text replacing \n by <br>
+		String descricaoTexto = event.getDescription() != null ? event.getDescription() : "";
+		descricaoTexto = descricaoTexto.replace("\n", "<br/>");
+
+		String descricaoHtml = String.format(
+				"<html><body>"
+						+ "<p>📝 <b>Descrição:</b></p>"
+						+ "<p>%s</p>"
+						+ "</body></html>",
+				descricaoTexto);
+
+		descriptionPane.setText(descricaoHtml);
+		descriptionPane.setCaretPosition(0); // rolar para o topo
+
+		JScrollPane scrollDescription = new JScrollPane(descriptionPane);
+		scrollDescription.setBorder(null);
+		scrollDescription.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		rightPanel.add(scrollDescription, BorderLayout.CENTER);
+
+		// --------- Add panels to main panel ---------
+		add(leftPanel, BorderLayout.WEST);
+		add(rightPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(1150, 680);
+	}
 }
