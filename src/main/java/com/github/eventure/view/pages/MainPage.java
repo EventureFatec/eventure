@@ -425,14 +425,6 @@ public class MainPage extends JPanel {
                 sidebar.setBounds(0, 0, sidebar.getWidth(), height);
             }
         });
-
-        var eventController = EventController.getInstance();
-        if (Session.isLoggedIn()) {
-            int userId = Session.getLoggedUser().getUserId();
-            eventController.createMultipleTestEvents(userId);
-        } else {
-            return;
-        }
     }
 
     private void configurarBotaoFechar(JButton botao) {
