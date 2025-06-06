@@ -8,6 +8,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -101,6 +102,7 @@ public class MainPage extends JPanel {
         // Barra de pesquisa
         var searchField = new JTextField() {
 
+            // Criando um efeito redondo
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -168,14 +170,49 @@ public class MainPage extends JPanel {
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtonsPanel.setOpaque(false);
         // Botão Criar Evento
-        JButton createEventButton = new JButton("Criar Evento");
-        createEventButton.setBackground(new Color(0x330065));
-        createEventButton.setForeground(Color.WHITE);
+        JButton createEventButton = new JButton("Criar Evento") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int arc = getHeight();
+
+                // Fundo personalizado
+                g2.setColor(new Color(0x330065)); // FUNDO desejado (roxo escuro, por exemplo)
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+
+                // Texto centralizado
+                FontMetrics fm = g2.getFontMetrics();
+                String text = getText();
+                int textWidth = fm.stringWidth(text);
+                int textHeight = fm.getAscent();
+
+                g2.setFont(getFont());
+                g2.setColor(Color.WHITE); // COR DO TEXTO
+                g2.drawString(text, (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 2);
+
+                g2.dispose();
+            }
+
+            @Override
+            protected void paintBorder(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(0xBDB2D2)); // Cor da borda (opcional)
+                g2.setStroke(new BasicStroke(1));
+                int arc = getHeight();
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
+                g2.dispose();
+            }
+        };
+
+        createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         createEventButton.setFocusPainted(false);
         createEventButton.setBorderPainted(false);
-        createEventButton.setOpaque(true);
-        createEventButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        createEventButton.setContentAreaFilled(false);
+        createEventButton.setOpaque(false);
         createEventButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         createEventButton.addActionListener(e -> {
             User user = Session.getLoggedUser();
 
