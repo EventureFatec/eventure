@@ -23,7 +23,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -37,8 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.ImageController;
