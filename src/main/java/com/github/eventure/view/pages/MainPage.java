@@ -38,7 +38,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
@@ -197,7 +196,7 @@ public class MainPage extends JPanel {
             @Override
             protected void paintBorder(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.setColor(new Color(0xBDB2D2)); // Cor da borda (opcional)
+                g2.setColor(new Color(0x330065)); // Cor da borda (opcional)
                 g2.setStroke(new BasicStroke(1));
                 int arc = getHeight();
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
@@ -340,19 +339,19 @@ public class MainPage extends JPanel {
         ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
         JButton btnConfig = new JButton(sbsettingsIcon);
         configurarBotaoSidebar(btnConfig);
-        btnConfig.addActionListener(e ->{
-        	// parametro é idDoEventos
-        	var s = new DisplayEvent0(1);
-        	showMainPanel(s, 1);
+        btnConfig.addActionListener(e -> {
+            // parametro é idDoEventos
+            var s = new DisplayEvent0(1);
+            showMainPanel(s, 1);
         });
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCreateEventSB.addActionListener(e -> { 
-        	var user = Session.getLoggedUser();
+        btnCreateEventSB.addActionListener(e -> {
+            var user = Session.getLoggedUser();
             var createEventPanel = new CreateEventPanel(user);
-            showMainPanel(createEventPanel,0);
+            showMainPanel(createEventPanel, 0);
         });
         configurarBotaoSidebar(btnCreateEventSB);
 
