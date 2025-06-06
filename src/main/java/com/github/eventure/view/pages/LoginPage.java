@@ -1,11 +1,17 @@
 package com.github.eventure.view.pages;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,7 +27,7 @@ import com.github.eventure.view.MainFrame;
 
 public class LoginPage extends JPanel {
     private MainFrame frame;
-    private JTextField loginField; // Corrigido nome da variável
+    private JTextField loginField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerBtn;
@@ -30,29 +36,21 @@ public class LoginPage extends JPanel {
 
     public LoginPage(MainFrame frame) {
         this.frame = frame;
-        this.setLayout(null);
-        this.setPreferredSize(new Dimension(1280, 720));
+        this.setLayout(new BorderLayout());
+        // this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
 
-        initComponents(); // Apenas chama o método de inicialização
-        var label1 = new JLabel();
-        var icon = new ImageIcon(getClass().getResource("/LOGIN.png"));
-        label1.setIcon(icon);
-        label1.setBounds(0, 0, 1200, 720);
-        this.add(label1);
-
-        // userController.createUser("allisson" , "thomas" , "Allisson7787@" ,
-        // "allisson@gmail.com");
-        // userController.print();
+        initDesign();
+        initComponents();
     }
 
     private void initComponents() {
-        // Inicializa os campos e botões
+
         loginField = new JTextField();
-        loginField.setBounds(247, 227, 240, 36);
+        // loginField.setBounds(247, 227, 240, 36);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(247, 331, 240, 36);
+        // passwordField.setBounds(247, 331, 240, 36);
 
         loginButton = new JButton();
         loginButton.setBounds(203, 420, 314, 48);
@@ -108,5 +106,27 @@ public class LoginPage extends JPanel {
             };
 
         });
+    }
+
+    private void initDesign() {
+        var mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS)); // Conteúdos serão organizados verticalmente
+        mainPanel.setBackground(new Color(0xcfcfcf)); // Painel com a cor cinza
+
+        // Carrega a imagem
+        var logoIcon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
+
+        // Redimensiona a imagem
+        var logoImageScaled = logoIcon.getImage().getScaledInstance(360, 98, Image.SCALE_SMOOTH);
+        logoIcon = new ImageIcon(logoImageScaled);
+
+        // JLabel para exibir a imagem redimensionada
+        var logoLabel = new JLabel(logoIcon);
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centraliza no BoxLayout
+
+        // Adiciona o logoLabel
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Espaço acima
+        mainPanel.add(logoLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Espaço abaixo
     }
 }
