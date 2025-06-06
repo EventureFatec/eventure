@@ -23,7 +23,7 @@ public class DisplayEvent0 extends JPanel {
 	private JLabel numero;
 	private JLabel bairro;
 	private JLabel complemento;
-	private JButton concluir;
+	private JButton btnConcluir;
     public DisplayEvent0(int id) {
     	setLayout(new BorderLayout());
     	idEvento = id;
@@ -31,45 +31,82 @@ public class DisplayEvent0 extends JPanel {
     	Event event = eventController.findEventById(idEvento);
 
     	JPanel contentPanel = new JPanel();
-    	//contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
     	contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.X_AXIS));
     	contentPanel.setBackground(Color.WHITE);
 
-    	// Garantir que imagePreview foi instanciado
         imagePreview = new JLabel();
-    	imagePreview.setPreferredSize(new Dimension(540, 300));
+    	imagePreview.setPreferredSize(new Dimension(500,300));
 
     	String imagePath = event.getImagePath();
-
-    	if (imagePath != null && !imagePath.isEmpty()) {
-    	    ImageIcon icon = new ImageIcon(imagePath);
-
-    	    Image imagemRedimensionada = icon.getImage().getScaledInstance(
-    	        imagePreview.getPreferredSize().width,
-    	        imagePreview.getPreferredSize().height,
-    	        Image.SCALE_SMOOTH
-    	    );
+    	ImageIcon icon = new ImageIcon(imagePath);
+    	Image imagemRedimensionada = icon.getImage().getScaledInstance(500, 300, Image.SCALE_SMOOTH);
+    	RoundedImageLabel imagePreview = new RoundedImageLabel(imagemRedimensionada);
 
     	    imagePreview.setIcon(new ImageIcon(imagemRedimensionada));
-
     	    JPanel leftPanel = new JPanel();
     	    leftPanel.setPreferredSize(new Dimension(565, 590));
+    	    
     	    leftPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 520));
-//    	    leftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-    	    leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-    	    leftPanel.add(new JLabel("teste"));
-//    	    leftPanel.add(imagePreview);
+    	    leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+    	    leftPanel.setBackground(new Color(0xe5d8fd));
+    	    titulo = new JLabel("<html><div style='font-family:Segoe UI; font-size:32px; font-weight:bold; margin:0;'>"
+                    + event.getTitle() + "</div></html>");
+    	    titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	    titulo.setFont(new Font("Segoe UI", Font.BOLD, 32));
+    	    titulo.setForeground(new Color(0x333333)); // Cor escura para contraste
+    	    leftPanel.add(Box.createVerticalStrut(20));
+    	    leftPanel.add(titulo);
+
+    	    
+    	    String dataCompleta = String.format("%s - %s às %s", 
+    	        event.getDate(), event.getDate(), event.getStartHours());
+    	    JLabel dataHora = new JLabel("📅 " + dataCompleta);
+    	    dataHora.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	    dataHora.setFont(new Font("SansSerif", Font.PLAIN, 20));
+    	    dataHora.setForeground(Color.DARK_GRAY);
+    	    leftPanel.add(Box.createVerticalStrut(10));
+    	    leftPanel.add(dataHora);
+
+    	    
+    	    JLabel local = new JLabel("📍 " + "Rua "+event.getAddress().getRua() + ", " 
+    	        + event.getAddress().getNumero() + " - " + event.getAddress().getBairro()
+    	        + ", " + event.getAddress().getCidade() + " - " + event.getAddress().getEstado());
+    	    local.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	    local.setFont(new Font("SansSerif", Font.PLAIN, 20));
+    	    local.setForeground(Color.DARK_GRAY);
+    	    leftPanel.add(Box.createVerticalStrut(10));
+    	    leftPanel.add(local);
+
+    	    
+    	    JLabel descricaoLabel = new JLabel("Descrição:");
+    	    descricaoLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+    	    leftPanel.add(descricaoLabel);
+    	    descricao = new JLabel("<html><p>" + event.getDescription() + "</p></html>");
+    	    descricao.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	    descricao.setFont(new Font("SansSerif", Font.PLAIN, 18));
+    	    descricao.setForeground(new Color(0x222222));
+    	    descricao.setMaximumSize(new Dimension(500, 100));
+    	    leftPanel.add(Box.createVerticalStrut(20));
+    	    leftPanel.add(descricao);
+
+    	    // Observação (classificação etária ou aviso)
+    	    JLabel observacao = new JLabel("Classificação etária: 18 anos | Sujeito a alterações sem aviso prévio.");
+    	    observacao.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	    observacao.setFont(new Font("SansSerif", Font.ITALIC, 14));
+    	    observacao.setForeground(new Color(0x880000));
+    	    leftPanel.add(Box.createVerticalStrut(15));
+    	    leftPanel.add(observacao);
     	    contentPanel.add(leftPanel);
     	    JPanel rightPanel = new JPanel();
     	    rightPanel.setPreferredSize(new Dimension(565, 590));
     	    rightPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 520));
-    	    //rightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-    	    rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+    	    rightPanel.setBackground(new Color(0xe5d8fd));
+    	    rightPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
     	    rightPanel.add(imagePreview);
     	    contentPanel.add(rightPanel);
-    	}
+    	
 
-    	// Força altura maior para scroll funcionar mesmo com só 1 item
+    	
     	contentPanel.setPreferredSize(new Dimension(820, 600));
 
     	JScrollPane scrollPane = new JScrollPane(contentPanel);
@@ -81,6 +118,6 @@ public class DisplayEvent0 extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(1130, 590); // tamanho visível esperado pelo método showMainPanel
+        return new Dimension(1130, 590); 
     }
 }
