@@ -21,7 +21,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 import com.github.eventure.controllers.ImageController;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import com.github.eventure.controllers.UserController;
@@ -61,7 +60,7 @@ public class ProfilePage extends JPanel {
         ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
-        imagePreview.add(imagePreview);
+        add(imagePreview);
         imagePreview.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
