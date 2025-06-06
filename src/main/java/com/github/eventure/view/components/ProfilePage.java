@@ -61,6 +61,7 @@ public class ProfilePage extends JPanel {
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(imagePreview);
+      
         imagePreview.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

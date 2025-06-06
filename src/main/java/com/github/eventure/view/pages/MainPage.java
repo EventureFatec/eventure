@@ -38,6 +38,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
@@ -48,6 +49,7 @@ import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.EventPanelEdit;
 import com.github.eventure.view.components.ProfilePage;
+import com.github.eventure.view.components.DisplayEvent0;
 
 public class MainPage extends JPanel {
 
@@ -338,14 +340,19 @@ public class MainPage extends JPanel {
         ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
         JButton btnConfig = new JButton(sbsettingsIcon);
         configurarBotaoSidebar(btnConfig);
+        btnConfig.addActionListener(e ->{
+        	// parametro é idDoEventos
+        	var s = new DisplayEvent0(1);
+        	showMainPanel(s, 1);
+        });
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCreateEventSB.addActionListener(e -> {
-            User user = Session.getLoggedUser();
+        btnCreateEventSB.addActionListener(e -> { 
+        	var user = Session.getLoggedUser();
             var createEventPanel = new CreateEventPanel(user);
-            showMainPanel(createEventPanel, 0);
+            showMainPanel(createEventPanel,0);
         });
         configurarBotaoSidebar(btnCreateEventSB);
 

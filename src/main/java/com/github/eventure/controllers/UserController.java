@@ -210,7 +210,7 @@ public class UserController {
 
     public boolean login(String emailOrusername, String password) {
     // Procura o usuário no storage
-    	print();
+    print();
     User user = findUserByEmail(emailOrusername);
     System.out.println("usuario = "+user);
     if(user == null)
@@ -224,6 +224,7 @@ public class UserController {
         byte[] salt = user.getPassword().getPasswordSalt();
         byte[] hash = Encryption.generateHash(password, salt);
         boolean loginValido = Encryption.checkHashes(hash, user.getPassword().getPasswordHash());
+        System.out.println("Hashes são iguais? " + loginValido);
         if(loginValido) {
         	IdController.logoffUser();
         	IdController.setIdUser(user.getUserId());
@@ -236,6 +237,13 @@ public class UserController {
     // Caso o usuário não seja encontrado
     return false;
 }
+    public User findUserByEmailOrUsername(String emailOrUsername) {
+        User user = findUserByEmail(emailOrUsername);
+        if (user == null) {
+            user = findUserByUsername(emailOrUsername);
+        }
+        return user;
+    }
 
     public static String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
