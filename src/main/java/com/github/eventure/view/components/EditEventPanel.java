@@ -160,6 +160,9 @@ public class EditEventPanel extends JPanel {
 	        for (EventClassification ec : EventClassification.values()) {
 	            classificationBox.addItem(ec.getLabel());
 	        }
+	        EventClassification selectedType = event.getType(); 
+	        String selectedLabel = selectedType.getLabel();     
+	        classificationBox.setSelectedItem(selectedLabel);
 	        classificationBox.setBounds(xField, y, 300, 30);
 	        classificationBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	        rightPanel.add(classificationBox);
@@ -332,6 +335,8 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(complementoField);
 	            
 	            y2 += espacamentoY;
+	            // para garantir que mesmo que o usuario não selecione uma foto diferente. a antiga ja esta setada
+	            caminho = event.getImagePath();
 	            //selecionar imagem 
 	            selectImageBtn.addActionListener(e2 -> {
 	            	ImageController imageController = new ImageController();
@@ -417,6 +422,7 @@ public class EditEventPanel extends JPanel {
 	            		System.out.println("id controller no create event = "+IdController.getIdUser());
 	            		// metodo de editar
 	            		eventController.eventClone(id, title, description, selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);          		
+	            		JOptionPane.showMessageDialog(null,"Evento editado com sucesso!");
 	                    this.setVisible(false);
 	            	}else {
 	            		JOptionPane.showMessageDialog(null, "Erro ao criar evento preencha as informações com valores validos");
@@ -473,7 +479,7 @@ public class EditEventPanel extends JPanel {
 	            });
 	             }else {
 	            	 JOptionPane.showMessageDialog(null, "Prencha os campos corretamente"); 
-	            	//messageBox
+	            	
 	             }
 	        });
 

@@ -58,7 +58,7 @@ public class EventController {
 				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
-			e.addUsersParticipantes(idMaker);
+			e.addConfirmedParticipantIds(idMaker);
 			var userController = UserController.getInstance();
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());
@@ -182,6 +182,37 @@ public class EventController {
 		}
 
 	}
+	
+	// metodo para adicionar o usuario a lista de participantes de um evento sendo que se evento for publico
+	// ele adiciona automaticamente se não for ele adiciona a lista de solicitaçoes que o usuario so é adicionado
+	// se o criador do evento aceitar
+	public void adicionarParticipante(int idEvent, int idUser)
+	{
+		boolean publicOrPrivate = true;
+		Event event = findEventById(idEvent);
+		if(!event.usersParticipaOuNão(idUser))
+		{
+		 if(publicOrPrivate)
+		 {
+			event.addConfirmedParticipantIds(idUser);
+			JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
+			//  evento publico
+		 }else
+		  {
+			 // evento privado
+			 // adiciona o usuario a uma lista que o criador vai decidir se confirma ou não a participação
+			event.addPendingRequestIds(idUser);
+		  }
+		}else {
+			JOptionPane.showMessageDialog(null, "Você já participa desse evento!");
+		}
+	}
+	
+	public void adicionarParticipantesPrivateEvento(int idEvent,int idUser) {
+		Event event = findEventById(idEvent);
+		event.addConfirmedParticipantIds(idUser);
+	    JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
+	}
 
 	public void print(List<Event> eventos) {
 		for (Event eb : eventos) {
@@ -262,7 +293,7 @@ public class EventController {
 				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
-			e.addUsersParticipantes(idMaker);
+			e.addConfirmedParticipantIds(idMaker);
 			var userController = UserController.getInstance();
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());

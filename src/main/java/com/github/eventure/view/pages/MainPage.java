@@ -46,9 +46,10 @@ import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
+import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EventPanelEdit;
 import com.github.eventure.view.components.ProfilePage;
-import com.github.eventure.view.components.DisplayEvent0;
+
 
 public class MainPage extends JPanel {
 
@@ -341,8 +342,8 @@ public class MainPage extends JPanel {
         configurarBotaoSidebar(btnConfig);
         btnConfig.addActionListener(e -> {
             // parametro é idDoEventos
-            var s = new DisplayEvent0(1);
-            showMainPanel(s, 1);
+            var displayEvent = new DisplayEvent(0);
+            showMainPanel(displayEvent, 0);
         });
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));

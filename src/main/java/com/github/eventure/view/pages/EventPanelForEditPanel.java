@@ -15,13 +15,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EditEventPanel;
 
-public class EventPanel2 extends JPanel {
+public class EventPanelForEditPanel extends JPanel {
     private int idEvento;
-    public EventPanel2(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
+    public EventPanelForEditPanel(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
         // Tamanho fixo do painel

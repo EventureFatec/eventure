@@ -2,6 +2,9 @@ package com.github.eventure.view;
 
 import javax.swing.*;
 
+import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.UserController;
+import com.github.eventure.model.EventClassification;
 import com.github.eventure.view.pages.LoginPage;
 import com.github.eventure.view.pages.RegisterPage;
 import com.github.eventure.view.pages.WelcomePage;
@@ -24,7 +27,16 @@ public class MainFrame extends JFrame {
         // Inicializando o CardLayout e o painel que vai conter as telas
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
-
+        
+        var userController = UserController.getInstance();
+        userController.createUserSemMessageBox("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
+        userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
+        userController.createUserSemMessageBox("luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
+        var eventos = EventController.getInstance();
+        String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
+        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
+                "20/02/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
+                "orlando novaes", "300", "casa");
         // Adiciona as telas (pages) no contentPanel
         WelcomePage welcomePage = new WelcomePage(this);
         contentPanel.add(welcomePage, "welcome"); // Tela de boas-vindas

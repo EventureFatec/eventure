@@ -16,12 +16,17 @@ public class Event {
 	private List<Image> images;
 	private String imagePath;
 	private String date;
+	private String EndDate;
 	private String startHours;
 	private String endHours;
 	private Address address;
 	private Cep cep;
-	private List<Integer> usersParticipantes = new ArrayList<>();
-
+	private Visibilidade visibilidade; // verifica se o evento é privado ou publico
+	private List<Integer> confirmedParticipantIds = new ArrayList<>(); // usuario que estão confirmados nos eventos
+	private List<Integer> pendingRequestIds = new ArrayList<>(); /* lista para caso se o evento for privado
+	o criador do evento vai ter essa lista com os id para ele decidir se confirma a participação ou não dos 
+	usuarios
+    */
 	public Event(int id, String description, String title, EventClassification type) {
 		this.id = id;
 		this.description = description;
@@ -147,11 +152,36 @@ public class Event {
 		this.type = type;
 	}
 
-	public void addUsersParticipantes(int id) {
-		usersParticipantes.add(id);
+	public void addConfirmedParticipantIds(int id) {
+		confirmedParticipantIds.add(id);
 	}
 
-	public void removeUsersParticipantes(int id) {
-		usersParticipantes.remove(id);
+	public void removeConfirmedParticipantIds(int id) {
+		confirmedParticipantIds.remove(id);
 	}
+	public void setConfirmedParticipantIds(List<Integer> confirmedParticipantIds) {
+		this.confirmedParticipantIds = confirmedParticipantIds;
+	}
+	public List<Integer> getConfirmedParticipantIds() {
+		return confirmedParticipantIds;
+	}
+
+	public void setPendingRequestIds(List<Integer> pendingRequestIds) {
+		this.pendingRequestIds = pendingRequestIds;
+	}
+	public List<Integer> getPendingRequestIds() {
+		return pendingRequestIds;
+	}
+	public void addPendingRequestIds(int id) {
+		pendingRequestIds.add(id);
+	}
+
+	public void removePendingRequestIds(int id) {
+		pendingRequestIds.remove(id);
+	}
+	public boolean usersParticipaOuNão(int id)
+	{
+		return confirmedParticipantIds.contains(id);
+	}
+
 }
