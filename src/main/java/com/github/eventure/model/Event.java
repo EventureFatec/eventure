@@ -16,7 +16,7 @@ public class Event {
 	private List<Image> images;
 	private String imagePath;
 	private String date;
-	private String EndDate;
+	private String dateEnd;
 	private String startHours;
 	private String endHours;
 	private Address address;
@@ -183,5 +183,22 @@ public class Event {
 	{
 		return confirmedParticipantIds.contains(id);
 	}
+	
+	public String getDateEnd() {
+		return dateEnd;
+	}
 
+	public void setDateEnd(String dateEnd) {
+		this.dateEnd = dateEnd;
+	}
+
+	public Visibilidade getVisibilidade() {
+		return visibilidade;
+	}
+
+	public void setVisibilidade(Visibilidade visibilidade) {
+		this.visibilidade = visibilidade;
+	}
+    
+	
 }

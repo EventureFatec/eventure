@@ -44,6 +44,7 @@ import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
+import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
@@ -287,9 +288,9 @@ public class MainPage extends JPanel {
 
             var img = new ImageController();
             String path = img.selecionarImagem();
-            evt.createEvent(0, "feira de gastronomia", "uma feira cheia de delicias", eventClassification, "20/02/2021",
+            evt.createEvent(0, "feira de gastronomia", "uma feira cheia de delicias", eventClassification, "20/02/2021","21/03/2022",
                     "15:30", "16:00", path, "12760000", "São paulo", "lavrinhas", "capela do jacu",
-                    "geraldo nogueira de sa", "100", "casa");
+                    "geraldo nogueira de sa", "100", "casa",Visibilidade.PRIVADO);
             ExibirEvents();
         });
 

@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import com.github.eventure.model.Address;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.Visibilidade;
 import com.github.eventure.model.address.Cep;
 import com.github.eventure.storage.Storage;
 
@@ -32,15 +33,16 @@ public class EventController {
 		return instance;
 	}
 
-	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,
+	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
-			String rua, String numero, String complemento) {
+			String rua, String numero, String complemento,Visibilidade visibilidade) {
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
 		e.setDescription(description);
 		e.setType(type);
 		e.setDate(date);
+		e.setDateEnd(dateEnd);
 		e.setStartHours(startHours);
 		e.setEndHours(endHours);
 		e.setImagePath(caminho);
@@ -50,11 +52,12 @@ public class EventController {
 		address.setBairro(bairro);
 		address.setRua(rua);
 		address.setNumero(numero);
+		e.setVisibilidade(visibilidade);
 		if (!complemento.isEmpty()) {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if (!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
+		if (!e.getTitle().isEmpty() && !e.getDescription().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
 				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
@@ -188,11 +191,10 @@ public class EventController {
 	// se o criador do evento aceitar
 	public void adicionarParticipante(int idEvent, int idUser)
 	{
-		boolean publicOrPrivate = true;
 		Event event = findEventById(idEvent);
 		if(!event.usersParticipaOuNão(idUser))
 		{
-		 if(publicOrPrivate)
+		 if(event.getVisibilidade() == Visibilidade.PUBLICO)
 		 {
 			event.addConfirmedParticipantIds(idUser);
 			JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
@@ -201,6 +203,8 @@ public class EventController {
 		  {
 			 // evento privado
 			 // adiciona o usuario a uma lista que o criador vai decidir se confirma ou não a participação
+			 JOptionPane.showInternalMessageDialog(null,"Pedido para participar enviado");
+			 System.out.println("privado o evento");
 			event.addPendingRequestIds(idUser);
 		  }
 		}else {
