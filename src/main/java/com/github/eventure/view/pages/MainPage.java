@@ -254,7 +254,7 @@ public class MainPage extends JPanel {
             }
 
             // Continua para criação do evento
-            var createEventPanel = new CreateEventPanel(user);
+            var createEventPanel = new CreateEventPanel(user,this);
             showMainPanel(createEventPanel, 0);
         });
 
@@ -352,7 +352,7 @@ public class MainPage extends JPanel {
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCreateEventSB.addActionListener(e -> {
             var user = Session.getLoggedUser();
-            var createEventPanel = new CreateEventPanel(user);
+            var createEventPanel = new CreateEventPanel(user,this);
             showMainPanel(createEventPanel, 0);
         });
         configurarBotaoSidebar(btnCreateEventSB);

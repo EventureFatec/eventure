@@ -67,7 +67,7 @@ public class EventPanelForEditPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
-                var editEvent = new EditEventPanel(idEvento);
+                var editEvent = new EditEventPanel(idEvento , mainPage);
                 // chamar a tela exibir evento completo
                 mainPage.showMainPanel(editEvent,0);
             }

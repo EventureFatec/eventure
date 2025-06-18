@@ -101,14 +101,15 @@ public class EventController {
 				.collect(Collectors.toList());
 	}
 
-	public void eventClone(int idEvent, String title, String description, EventClassification type, String date,
+	public void eventClone(int idEvent, String title, String description, EventClassification type, String date, String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
-			String rua, String numero, String complemento) {
+			String rua, String numero, String complemento,Visibilidade visibilidade) {
 		var eventClone = new Event();
 		eventClone.setTitle(title);
 		eventClone.setDescription(description);
 		eventClone.setType(type);
 		eventClone.setDate(date);
+		eventClone.setDateEnd(dateEnd);
 		eventClone.setStartHours(startHours);
 		eventClone.setEndHours(endHours);
 		eventClone.setImagePath(caminho);
@@ -121,6 +122,7 @@ public class EventController {
 		address.setNumero(numero);
 		address.setRua(rua);
 		eventClone.setAddress(address);
+		eventClone.setVisibilidade(visibilidade);
 		eventClone.setId(idEvent);
 		applyChanges(idEvent, eventClone);
 	}
@@ -145,6 +147,9 @@ public class EventController {
 		}
 		if (eventClone.getDate() != null && !(eventClone.getDate().equals(event.getDate()))) {
 			event.setDate(eventClone.getDate());
+		}
+		if (eventClone.getDateEnd() != null && !(eventClone.getDateEnd().equals(event.getDateEnd()))) {
+			event.setDateEnd(eventClone.getDateEnd());
 		}
 		if (eventClone.getStartHours() != null && !(eventClone.getStartHours().equals(event.getStartHours()))) {
 			event.setStartHours(eventClone.getStartHours());
@@ -182,6 +187,10 @@ public class EventController {
 		if (eventClone.getAddress().getNumero() != null
 				&& !(eventClone.getAddress().getNumero().equals(event.getAddress().getNumero()))) {
 			event.getAddress().setNumero(eventClone.getAddress().getNumero());
+		}
+		if(eventClone.getVisibilidade() != null && eventClone.getVisibilidade() != event.getVisibilidade())
+		{
+			event.setVisibilidade(eventClone.getVisibilidade());
 		}
 
 	}

@@ -57,11 +57,11 @@ public class DisplayEvent extends JPanel {
 
 		// Date and Time (with emojis)
 		String dateTimeHtml = String.format(
-				"<html><span style='font-family:Segoe UI; font-size:12px; color:#555555;'>"
-						+ "📅 <b>Data:</b> %s<br/>"
-						+ "⏰ <b>Início:</b> %s - <b>Término:</b> %s"
-						+ "</span></html>",
-				event.getDate(), event.getStartHours(), event.getEndHours());
+			    "<html><span style='font-family:Segoe UI; font-size:12px; color:#555555;'>"
+			    + "📅 <b>Data:</b> %s&nbsp;à&nbsp;%s<br/>"
+			    + "⏰ <b>Início:</b> %s - <b>Término:</b> %s"
+			    + "</span></html>",
+			    event.getDate(), event.getDateEnd(), event.getStartHours(), event.getEndHours());
 		JLabel dateTimeLabel = new JLabel(dateTimeHtml);
 		dateTimeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		infoPanel.add(dateTimeLabel);
@@ -116,7 +116,6 @@ public class DisplayEvent extends JPanel {
 		styleSheet.addRule("b {color: #2e1a47;}");
 		styleSheet.addRule("span {line-height: 1.4;}");
 
-		// Format description text replacing \n by <br>
 		String descricaoTexto = event.getDescription() != null ? event.getDescription() : "";
 		descricaoTexto = descricaoTexto.replace("\n", "<br/>");
 
@@ -133,6 +132,7 @@ public class DisplayEvent extends JPanel {
 		JScrollPane scrollDescription = new JScrollPane(descriptionPane);
 		scrollDescription.setBorder(null);
 		scrollDescription.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollDescription.setPreferredSize(new Dimension(400, 300));
 		
 		// Painel de informações adicionais (tipo, participantes, organizador)
 		JPanel extraInfoPanel = new JPanel();

@@ -14,6 +14,7 @@ import com.github.eventure.model.NumericDocumentFilter;
 import com.github.eventure.model.User;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.model.address.Cep;
+import com.github.eventure.view.pages.MainPage;
 import com.github.eventure.web.Requests;
 
 import java.awt.*;
@@ -43,7 +44,7 @@ public class CreateEventPanel extends JPanel {
 
     private User user;
 
-    public CreateEventPanel(User user) {
+    public CreateEventPanel(User user,MainPage mainPage) {
         this.user = user;
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
@@ -207,7 +208,7 @@ public class CreateEventPanel extends JPanel {
             
             if (selectedDate2 != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                dateEnd = sdf.format(selectedDate);
+                dateEnd = sdf.format(selectedDate2);
             }
             
             System.out.println("data = "+dateEnd);
@@ -223,7 +224,7 @@ public class CreateEventPanel extends JPanel {
             starsHours = startHourField.getText();
             endHours = endHourField.getText();
             if (!title.isEmpty() && !description.isEmpty() && !starsHours.isEmpty() && !endHours.isEmpty()
-                    && !date.isEmpty() && selectedClassification != null) {
+                    && !date.isEmpty() && !dateEnd.isEmpty() && selectedClassification != null && visibilidade != null && Visibilidade.isValido(visibilidade)) {
 
                 rightPanel.removeAll();
 
@@ -432,6 +433,7 @@ public class CreateEventPanel extends JPanel {
                                 selectedClassification, date, dateEnd ,starsHours, endHours, caminho, cepAddress, estado, cidade,
                                 bairro, rua, numero, complemento,visibilidade);
                         this.setVisible(false);
+                        mainPage.ExibirEvents();
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "Erro ao criar evento preencha as informações com valores validos");
