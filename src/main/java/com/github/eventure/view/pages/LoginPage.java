@@ -72,7 +72,7 @@ public class LoginPage extends JPanel {
             passwordField.setText(" ");
             frame.showPanel("register");
         });
-
+    
         this.add(loginField);
         this.add(passwordField);
         this.add(loginButton);
@@ -105,7 +105,8 @@ public class LoginPage extends JPanel {
                     JOptionPane.showMessageDialog(null, "Login falhou. Tente novamente.");
                 }
             }
-        });
+          }
+       });
 
     }
 }

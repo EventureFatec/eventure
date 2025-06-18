@@ -62,6 +62,8 @@ public class MainPage extends JPanel {
     private JLayeredPane layeredPane;
     private final int SIDEBAR_COLLAPSED_WIDTH = 45;
     private final int SIDEBAR_EXPANDED_WIDTH = 300;
+    private JPanel chatPanel;
+    private boolean chatVisible = false;
 
     public MainPage(MainFrame frame) {
         this.frame = frame;
@@ -268,9 +270,14 @@ public class MainPage extends JPanel {
         chatButton.setOpaque(false);
         chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         chatButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Botão Chat clicado!", "Chat", JOptionPane.INFORMATION_MESSAGE);
-            ExibirEvents();
-        });
+        chatVisible = !chatVisible;
+        chatPanel.setVisible(chatVisible);
+         if (chatVisible) {
+             chatPanel.setBounds(getWidth() - 320, 50, 300, 400);
+                layeredPane.moveToFront(chatPanel);
+    }
+        ExibirEvents();
+});
         rightButtonsPanel.add(chatButton);
 
         // Botão Notificação
@@ -455,6 +462,9 @@ public class MainPage extends JPanel {
         });
 
         layeredPane.add(sidebar, JLayeredPane.PALETTE_LAYER);
+        
+           // Inicializa o chat
+           initChatPanel();
 
         // Ajusta dinamicamente ao redimensionar
         addComponentListener(new ComponentAdapter() {
@@ -478,6 +488,21 @@ public class MainPage extends JPanel {
         botao.setFont(new Font("SansSerif", Font.BOLD, 12));
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+    
+    private void initChatPanel() {
+    chatPanel = new JPanel();
+    chatPanel.setLayout(new BorderLayout());
+    chatPanel.setBackground(new Color(240, 240, 255));
+    chatPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH + 300, 48, 300, 600); // Ajuste conforme necessário
+
+    JLabel label = new JLabel("Chat em construção...");
+    label.setHorizontalAlignment(SwingConstants.CENTER);
+    chatPanel.add(label, BorderLayout.CENTER);
+
+    layeredPane.add(chatPanel, JLayeredPane.MODAL_LAYER);
+    chatPanel.setVisible(chatVisible);
+}
+
 
     public void showMainPanel(JPanel contentPanel, int modo) {
         galleryPanel.removeAll();
@@ -635,6 +660,8 @@ public class MainPage extends JPanel {
 
         galleryPanel.revalidate();
         galleryPanel.repaint();
+        
+        
     }
 
 }
