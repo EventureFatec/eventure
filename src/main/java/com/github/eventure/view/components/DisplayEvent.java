@@ -10,6 +10,7 @@ import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
+import com.github.eventure.model.Visibilidade;
 
 public class DisplayEvent extends JPanel {
 	private int idEvento;
@@ -146,16 +147,26 @@ public class DisplayEvent extends JPanel {
 		// Tipo do evento
 		String tipoEvento = event.getType() != null ? event.getType().getLabel() : "Não especificado";
 		JLabel tipoLabel = new JLabel("🎯 Tipo de evento: " + tipoEvento);
-		tipoLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+		tipoLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
 		tipoLabel.setForeground(new Color(0x333333));
 		tipoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		extraInfoPanel.add(tipoLabel);
+		extraInfoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		Visibilidade nivelVisibilidade = event.getVisibilidade();
+		String visibilidadeTexto = nivelVisibilidade == Visibilidade.PUBLICO
+			    ? "🌐 Acesso público"
+			    : "👤 Somente convidados";
+		JLabel visibilidadeLabel = new JLabel(visibilidadeTexto);
+		visibilidadeLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
+		visibilidadeLabel.setForeground(new Color(0x333333));
+		visibilidadeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		extraInfoPanel.add(visibilidadeLabel);
 		extraInfoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		// Participantes
 		int totalParticipantes = event.getConfirmedParticipantIds().size();
 		JLabel participantesLabel = new JLabel("👥 Participantes confirmados: " + totalParticipantes);
-		participantesLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+		participantesLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
 		participantesLabel.setForeground(new Color(0x333333));
 		participantesLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		extraInfoPanel.add(participantesLabel);
@@ -165,7 +176,7 @@ public class DisplayEvent extends JPanel {
 		User user = UserController.getInstance().findUserById(event.getIdMaker());
 		String organizador = String.valueOf(user.getName());
 		JLabel organizadorLabel = new JLabel("🧑‍💼 Organizador: " + organizador);
-		organizadorLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+		organizadorLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
 		organizadorLabel.setForeground(new Color(0x333333));
 		organizadorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		extraInfoPanel.add(organizadorLabel);

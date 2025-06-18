@@ -18,6 +18,7 @@ import com.github.eventure.view.pages.MainPage;
 import com.github.eventure.web.Requests;
 
 import java.awt.*;
+import java.awt.desktop.OpenURIHandler;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -464,6 +465,10 @@ public class CreateEventPanel extends JPanel {
                     descriptionArea.setText(description);
                     rightPanel.add(labeldate);
                     rightPanel.add(datePicker);
+                    rightPanel.add(labeldate2);
+                    rightPanel.add(datePicker2);
+                    rightPanel.add(publicoButton);
+                    rightPanel.add(privadoButton);
                     rightPanel.add(hourLabel);
                     rightPanel.add(startHourField);
                     startHourField.setText(starsHours);

@@ -279,16 +279,16 @@ public class EventController {
 		return eventos;
 	}
 
-	public void createEventSemMessageBox(int idMaker, String title, String description, EventClassification type,
-			String date,
+	public void createEventSemMessageBox(int idMaker, String title, String description, EventClassification type, String date,String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
-			String rua, String numero, String complemento) {
+			String rua, String numero, String complemento,Visibilidade visibilidade) {
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
 		e.setDescription(description);
 		e.setType(type);
 		e.setDate(date);
+		e.setDateEnd(dateEnd);
 		e.setStartHours(startHours);
 		e.setEndHours(endHours);
 		e.setImagePath(caminho);
@@ -298,11 +298,12 @@ public class EventController {
 		address.setBairro(bairro);
 		address.setRua(rua);
 		address.setNumero(numero);
+		e.setVisibilidade(visibilidade);
 		if (!complemento.isEmpty()) {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if (!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
+		if (!e.getTitle().isEmpty() && !e.getDescription().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
 				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
@@ -311,9 +312,9 @@ public class EventController {
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());
 			eventController.add(e);
-			// JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
+//			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
 		} else {
-			JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
+			//JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
 		}
 
 	}
