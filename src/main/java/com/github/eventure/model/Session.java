@@ -1,26 +1,21 @@
 package com.github.eventure.model;
 
 public class Session {
-    public static Account loggedInAccount;
+    private static User loggedUser = null;
 
-    public static boolean login(Account a) {
-        if (loggedInAccount == null) {
-            loggedInAccount = a;
-            return true;
-        }
-        return false;
+    public static void login(User user) {
+        loggedUser = user;
     }
 
-    public static boolean logout() {
-        if (loggedInAccount != null) {
-            loggedInAccount = null;
-            return true;
-        } else {
-            return false;
-        }
+    public static void logout() {
+        loggedUser = null;
     }
 
-    public static Account getLoggedInUser() {
-        return loggedInAccount;
+    public static User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public static boolean isLoggedIn() {
+        return loggedUser != null;
     }
 }

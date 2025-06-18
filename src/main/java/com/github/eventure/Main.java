@@ -3,6 +3,7 @@ package com.github.eventure;
 
 import javax.swing.SwingUtilities;
 
+import com.github.eventure.controllers.UserController;
 import com.github.eventure.view.MainFrame;
 
 public class Main {

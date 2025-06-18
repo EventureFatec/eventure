@@ -16,18 +16,23 @@ public class User {
     private Password password;
     private int userId;
     private String cpf;
+	private String profilePic;
     private boolean organazador = false;
+    private boolean isLogged = false;
+    private List<Integer> myEventsList = new ArrayList<>(); // salva uma lista com todos os eventos que ele criou
     private List<Integer> eventsList = new ArrayList<>();  // Inicializando a lista de eventos
     private List<Integer> communityList = new ArrayList<>(); // Inicializando a lista de comunidades
 
     // Construtor
-    public User(String name, String email, String username, Password password, int userId, String cpf) {
+    public User(String name, String email, String username, Password password, int userId, String cpf, String profilePic, boolean isLogged) {
         this.name = name;
         this.email = email;
         this.username = username;
         this.password = password;
         this.userId = userId;
         this.cpf = cpf;
+		this.profilePic = profilePic;
+        this.isLogged = isLogged;
     }
 
     // Getters e Setters
@@ -79,6 +84,22 @@ public class User {
         this.cpf = cpf;
     }
 
+    public boolean getIsLogged(boolean isLogged) {
+        return this.isLogged;
+    }
+
+    public void setIsLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
+
+	public String getProfilePic(String profilePic) {
+		return this.profilePic;
+	}
+	
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
+	}
+
     public boolean isOrganazador() {
         return organazador;
     }
@@ -102,13 +123,19 @@ public class User {
     public void addCommunity(int communityId) {
         communityList.add(communityId);
     }
-
-    // Métodos para acessar o hash da senha e salt como String em base64
-    public String getPasswordHashAsString() {
-        return password.getPasswordHashAsString();
+    public void addListMyEvents(int idEvento) {
+    	myEventsList.add(idEvento);
+    }
+    public void removeListMyEvents(int idEvento) {
+    	myEventsList.remove(idEvento);
     }
 
-    public String getPasswordSaltAsString() {
-        return password.getPasswordSaltAsString();
-    }
+	public List<Integer> getMyEventsList() {
+		return myEventsList;
+	}
+
+	public void setMyEventsList(List<Integer> myEventsList) {
+		this.myEventsList = myEventsList;
+	}
+    
 }

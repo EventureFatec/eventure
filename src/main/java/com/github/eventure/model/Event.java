@@ -1,46 +1,51 @@
 package com.github.eventure.model;
 
-import java.time.LocalTime;
-import java.util.Date;
+//import java.time.LocalTime;
+import java.util.ArrayList;
+//import java.util.Date;
 import java.util.List;
 
-import com.github.eventure.model.address.Address;
 import com.github.eventure.model.address.Cep;
 
 public class Event {
 	private int id;
-	private String name;
-	private String description;
+	private int idMaker;
 	private String title;
+	private String description;
 	private EventClassification type;
 	private List<Image> images;
-	private Date date;
-	private LocalTime startHours;
-	private LocalTime endHours;
+	private String imagePath;
+	private String date;
+	private String dateEnd;
+	private String startHours;
+	private String endHours;
 	private Address address;
 	private Cep cep;
-	private List<Integer> usersParticipantes;
-
-	public Event(int id, String name, String description, String title, EventClassification type) {
+	private Visibilidade visibilidade; // verifica se o evento é privado ou publico
+	private List<Integer> confirmedParticipantIds = new ArrayList<>(); // usuario que estão confirmados nos eventos
+	private List<Integer> pendingRequestIds = new ArrayList<>(); /* lista para caso se o evento for privado
+	o criador do evento vai ter essa lista com os id para ele decidir se confirma a participação ou não dos 
+	usuarios
+    */
+	public Event(int id, String description, String title, EventClassification type) {
 		this.id = id;
-		this.name = name;
 		this.description = description;
 		this.title = title;
 		this.type = type;
 	}
 
-	public Event(int id, String name, String description, String title, EventClassification type, Date date,
-			LocalTime startHours, LocalTime endHours, Cep cep) {
+	public Event(int id, String description, String title, EventClassification type, String date,
+			String startHours, String endHours, String imagePath, Address address) {
 		super();
 		this.id = id;
-		this.name = name;
 		this.description = description;
 		this.title = title;
 		this.type = type;
 		this.date = date;
 		this.startHours = startHours;
 		this.endHours = endHours;
-		this.cep = cep;
+		this.imagePath = imagePath;
+		this.address = address;
 	}
 
 	public Event() {
@@ -55,12 +60,12 @@ public class Event {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public int getIdMaker() {
+		return idMaker;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setIdMaker(int idMaker) {
+		this.idMaker = idMaker;
 	}
 
 	public Cep getCep() {
@@ -99,28 +104,36 @@ public class Event {
 		this.images = images;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
-	public LocalTime getStartHours() {
+	public String getStartHours() {
 		return startHours;
 	}
 
-	public void setStartHours(LocalTime startHours) {
+	public void setStartHours(String startHours) {
 		this.startHours = startHours;
 	}
 
-	public LocalTime getEndHours() {
+	public String getEndHours() {
 		return endHours;
 	}
 
-	public void setEndHours(LocalTime endHours) {
+	public void setEndHours(String endHours) {
 		this.endHours = endHours;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public Address getAddress() {
@@ -139,9 +152,53 @@ public class Event {
 		this.type = type;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Evento(id=%d, name=%s)", id, name);
+	public void addConfirmedParticipantIds(int id) {
+		confirmedParticipantIds.add(id);
 	}
 
+	public void removeConfirmedParticipantIds(int id) {
+		confirmedParticipantIds.remove(id);
+	}
+	public void setConfirmedParticipantIds(List<Integer> confirmedParticipantIds) {
+		this.confirmedParticipantIds = confirmedParticipantIds;
+	}
+	public List<Integer> getConfirmedParticipantIds() {
+		return confirmedParticipantIds;
+	}
+
+	public void setPendingRequestIds(List<Integer> pendingRequestIds) {
+		this.pendingRequestIds = pendingRequestIds;
+	}
+	public List<Integer> getPendingRequestIds() {
+		return pendingRequestIds;
+	}
+	public void addPendingRequestIds(int id) {
+		pendingRequestIds.add(id);
+	}
+
+	public void removePendingRequestIds(int id) {
+		pendingRequestIds.remove(id);
+	}
+	public boolean usersParticipaOuNão(int id)
+	{
+		return confirmedParticipantIds.contains(id);
+	}
+	
+	public String getDateEnd() {
+		return dateEnd;
+	}
+
+	public void setDateEnd(String dateEnd) {
+		this.dateEnd = dateEnd;
+	}
+
+	public Visibilidade getVisibilidade() {
+		return visibilidade;
+	}
+
+	public void setVisibilidade(Visibilidade visibilidade) {
+		this.visibilidade = visibilidade;
+	}
+    
+	
 }
