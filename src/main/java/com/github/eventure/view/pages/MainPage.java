@@ -44,11 +44,13 @@ import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
+import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CreateEventPanel;
+import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EventPanelEdit;
 import com.github.eventure.view.components.ProfilePage;
-import com.github.eventure.view.components.DisplayEvent0;
+
 
 public class MainPage extends JPanel {
 
@@ -252,7 +254,7 @@ public class MainPage extends JPanel {
             }
 
             // Continua para criação do evento
-            var createEventPanel = new CreateEventPanel(user);
+            var createEventPanel = new CreateEventPanel(user,this);
             showMainPanel(createEventPanel, 0);
         });
 
@@ -286,9 +288,9 @@ public class MainPage extends JPanel {
 
             var img = new ImageController();
             String path = img.selecionarImagem();
-            evt.createEvent(0, "feira de gastronomia", "uma feira cheia de delicias", eventClassification, "20/02/2021",
+            evt.createEvent(0, "feira de gastronomia", "uma feira cheia de delicias", eventClassification, "20/02/2021","21/03/2022",
                     "15:30", "16:00", path, "12760000", "São paulo", "lavrinhas", "capela do jacu",
-                    "geraldo nogueira de sa", "100", "casa");
+                    "geraldo nogueira de sa", "100", "casa",Visibilidade.PRIVADO);
             ExibirEvents();
         });
 
@@ -341,8 +343,8 @@ public class MainPage extends JPanel {
         configurarBotaoSidebar(btnConfig);
         btnConfig.addActionListener(e -> {
             // parametro é idDoEventos
-            var s = new DisplayEvent0(1);
-            showMainPanel(s, 1);
+            var displayEvent = new DisplayEvent(0);
+            showMainPanel(displayEvent, 0);
         });
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
@@ -350,7 +352,7 @@ public class MainPage extends JPanel {
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCreateEventSB.addActionListener(e -> {
             var user = Session.getLoggedUser();
-            var createEventPanel = new CreateEventPanel(user);
+            var createEventPanel = new CreateEventPanel(user,this);
             showMainPanel(createEventPanel, 0);
         });
         configurarBotaoSidebar(btnCreateEventSB);

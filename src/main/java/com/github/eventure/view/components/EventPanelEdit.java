@@ -13,7 +13,7 @@ import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
 import com.github.eventure.view.pages.EventPanel;
-import com.github.eventure.view.pages.EventPanel2;
+import com.github.eventure.view.pages.EventPanelForEditPanel;
 import com.github.eventure.view.pages.MainPage;
 
 public class EventPanelEdit extends JPanel {
@@ -39,7 +39,7 @@ public class EventPanelEdit extends JPanel {
             int idEvent = user.getMyEventsList().get(i);
             var event = eventController.findEventById(idEvent);
 
-            EventPanel2 panel = new EventPanel2(
+            EventPanelForEditPanel panel = new EventPanelForEditPanel(
                 event.getTitle(),
                 event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
                 event.getDate(),

@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import com.github.eventure.model.Address;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.Visibilidade;
 import com.github.eventure.model.address.Cep;
 import com.github.eventure.storage.Storage;
 
@@ -32,15 +33,16 @@ public class EventController {
 		return instance;
 	}
 
-	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,
+	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
-			String rua, String numero, String complemento) {
+			String rua, String numero, String complemento,Visibilidade visibilidade) {
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
 		e.setDescription(description);
 		e.setType(type);
 		e.setDate(date);
+		e.setDateEnd(dateEnd);
 		e.setStartHours(startHours);
 		e.setEndHours(endHours);
 		e.setImagePath(caminho);
@@ -50,15 +52,16 @@ public class EventController {
 		address.setBairro(bairro);
 		address.setRua(rua);
 		address.setNumero(numero);
+		e.setVisibilidade(visibilidade);
 		if (!complemento.isEmpty()) {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if (!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
+		if (!e.getTitle().isEmpty() && !e.getDescription().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
 				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
-			e.addUsersParticipantes(idMaker);
+			e.addConfirmedParticipantIds(idMaker);
 			var userController = UserController.getInstance();
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());
@@ -98,14 +101,15 @@ public class EventController {
 				.collect(Collectors.toList());
 	}
 
-	public void eventClone(int idEvent, String title, String description, EventClassification type, String date,
+	public void eventClone(int idEvent, String title, String description, EventClassification type, String date, String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
-			String rua, String numero, String complemento) {
+			String rua, String numero, String complemento,Visibilidade visibilidade) {
 		var eventClone = new Event();
 		eventClone.setTitle(title);
 		eventClone.setDescription(description);
 		eventClone.setType(type);
 		eventClone.setDate(date);
+		eventClone.setDateEnd(dateEnd);
 		eventClone.setStartHours(startHours);
 		eventClone.setEndHours(endHours);
 		eventClone.setImagePath(caminho);
@@ -118,6 +122,7 @@ public class EventController {
 		address.setNumero(numero);
 		address.setRua(rua);
 		eventClone.setAddress(address);
+		eventClone.setVisibilidade(visibilidade);
 		eventClone.setId(idEvent);
 		applyChanges(idEvent, eventClone);
 	}
@@ -142,6 +147,9 @@ public class EventController {
 		}
 		if (eventClone.getDate() != null && !(eventClone.getDate().equals(event.getDate()))) {
 			event.setDate(eventClone.getDate());
+		}
+		if (eventClone.getDateEnd() != null && !(eventClone.getDateEnd().equals(event.getDateEnd()))) {
+			event.setDateEnd(eventClone.getDateEnd());
 		}
 		if (eventClone.getStartHours() != null && !(eventClone.getStartHours().equals(event.getStartHours()))) {
 			event.setStartHours(eventClone.getStartHours());
@@ -180,7 +188,43 @@ public class EventController {
 				&& !(eventClone.getAddress().getNumero().equals(event.getAddress().getNumero()))) {
 			event.getAddress().setNumero(eventClone.getAddress().getNumero());
 		}
+		if(eventClone.getVisibilidade() != null && eventClone.getVisibilidade() != event.getVisibilidade())
+		{
+			event.setVisibilidade(eventClone.getVisibilidade());
+		}
 
+	}
+	
+	// metodo para adicionar o usuario a lista de participantes de um evento sendo que se evento for publico
+	// ele adiciona automaticamente se não for ele adiciona a lista de solicitaçoes que o usuario so é adicionado
+	// se o criador do evento aceitar
+	public void adicionarParticipante(int idEvent, int idUser)
+	{
+		Event event = findEventById(idEvent);
+		if(!event.usersParticipaOuNão(idUser))
+		{
+		 if(event.getVisibilidade() == Visibilidade.PUBLICO)
+		 {
+			event.addConfirmedParticipantIds(idUser);
+			JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
+			//  evento publico
+		 }else
+		  {
+			 // evento privado
+			 // adiciona o usuario a uma lista que o criador vai decidir se confirma ou não a participação
+			 JOptionPane.showInternalMessageDialog(null,"Pedido para participar enviado");
+			 System.out.println("privado o evento");
+			event.addPendingRequestIds(idUser);
+		  }
+		}else {
+			JOptionPane.showMessageDialog(null, "Você já participa desse evento!");
+		}
+	}
+	
+	public void adicionarParticipantesPrivateEvento(int idEvent,int idUser) {
+		Event event = findEventById(idEvent);
+		event.addConfirmedParticipantIds(idUser);
+	    JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
 	}
 
 	public void print(List<Event> eventos) {
@@ -235,16 +279,16 @@ public class EventController {
 		return eventos;
 	}
 
-	public void createEventSemMessageBox(int idMaker, String title, String description, EventClassification type,
-			String date,
+	public void createEventSemMessageBox(int idMaker, String title, String description, EventClassification type, String date,String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
-			String rua, String numero, String complemento) {
+			String rua, String numero, String complemento,Visibilidade visibilidade) {
 		var e = new Event();
 		var address = new Address();
 		e.setTitle(title);
 		e.setDescription(description);
 		e.setType(type);
 		e.setDate(date);
+		e.setDateEnd(dateEnd);
 		e.setStartHours(startHours);
 		e.setEndHours(endHours);
 		e.setImagePath(caminho);
@@ -254,22 +298,23 @@ public class EventController {
 		address.setBairro(bairro);
 		address.setRua(rua);
 		address.setNumero(numero);
+		e.setVisibilidade(visibilidade);
 		if (!complemento.isEmpty()) {
 			address.setComplemento(complemento);
 		}
 		e.setAddress(address);
-		if (!e.getTitle().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
+		if (!e.getTitle().isEmpty() && !e.getDescription().isEmpty() && !e.getDate().isEmpty() && !e.getStartHours().isEmpty()
 				&& !e.getImagePath().isEmpty() && e.getAddress() != null) {
 			e.setId(generateId());
 			e.setIdMaker(idMaker);
-			e.addUsersParticipantes(idMaker);
+			e.addConfirmedParticipantIds(idMaker);
 			var userController = UserController.getInstance();
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());
 			eventController.add(e);
-			// JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
+//			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
 		} else {
-			JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
+			//JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
 		}
 
 	}

@@ -12,10 +12,13 @@ import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.NumericDocumentFilter;
 import com.github.eventure.model.User;
+import com.github.eventure.model.Visibilidade;
 import com.github.eventure.model.address.Cep;
+import com.github.eventure.view.pages.MainPage;
 import com.github.eventure.web.Requests;
 
 import java.awt.*;
+import java.awt.desktop.OpenURIHandler;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,7 @@ public class CreateEventPanel extends JPanel {
     private String title;
     private String description;
     private String date;
+    private String dateEnd;
     private String starsHours;
     private String endHours;
     private Cep cep;
@@ -37,10 +41,11 @@ public class CreateEventPanel extends JPanel {
     private String numero;
     private String complemento;
     private EventClassification selectedClassification;
+    private Visibilidade visibilidade;
 
     private User user;
 
-    public CreateEventPanel(User user) {
+    public CreateEventPanel(User user,MainPage mainPage) {
         this.user = user;
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
@@ -69,7 +74,7 @@ public class CreateEventPanel extends JPanel {
         rightPanel.add(header);
 
         int xMargin = 50;
-        int y = 80;
+        int y = 60;
         int panelWidth = 704; // largura do rightPanel
 
         int fieldWidth = 300;
@@ -87,8 +92,23 @@ public class CreateEventPanel extends JPanel {
         JTextField titleField = new JTextField();
         titleField.setBounds(xField, y, 300, 30);
         rightPanel.add(titleField);
-        y += 50;
-
+        y += 35;
+        JRadioButton publicoButton = new JRadioButton("Público");
+        JRadioButton privadoButton = new JRadioButton("Privado");
+        publicoButton.setBounds(xLabel, y, 100, 20);
+        publicoButton.setBackground(new Color(0xe5d8fd));
+        publicoButton.setSelected(true);
+        
+        privadoButton.setBounds(xLabel + 100, y, 100, 20);
+        privadoButton.setBackground(new Color(0xe5d8fd));
+        
+        ButtonGroup group = new ButtonGroup();
+        group.add(publicoButton);
+        group.add(privadoButton);
+        
+        rightPanel.add(publicoButton);
+        rightPanel.add(privadoButton);
+        y+=25;
         // Descrição
         JLabel descLabel = new JLabel("Descrição:");
         descLabel.setBounds(xLabel, y, 300, 20);
@@ -100,8 +120,8 @@ public class CreateEventPanel extends JPanel {
         scrollPane.setBounds(xField, y, 300, 120);
         rightPanel.add(scrollPane);
         y += 100;
-        y += 50;
-        JLabel labeldate = new JLabel("Data do evento:");
+        y += 30;
+        JLabel labeldate = new JLabel("Data do inicio do evento:");
         labeldate.setBounds(xLabel, y, 300, 20);
         labeldate.setFont(new Font("SansSerif", Font.BOLD, 12));
         rightPanel.add(labeldate);
@@ -110,8 +130,18 @@ public class CreateEventPanel extends JPanel {
         datePicker.setBounds(xField, y, 300, 30);
         datePicker.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         rightPanel.add(datePicker);
+        y+=30;
+        JLabel labeldate2 = new JLabel("Data do final do evento:");
+        labeldate2.setBounds(xLabel, y, 300, 20);
+        labeldate2.setFont(new Font("SansSerif", Font.BOLD, 12));
+        rightPanel.add(labeldate2);
+        y += 25;
+        JXDatePicker datePicker2 = new JXDatePicker();
+        datePicker2.setBounds(xField, y, 300, 30);
+        datePicker2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        rightPanel.add(datePicker2);
 
-        y += 50;
+        y += 35;
 
         JLabel hourLabel = new JLabel("Horário (início/término):");
         hourLabel.setBounds(xLabel, y, 300, 20);
@@ -132,7 +162,7 @@ public class CreateEventPanel extends JPanel {
         JFormattedTextField endHourField = new JFormattedTextField(timeMask);
         endHourField.setBounds(xField + 160, y, 140, 30);
         rightPanel.add(endHourField);
-        y += 50;
+        y += 35;
         JLabel categoryLabel = new JLabel("Classificação:");
         categoryLabel.setBounds(xLabel, y, 300, 20);
         rightPanel.add(categoryLabel);
@@ -169,16 +199,33 @@ public class CreateEventPanel extends JPanel {
                 }
             }
             Date selectedDate = datePicker.getDate();
-
+          
             if (selectedDate != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 date = sdf.format(selectedDate);
+            }
+            
+            Date selectedDate2 = datePicker2.getDate();
+            
+            if (selectedDate2 != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                dateEnd = sdf.format(selectedDate2);
+            }
+            
+            System.out.println("data = "+dateEnd);
+            
+            if (publicoButton.isSelected()) {
+                System.out.println("Opção selecionada: Público");
+                visibilidade = Visibilidade.PUBLICO;
+            } else if (privadoButton.isSelected()) {
+                System.out.println("Opção selecionada: Privado");
+                visibilidade = Visibilidade.PRIVADO;
             }
 
             starsHours = startHourField.getText();
             endHours = endHourField.getText();
             if (!title.isEmpty() && !description.isEmpty() && !starsHours.isEmpty() && !endHours.isEmpty()
-                    && !date.isEmpty() && selectedClassification != null) {
+                    && !date.isEmpty() && !dateEnd.isEmpty() && selectedClassification != null && visibilidade != null && Visibilidade.isValido(visibilidade)) {
 
                 rightPanel.removeAll();
 
@@ -384,9 +431,10 @@ public class CreateEventPanel extends JPanel {
                         var eventController = EventController.getInstance();
                         System.out.println("id controller no create event = " + IdController.getIdUser());
                         eventController.createEvent(IdController.getIdUser(), title, description,
-                                selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade,
-                                bairro, rua, numero, complemento);
+                                selectedClassification, date, dateEnd ,starsHours, endHours, caminho, cepAddress, estado, cidade,
+                                bairro, rua, numero, complemento,visibilidade);
                         this.setVisible(false);
+                        mainPage.ExibirEvents();
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "Erro ao criar evento preencha as informações com valores validos");
@@ -417,6 +465,10 @@ public class CreateEventPanel extends JPanel {
                     descriptionArea.setText(description);
                     rightPanel.add(labeldate);
                     rightPanel.add(datePicker);
+                    rightPanel.add(labeldate2);
+                    rightPanel.add(datePicker2);
+                    rightPanel.add(publicoButton);
+                    rightPanel.add(privadoButton);
                     rightPanel.add(hourLabel);
                     rightPanel.add(startHourField);
                     startHourField.setText(starsHours);

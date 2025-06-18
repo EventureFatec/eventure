@@ -7,12 +7,16 @@ import com.github.eventure.storage.Storage;
 public class CommunityController {
 	private Storage<Community> communities;
 	private static int lastGeneratedId = 0;
-
-	public CommunityController() {
-		if (communities == null) {
-			communities = new Storage<Community>();
-		}
+    private static CommunityController instance;
+	private CommunityController() {
+		communities = new Storage<Community>();
 	}
+    public static CommunityController getInstance() {
+        if (instance == null) {
+            instance = new CommunityController();
+        }
+        return instance;
+    }
 
 	public void createCommunity(User u, String nome) {
 		var community = new Community(nome, u.getUserId(), generateId());

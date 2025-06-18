@@ -7,9 +7,11 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,6 +19,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -29,13 +32,16 @@ import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.Visibilidade;
 import com.github.eventure.model.address.Cep;
+import com.github.eventure.view.pages.MainPage;
 import com.github.eventure.web.Requests;
 
 public class EditEventPanel extends JPanel {
 	private String title;
 	  private String description;
 	  private String date;
+	  private String dateEnd;
 	  private String starsHours;
 	  private String endHours;
 	  private Cep cep;
@@ -47,9 +53,10 @@ public class EditEventPanel extends JPanel {
 	  private String rua;
 	  private String numero;
 	  private String complemento;
+	  private Visibilidade visibilidade;
 	  private int idEvent;
 	  private EventClassification selectedClassification;
-	    public EditEventPanel(int id) {
+	    public EditEventPanel(int id,MainPage mainPage) {
 	    	idEvent = id;
 	        setLayout(null);
 	        setPreferredSize(new Dimension(1130, 590));
@@ -77,7 +84,7 @@ public class EditEventPanel extends JPanel {
 	        rightPanel.add(header);
 
 	        int xMargin = 50;
-	        int y = 80;
+	        int y = 60;
 	        int panelWidth = 704; // largura do rightPanel
 
 	        int fieldWidth = 300;
@@ -96,8 +103,28 @@ public class EditEventPanel extends JPanel {
 	        titleField.setBounds(xField, y, 300, 30);
 	        titleField.setText(event.getTitle());
 	        rightPanel.add(titleField);
-	        y += 50;
-
+	        y += 35;
+	        JRadioButton publicoButton = new JRadioButton("Público");
+	        JRadioButton privadoButton = new JRadioButton("Privado");
+	        publicoButton.setBounds(xLabel, y, 100, 20);
+	        publicoButton.setBackground(new Color(0xe5d8fd));
+	        if(event.getVisibilidade() == Visibilidade.PUBLICO)
+	        {
+	        publicoButton.setSelected(true);
+	        }else
+	        {
+	        	privadoButton.setSelected(true);
+	        }
+	        privadoButton.setBounds(xLabel + 100, y, 100, 20);
+	        privadoButton.setBackground(new Color(0xe5d8fd));
+	        
+	        ButtonGroup group = new ButtonGroup();
+	        group.add(publicoButton);
+	        group.add(privadoButton);
+	        
+	        rightPanel.add(publicoButton);
+	        rightPanel.add(privadoButton);
+	        y+=25;
 	        // Descrição
 	        JLabel descLabel = new JLabel("Descrição:");
 	        descLabel.setBounds(xLabel, y, 300, 20);
@@ -109,10 +136,9 @@ public class EditEventPanel extends JPanel {
 	        scrollPane.setBounds(xField, y, 300, 120);
 	        rightPanel.add(scrollPane);
 	        y += 100;
-	        y +=50;
 	        descriptionArea.setText(event.getDescription());
-	        
-	        JLabel labeldate = new JLabel("Data do evento:");
+	        y += 30;
+	        JLabel labeldate = new JLabel("Data do inicio do evento:");
 	        labeldate.setBounds(xLabel, y, 300, 20);
 	        labeldate.setFont(new Font("SansSerif", Font.BOLD, 12));
 	        rightPanel.add(labeldate);
@@ -121,15 +147,31 @@ public class EditEventPanel extends JPanel {
 	        datePicker.setBounds(xField, y, 300, 30);
 	        datePicker.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	        rightPanel.add(datePicker);
+	        y+=30;
+	        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 	        try {
-	        	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	        	Date date = sdf.parse(event.getDate());
-	        	datePicker.setDate(date);
-	        }catch(Exception e) {
-	        	e.printStackTrace();
+	            Date data = formato.parse(event.getDate());
+	            datePicker.setDate(data); 
+	        } catch (ParseException e) {
+	            e.printStackTrace(); 
 	        }
-	        y+=50;
-	        
+	        JLabel labeldate2 = new JLabel("Data do final do evento:");
+	        labeldate2.setBounds(xLabel, y, 300, 20);
+	        labeldate2.setFont(new Font("SansSerif", Font.BOLD, 12));
+	        rightPanel.add(labeldate2);
+	        y += 25;
+	        JXDatePicker datePicker2 = new JXDatePicker();
+	        datePicker2.setBounds(xField, y, 300, 30);
+	        datePicker2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	        rightPanel.add(datePicker2);
+	        SimpleDateFormat formato02 = new SimpleDateFormat("dd/MM/yyyy");
+	        try {
+	            Date data02 = formato.parse(event.getDateEnd());
+	            datePicker2.setDate(data02); 
+	        } catch (ParseException e) {
+	            e.printStackTrace(); 
+	        }
+	        y += 35;
 	        JLabel hourLabel = new JLabel("Horário (início/término):");
 	        hourLabel.setBounds(xLabel, y, 300, 20);
 	        rightPanel.add(hourLabel);
@@ -151,7 +193,7 @@ public class EditEventPanel extends JPanel {
 	        endHourField.setBounds(xField + 160, y, 140, 30);
 	        rightPanel.add(endHourField);
 	        endHourField.setText(event.getEndHours());
-	        y += 50;
+	        y += 35;
 	        JLabel categoryLabel = new JLabel("Classificação:");
 	        categoryLabel.setBounds(xLabel, y, 300, 20);
 	        rightPanel.add(categoryLabel);
@@ -160,6 +202,9 @@ public class EditEventPanel extends JPanel {
 	        for (EventClassification ec : EventClassification.values()) {
 	            classificationBox.addItem(ec.getLabel());
 	        }
+	        EventClassification selectedType = event.getType(); 
+	        String selectedLabel = selectedType.getLabel();     
+	        classificationBox.setSelectedItem(selectedLabel);
 	        classificationBox.setBounds(xField, y, 300, 30);
 	        classificationBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	        rightPanel.add(classificationBox);
@@ -193,7 +238,24 @@ public class EditEventPanel extends JPanel {
 	                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	                date = sdf.format(selectedDate);
 	            }
-	             
+	            System.out.println("data 1 = "+date);
+	            Date selectedDateEnd = datePicker2.getDate();
+	            
+	            if (selectedDateEnd != null) {
+	                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	                dateEnd = sdf.format(selectedDateEnd);
+	            }
+	            System.out.println("data 2 = "+dateEnd);
+	            
+	            if (publicoButton.isSelected()) {
+	                System.out.println("Opção selecionada: Público");
+	                visibilidade = Visibilidade.PUBLICO;
+	            } else if (privadoButton.isSelected()) {
+	                System.out.println("Opção selecionada: Privado");
+	                visibilidade = Visibilidade.PRIVADO;
+	            }
+	            System.out.println("visibilidade = "+visibilidade.toString());
+
 	            
 	        	starsHours = startHourField.getText();
 	        	endHours = endHourField.getText();
@@ -203,7 +265,7 @@ public class EditEventPanel extends JPanel {
 	        	System.out.println(date);
 	        	System.out.println(starsHours);
 	        	System.out.println(endHours);
-	             if(!title.isEmpty() && !description.isEmpty() && !starsHours.isEmpty() && !endHours.isEmpty() && !date.isEmpty() && selectedClassification != null) {
+	             if(!title.isEmpty() && !description.isEmpty() && !starsHours.isEmpty() && !endHours.isEmpty() && !date.isEmpty() && !dateEnd.isEmpty() && selectedClassification != null) {
 	            	 
 	            rightPanel.removeAll();
 
@@ -332,6 +394,8 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(complementoField);
 	            
 	            y2 += espacamentoY;
+	            // para garantir que mesmo que o usuario não selecione uma foto diferente. a antiga ja esta setada
+	            caminho = event.getImagePath();
 	            //selecionar imagem 
 	            selectImageBtn.addActionListener(e2 -> {
 	            	ImageController imageController = new ImageController();
@@ -416,8 +480,10 @@ public class EditEventPanel extends JPanel {
 	            		var eventController = EventController.getInstance();
 	            		System.out.println("id controller no create event = "+IdController.getIdUser());
 	            		// metodo de editar
-	            		eventController.eventClone(id, title, description, selectedClassification, date, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento);          		
+	            		eventController.eventClone(id, title, description, selectedClassification, date, dateEnd, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento,visibilidade);          		
+	            		JOptionPane.showMessageDialog(null,"Evento editado com sucesso!");
 	                    this.setVisible(false);
+	                    mainPage.ExibirEvents();
 	            	}else {
 	            		JOptionPane.showMessageDialog(null, "Erro ao criar evento preencha as informações com valores validos");
 	            	}
@@ -459,8 +525,12 @@ public class EditEventPanel extends JPanel {
 	                rightPanel.add(scrollPane);
 	                descriptionArea.setText(description);
 	                rightPanel.add(labeldate);
-	                rightPanel.add(datePicker); 
+	                rightPanel.add(datePicker);
+	                rightPanel.add(labeldate2);
+	                rightPanel.add(datePicker2);
 	                rightPanel.add(hourLabel);
+	                rightPanel.add(privadoButton);
+	                rightPanel.add(publicoButton);
 	                rightPanel.add(startHourField);
 	                startHourField.setText(starsHours);
 	                rightPanel.add(endHourField);
@@ -473,7 +543,7 @@ public class EditEventPanel extends JPanel {
 	            });
 	             }else {
 	            	 JOptionPane.showMessageDialog(null, "Prencha os campos corretamente"); 
-	            	//messageBox
+	            	
 	             }
 	        });
 
