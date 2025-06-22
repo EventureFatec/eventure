@@ -2,9 +2,11 @@ package com.github.eventure.view;
 
 import javax.swing.*;
 
+import com.github.eventure.controllers.CommunityController;
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.Message;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.pages.LoginPage;
 import com.github.eventure.view.pages.RegisterPage;
@@ -33,6 +35,18 @@ public class MainFrame extends JFrame {
         userController.createUserSemMessageBox("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
         userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
         userController.createUserSemMessageBox("luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
+        // criando comunidade
+        CommunityController communityController = CommunityController.getInstance();
+        var u = userController.findUserById(0);
+        u.setProfilePic("C:/Users/User/OneDrive/Documentos/imagensCardapio/fagner.jpg");
+        communityController.createCommunity(u, "salve crias");
+        communityController.addUser(0, 1);
+        communityController.addUser(0, 2);
+        var comunidade = communityController.findCommunityById(0);
+        Message m = new Message("Bom dia","7:50","allisson",0);
+        Message m2 = new Message("Bom tarde","14:50","pedro",1);
+        comunidade.addMessage(m);
+        comunidade.addMessage(m2);
 //        var eventos = EventController.getInstance();
 //        String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
 //        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,

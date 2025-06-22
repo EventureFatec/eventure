@@ -22,6 +22,7 @@ public class User {
     private List<Integer> myEventsList = new ArrayList<>(); // salva uma lista com todos os eventos que ele criou
     private List<Integer> eventsList = new ArrayList<>();  // Inicializando a lista de eventos
     private List<Integer> communityList = new ArrayList<>(); // Inicializando a lista de comunidades
+    private List<Integer> myCommunityList = new ArrayList<>();
 
     // Construtor
     public User(String name, String email, String username, Password password, int userId, String cpf, String profilePic, boolean isLogged) {
@@ -92,7 +93,7 @@ public class User {
         this.isLogged = isLogged;
     }
 
-	public String getProfilePic(String profilePic) {
+	public String getProfilePic() {
 		return this.profilePic;
 	}
 	

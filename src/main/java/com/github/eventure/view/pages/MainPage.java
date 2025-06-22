@@ -46,6 +46,7 @@ import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
+import com.github.eventure.view.components.CommunityPanel;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EventPanelEdit;
@@ -269,8 +270,9 @@ public class MainPage extends JPanel {
         chatButton.setOpaque(false);
         chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         chatButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Botão Chat clicado!", "Chat", JOptionPane.INFORMATION_MESSAGE);
-            ExibirEvents();
+            CommunityPanel communityPanel = new CommunityPanel(0,this);
+            showMainPanel(communityPanel, 0);
+           // ExibirEvents();
         });
         rightButtonsPanel.add(chatButton);
 
