@@ -1,5 +1,7 @@
 package com.github.eventure.controllers;
 
+import java.util.List;
+
 import com.github.eventure.model.Community;
 import com.github.eventure.model.User;
 import com.github.eventure.storage.Storage;
@@ -21,11 +23,20 @@ public class CommunityController {
 	public void createCommunity(User u, String nome) {
 		var community = new Community(nome, u.getUserId(), generateId());
 		community.addUserList(u.getUserId());
+		u.addCommunityList(community.getIdCommunity());
 		communities.add(community);
 	}
 
 	public void deleteCommunity(int idCommunity) {
 		var community = findCommunity(idCommunity);
+		UserController userController = UserController.getInstance();
+		List<Integer> idUsers = community.getIdUsers();
+		for(int i = 0; i < idUsers.size(); i++)
+		{
+			int userId = idUsers.get(i);
+			var user = userController.findUserById(userId);
+			user.removeCommunityList(idCommunity);
+		}
 		communities.remove(community);
 	}
 
@@ -36,7 +47,7 @@ public class CommunityController {
 	public void invites(String nome, int idUser, int idCommunity) {
 		// seria uma funcão para que usuarios possam enviar convites ao criador da
 		// comunidade e ele escolha se aceita ou não
-		var comunnity = findCommunity(idCommunity);
+		var comunnity = findCommunityById(idCommunity);
 		addUser(idCommunity, idUser);
 	}
 
@@ -56,6 +67,9 @@ public class CommunityController {
 	public void addUser(int idCommunity, int idUser) {
 		var community = findCommunity(idCommunity);
 		community.addUserList(idUser);
+		UserController userController = UserController.getInstance();
+		var user = userController.findUserById(idUser);
+		user.addCommunityList(idCommunity);
 	}
 
 	public void removeUser(int idCommunity, int idUser) {

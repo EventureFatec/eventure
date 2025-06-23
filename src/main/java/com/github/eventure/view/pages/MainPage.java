@@ -239,7 +239,7 @@ public class MainPage extends JPanel {
 
                     if (result == JOptionPane.OK_OPTION) {
                         String cpf = cpfField.getText().trim();
-                        if (!UserController.getInstance().validateCpf(cpf) || !cpf.isEmpty()) {
+                        if (UserController.getInstance().validateCpf(cpf) && !cpf.isEmpty()) {
                             Session.getLoggedUser().setCpf(cpf);
                             JOptionPane.showMessageDialog(null, "Você agora é um organizador!");
                         } else {
@@ -270,7 +270,7 @@ public class MainPage extends JPanel {
         chatButton.setOpaque(false);
         chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         chatButton.addActionListener(e -> {
-            CommunityPanel communityPanel = new CommunityPanel(0,this);
+            CommunityPanel communityPanel = new CommunityPanel(this);
             showMainPanel(communityPanel, 0);
            // ExibirEvents();
         });

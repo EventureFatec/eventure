@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
         // criando comunidade
         CommunityController communityController = CommunityController.getInstance();
         var u = userController.findUserById(0);
-        u.setProfilePic("C:/Users/User/OneDrive/Documentos/imagensCardapio/fagner.jpg");
+        var u2 = userController.findUserById(1);
         communityController.createCommunity(u, "salve crias");
         communityController.addUser(0, 1);
         communityController.addUser(0, 2);
@@ -47,6 +47,15 @@ public class MainFrame extends JFrame {
         Message m2 = new Message("Bom tarde","14:50","pedro",1);
         comunidade.addMessage(m);
         comunidade.addMessage(m2);
+        
+        communityController.createCommunity(u, "teste");
+        communityController.addUser(1, 1);
+        communityController.addUser(1, 2);
+        var comunidade02 = communityController.findCommunityById(1);
+        Message m1 = new Message("teste ","7:50","allisson",0);
+        Message m21 = new Message("teste 02","14:50","pedro",1);
+        comunidade02.addMessage(m1);
+        comunidade02.addMessage(m21);
 //        var eventos = EventController.getInstance();
 //        String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
 //        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,

@@ -34,6 +34,7 @@ import com.github.eventure.controllers.CommunityController;
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
+import com.github.eventure.model.Community;
 import com.github.eventure.model.Message;
 import com.github.eventure.model.User;
 import com.github.eventure.view.pages.EventPanelForEditPanel;
@@ -46,43 +47,76 @@ public class CommunityPanel extends JPanel {
 	private String horario;
 	private Message message;
 	private List<Message> listaDeMensagens = new ArrayList<>();
+	private List<Integer> listaDeComunidades = new ArrayList<>();
 	private CommunityController communityController;
+	private User user;
+	private MainPage mainPage;
 	private UserController userController = UserController.getInstance();
-    public CommunityPanel(int id, MainPage mainPage) {
-        this.idComunidade = id;
+    public CommunityPanel( MainPage mainPage) {
+    	this.mainPage = mainPage;
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
         this.setBackground(Color.WHITE);
-        // Painel lateral esquerdo
         JPanel sidePanel = new JPanel(null);
         sidePanel.setBounds(0, 0, 250, 590);
 //        sidePanel.setBackground(new Color(0xE5D8FD));
         sidePanel.setBackground(Color.WHITE);
-        ImageIcon setaImage = new ImageIcon("C:/Users/User/Downloads/seta (2).png");
+        
+        ImageIcon setaImage = new ImageIcon(getClass().getResource("/seta02.png"));
         JButton backButton = new JButton(setaImage);
         backButton.setBorder(null);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.setBounds(10, 10, 40, 40);
         sidePanel.add(backButton);
+        backButton.addActionListener(e -> {
+        	System.out.println("Botão voltar");
+        	mainPage.ExibirEvents();
+        });
         
         JPanel conteudoScroll = new JPanel();
         conteudoScroll.setBackground(Color.BLUE);
         conteudoScroll.setLayout(new BoxLayout(conteudoScroll, BoxLayout.Y_AXIS));
         conteudoScroll.setBackground(Color.WHITE);
-        
-
-        // Adiciona alguns itens de exemplo
-        for (int i = 0; i < 100; i++) {
-            JLabel item = new JLabel("Item " + (i + 1));
-            item.setAlignmentX(Component.LEFT_ALIGNMENT);
-            conteudoScroll.add(item);
+        List<Community> comunidades = new ArrayList<>();
+        user = userController.findUserById(IdController.getIdUser());
+        listaDeComunidades = user.getCommunityList();
+        idComunidade = listaDeComunidades.indexOf(0);
+        communityController = CommunityController.getInstance();
+        for(int i = 0; i < listaDeComunidades.size(); i++)
+        {
+        	comunidades.add(communityController.findCommunity(listaDeComunidades.indexOf(i)));
         }
 
-        // ScrollPane que envolve o painel
+        for (Community comunidade : comunidades) {
+            JButton botaoComunidade = new JButton(comunidade.getName());
+            Font fonte = new Font("Arial", Font.BOLD, 16);
+            botaoComunidade.setFont(fonte);
+            botaoComunidade.setHorizontalAlignment(SwingConstants.CENTER);
+            botaoComunidade.setVerticalAlignment(SwingConstants.CENTER);
+            botaoComunidade.setPreferredSize(new Dimension(200, 40)); 
+            botaoComunidade.setMaximumSize(new Dimension(200, 40));
+            botaoComunidade.setAlignmentX(Component.CENTER_ALIGNMENT);
+            botaoComunidade.setBackground(new Color(0xF5F5F5));
+            botaoComunidade.setFocusPainted(false);
+            botaoComunidade.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            botaoComunidade.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            botaoComunidade.setHorizontalAlignment(SwingConstants.LEFT);
+
+            
+            botaoComunidade.addActionListener(e -> {
+            	
+                System.out.println("Clicou em: " + comunidade.getName());
+                recarregarPanelComunidade(comunidade.getIdCommunity());
+            });
+
+            conteudoScroll.add(botaoComunidade);
+            conteudoScroll.add(Box.createVerticalStrut(5));
+        }
+        
         JScrollPane scrollPane01 = new JScrollPane(conteudoScroll);
-        scrollPane01.setBounds(10, 60, 230, 400); // altura suficiente antes do botão em y = 500
-//        scrollPane01.setBorder(null);
-        scrollPane01.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane01.setBounds(10, 60, 230, 400);
+        scrollPane01.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//        scrollPane01.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane01.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane01.setBorder(BorderFactory.createEmptyBorder());
 
@@ -90,7 +124,7 @@ public class CommunityPanel extends JPanel {
         scrollPane01.getVerticalScrollBar().setUI(new ModernScrollBarUI());
         scrollPane01.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
 
-        // Adiciona ao painel lateral
+       
         sidePanel.add(scrollPane01);
         
         
@@ -102,18 +136,16 @@ public class CommunityPanel extends JPanel {
 
                 int arc = getHeight();
 
-                // Fundo personalizado
-                g2.setColor(new Color(0x330065)); // FUNDO desejado (roxo escuro, por exemplo)
+                g2.setColor(new Color(0x330065));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
 
-                // Texto centralizado
                 FontMetrics fm = g2.getFontMetrics();
                 String text = getText();
                 int textWidth = fm.stringWidth(text);
                 int textHeight = fm.getAscent();
 
                 g2.setFont(getFont());
-                g2.setColor(Color.WHITE); // COR DO TEXTO
+                g2.setColor(Color.WHITE);
                 g2.drawString(text, (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 2);
 
                 g2.dispose();
@@ -122,7 +154,7 @@ public class CommunityPanel extends JPanel {
             @Override
             protected void paintBorder(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.setColor(new Color(0x330065)); // Cor da borda (opcional)
+                g2.setColor(new Color(0x330065));
                 g2.setStroke(new BasicStroke(1));
                 int arc = getHeight();
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
@@ -136,20 +168,22 @@ public class CommunityPanel extends JPanel {
         btnCriarComunidade.setContentAreaFilled(false);
         btnCriarComunidade.setOpaque(false);
         btnCriarComunidade.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCriarComunidade.setBounds(10,500,200,30);
+        btnCriarComunidade.setBounds(10,520,200,30);
         sidePanel.add(btnCriarComunidade);
         add(sidePanel);
+        btnCriarComunidade.addActionListener(e -> {
+        	System.out.println("adicionar o panel para criar comunidade");
+        });
 
-        // Painel de topo
         JPanel topPanel = new JPanel();
         topPanel.setLayout(null);
         topPanel.setBounds(250, 0, 880, 50);
         topPanel.setBackground(Color.WHITE);
         JLabel comunidadesLabel2 = new JLabel("Comunidade");
+        comunidadesLabel2.setFont(new Font("SansSerif", Font.BOLD, 14));
         comunidadesLabel2.setBounds(20, 20, 180, 20);
         topPanel.add(comunidadesLabel2);
         
-        // colocar foto de perfil
         int idUserPerfil = IdController.getIdUser();
         var userPerfil = userController.findUserById(idUserPerfil);
         ImageIcon imagemOriginalPerfil;
@@ -171,7 +205,7 @@ public class CommunityPanel extends JPanel {
 
         add(topPanel);
 
-        // Painel de mensagens
+        
         JPanel messagePanel = new JPanel();
         communityController = CommunityController.getInstance();
         var comunidade = communityController.findCommunity(idComunidade);
@@ -179,13 +213,6 @@ public class CommunityPanel extends JPanel {
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
         messagePanel.setBackground(Color.WHITE);
 
-        // Crie o scroll e adicione ao painel principal
-//        JScrollPane scrollPane = new JScrollPane(messagePanel);
-//        scrollPane.setBounds(250, 50, 880, 400);
-//        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // rolagem mais suave
-//        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-//        add(scrollPane);
         JScrollPane scrollPane = new JScrollPane(messagePanel);
         scrollPane.setBounds(250, 50, 880, 400);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -224,7 +251,6 @@ public class CommunityPanel extends JPanel {
             avatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
             avatar.setPreferredSize(new Dimension(40, 40));
 
-            // Painel da mensagem
             JPanel bubble = new JPanel();
             bubble.setLayout(new BoxLayout(bubble, BoxLayout.Y_AXIS));
             bubble.setBackground(new Color(230, 240, 255));
@@ -260,14 +286,14 @@ public class CommunityPanel extends JPanel {
             messagePanel.add(Box.createVerticalStrut(10));
         }
 
-        // Campo de texto e botão
-        JPanel inputPanel = new JPanel(null); // ou new FlowLayout() se quiser simples
+        JPanel inputPanel = new JPanel(null);
         inputPanel.setBounds(250, 450, 880, 500);
         inputPanel.setBackground(Color.WHITE);
 
         JTextField inputField = new JTextField("");
         inputField.setBounds(20, 20, 600, 40);
         inputField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        inputField.setToolTipText("Digite a mensagem");
         inputPanel.add(inputField);
 
         JButton btnEnviarMsg = new JButton("Enviar") {
@@ -278,18 +304,16 @@ public class CommunityPanel extends JPanel {
 
                 int arc = getHeight();
 
-                // Fundo personalizado
-                g2.setColor(new Color(0x330065)); // FUNDO desejado (roxo escuro, por exemplo)
+                g2.setColor(new Color(0x330065)); 
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
 
-                // Texto centralizado
                 FontMetrics fm = g2.getFontMetrics();
                 String text = getText();
                 int textWidth = fm.stringWidth(text);
                 int textHeight = fm.getAscent();
 
                 g2.setFont(getFont());
-                g2.setColor(Color.WHITE); // COR DO TEXTO
+                g2.setColor(Color.WHITE);
                 g2.drawString(text, (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 2);
 
                 g2.dispose();
@@ -298,7 +322,7 @@ public class CommunityPanel extends JPanel {
             @Override
             protected void paintBorder(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.setColor(new Color(0x330065)); // Cor da borda (opcional)
+                g2.setColor(new Color(0x330065));
                 g2.setStroke(new BasicStroke(1));
                 int arc = getHeight();
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
@@ -393,5 +417,92 @@ public class CommunityPanel extends JPanel {
 
         messagePanel.revalidate();
         messagePanel.repaint();
+    }
+    
+    public void recarregarPanelComunidade(int idComunidadeForPanel)
+    {
+        idComunidade = idComunidadeForPanel;
+        JPanel messagePanel = new JPanel();
+        communityController = CommunityController.getInstance();
+        var comunidade = communityController.findCommunity(idComunidadeForPanel);
+        listaDeMensagens = comunidade.getMensagens();
+        messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+        messagePanel.setBackground(Color.WHITE);
+        
+        JScrollPane scrollPane = new JScrollPane(messagePanel);
+        scrollPane.setBounds(250, 50, 880, 400);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        
+        scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+
+        add(scrollPane);
+        
+        for (Message mensagem : listaDeMensagens) {
+            JPanel msgContainer = new JPanel(new BorderLayout());
+            msgContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            msgContainer.setBackground(Color.WHITE);
+            
+            int idUser = mensagem.getIdUser();
+            var user = userController.findUserById(idUser);
+            ImageIcon imagemOriginal;
+            if(user.getProfilePic() != null && !user.getProfilePic().isEmpty())
+            {
+            	imagemOriginal = new ImageIcon(user.getProfilePic());
+            
+            }else
+            {
+            	imagemOriginal = new ImageIcon(getClass().getResource("/fotoPerfil.png"));
+            }
+
+
+            Image imagemRedimensionada = imagemOriginal.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            ImageIcon novaImagem = new ImageIcon(imagemRedimensionada);
+
+            
+            JLabel avatar = new JLabel(novaImagem);
+            avatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+            avatar.setPreferredSize(new Dimension(40, 40));
+
+            JPanel bubble = new JPanel();
+            bubble.setLayout(new BoxLayout(bubble, BoxLayout.Y_AXIS));
+            bubble.setBackground(new Color(230, 240, 255));
+            bubble.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+            bubble.setPreferredSize(new Dimension(100, 60));
+            bubble.setMaximumSize(new Dimension(100, 60));
+            bubble.setMinimumSize(new Dimension(100, 60));
+            bubble.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            JLabel nomeHora = new JLabel(mensagem.getName() + " - " + mensagem.getHorario());
+            nomeHora.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            nomeHora.setForeground(new Color(70, 70, 70));
+
+            String mensagemHtml = String.format(
+            	    "<html><div style='width:180px;'>%s</div></html>", mensagem.getMessage()
+            	);
+            	JLabel texto = new JLabel(mensagemHtml);
+            	texto.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            	texto.setForeground(new Color(40, 40, 40));
+
+
+            bubble.add(nomeHora);
+            bubble.add(Box.createVerticalStrut(5));
+            bubble.add(texto);
+
+            msgContainer.add(avatar, BorderLayout.WEST);
+            msgContainer.add(bubble, BorderLayout.CENTER);
+            msgContainer.setPreferredSize(new Dimension(600, 70));
+            msgContainer.setMaximumSize(new Dimension(600, 70));
+            msgContainer.setMinimumSize(new Dimension(600, 70));
+
+            messagePanel.add(msgContainer);
+            messagePanel.add(Box.createVerticalStrut(10));
+            messagePanel.revalidate();
+            messagePanel.repaint();
+        }
+
     }
 }
