@@ -39,7 +39,7 @@ public class ProfilePage extends JPanel {
     private JPasswordField Password2;
     private JLabel imagePreview;
     private JButton selectImgBtn;
-    private String imagePath;
+    private String imagePath = "";
     private User loggedUser = Session.getLoggedUser();
 
     public ProfilePage() {
@@ -58,6 +58,15 @@ public class ProfilePage extends JPanel {
         imagePreview.setMaximumSize(new Dimension(300, 200));
         imagePreview.setBorder(new LineBorder(Color.BLACK, 1));
         ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagemRosa.png"));
+
+        if(loggedUser.getProfilePic() != null && !loggedUser.getProfilePic().isEmpty())
+        {
+        	System.out.println("one");
+        	ImageIcon originalIcon = new ImageIcon(loggedUser.getProfilePic());
+        	Image imagemOriginal = originalIcon.getImage();
+        	Image imagemRedimensionada = imagemOriginal.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+            icon03 = new ImageIcon(imagemRedimensionada);
+        }
         imagePreview.setIcon(icon03);
         imagePreview.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(imagePreview);
@@ -67,6 +76,7 @@ public class ProfilePage extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 ImageController imageController = new ImageController();
                 imagePath = imageController.selecionarImagem();
+                System.out.println("depois do one imagePath = "+imagePath);
                 if (!imagePath.isEmpty() && imagePath != null) {
                     ImageIcon icon = new ImageIcon(imagePath);
 
@@ -99,6 +109,7 @@ public class ProfilePage extends JPanel {
         selectImgBtn.addActionListener(e -> {
             ImageController imageController = new ImageController();
             imagePath = imageController.selecionarImagem();
+            System.out.println("depois do one imagePath = "+imagePath);
             if (imagePath != null && !imagePath.isEmpty()) {
                 var icontemp = new ImageIcon(imagePath);
                 Image resizedImg = icontemp.getImage().getScaledInstance(
@@ -111,7 +122,7 @@ public class ProfilePage extends JPanel {
         });
         add(selectImgBtn);
 
-        add(Box.createRigidArea(new Dimension(0, 15))); // espaço vertical
+        add(Box.createRigidArea(new Dimension(0, 10))); // espaço vertical
 
         // Campos do formulário
         add(label("Nome"));
@@ -142,7 +153,7 @@ public class ProfilePage extends JPanel {
         Password2 = passwordField();
         add(Password2);
 
-        add(Box.createRigidArea(new Dimension(0, 30))); // espaço antes dos botões
+        add(Box.createRigidArea(new Dimension(0, 20))); // espaço antes dos botões
 
         // Painel horizontal para os botões lado a lado
         JPanel buttonsPanel = new JPanel();
@@ -158,17 +169,24 @@ public class ProfilePage extends JPanel {
             String newEmail = email.getText();
             String newPassword = new String(Password.getPassword());
             String newPassword2 = new String(Password2.getPassword());
-
+            String newImagePath = "";
+            System.out.println("image Path = "+imagePath);
+            if(imagePath != null && !imagePath.isEmpty())
+            {
+            	System.out.println("Dentro do if");
+            	newImagePath = imagePath;
+            }
             System.out.println(newName);
             System.out.println(newUsername);
             System.out.println(newCpf);
             System.out.println(newEmail);
             System.out.println(newPassword);
             System.out.println(newPassword2);
+            System.out.println(newImagePath);
 
             if (newPassword.equals(newPassword2)) {
                 System.out.println("Modificando usuário...");
-                ApplyChanges(newName, newUsername, newCpf, newEmail, newPassword);
+                ApplyChanges(newName, newUsername, newCpf, newEmail, newPassword,newImagePath);
             }
         });
 
@@ -213,12 +231,12 @@ public class ProfilePage extends JPanel {
         return field;
     }
 
-    private void ApplyChanges(String name, String username, String cpf, String email, String password) {
+    private void ApplyChanges(String name, String username, String cpf, String email, String password,String newImagePath) {
         var userController = UserController.getInstance();
 
         int id = loggedUser.getUserId();
 
-        userController.cloneUser(name, username, password, email, cpf, id);
+        userController.cloneUser(name, username, password, email, cpf, newImagePath, id);
         System.out.println("Usuário modificado!");
     }
 

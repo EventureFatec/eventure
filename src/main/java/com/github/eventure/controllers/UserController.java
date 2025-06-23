@@ -144,11 +144,13 @@ public class UserController {
         return temMaiuscula && temNumero && temEspecial;
     }
 
-    public void cloneUser(String name, String username, String password, String email, String cpf, int id) {
+    public void cloneUser(String name, String username, String password, String email, String cpf,String imagePath, int id) {
         // Instantiate the user
+    	System.out.println("dentro do clone user");
         var userCloned = new User();
         userCloned.setName(name);
         userCloned.setUsername(username);
+        userCloned.setProfilePic(imagePath);
 
         EmailController emailTest = new EmailController();
         boolean verdade_ou_nao = emailTest.ValidateEmail(email);
@@ -162,17 +164,20 @@ public class UserController {
             userCloned.setCpf(cpf);
         }
         // Create the password hash
+        if(!password.isEmpty())
+        {
         var salt = Encryption.generateSalt();
         var hash = Encryption.generateHash(password, salt);
         var passwordClass = new Password();
         passwordClass.setPasswordSalt(salt);
         passwordClass.setPasswordHash(hash);
         userCloned.setPassword(passwordClass);
+        }
         // arrumar esse metodo pois não posso gerar uma salt nova o que vai mudar a
         // senha totalmente
 
-        if (userCloned.getName() != null && userCloned.getPassword() != null && userCloned.getName() != null
-                && cpfValid) {
+        if (userCloned.getName() != null || userCloned.getPassword() != null || userCloned.getName() != null
+                || cpfValid || userCloned.getProfilePic() != null) {
 
             userCloned.setUserId(id);
 
@@ -332,6 +337,8 @@ public class UserController {
     }
 
     public boolean applyChanges(int id, User userCloned) {
+    	System.out.println("dentro do apply");
+    	System.out.println("imagem apply = "+userCloned.getProfilePic());
         var storedUser = findUserById(id);
 
         if (!(storedUser.getName() == userCloned.getName()) && userCloned.getName() != null) storedUser.setName(userCloned.getName());
@@ -343,7 +350,12 @@ public class UserController {
         if (!(storedUser.getCpf() == userCloned.getCpf()) && userCloned.getCpf() != null) storedUser.setCpf(userCloned.getCpf());
         
         if (userCloned.getPassword() != null && !(storedUser.getPassword().equals(userCloned.getPassword()))) storedUser.setPassword(userCloned.getPassword());
-
+        
+        if (userCloned.getProfilePic() != null 
+        	    && (storedUser.getProfilePic() == null || !storedUser.getProfilePic().equals(userCloned.getProfilePic()))) {
+        	    storedUser.setProfilePic(userCloned.getProfilePic());
+        	}
+        
         return false;
 
     }

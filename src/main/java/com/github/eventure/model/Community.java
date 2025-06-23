@@ -7,6 +7,7 @@ public class Community {
 	private String name;
 	private String description;
 	private int idMaker;
+	private String imagePath; // se posivel vou colocar imagem na comunidade
 	// id do criador para diferenciar eles dos demais usuarios sendo ele que
 	// controla quem ele coloca na comunidade
 	private int idCommunity;
@@ -15,7 +16,7 @@ public class Community {
 	// a ideia é que os usuarios tenha uma area no programa aonde seja exibido as
 	// comunidades que eles participam
 	private List<Integer> IdUsers = new ArrayList<>();
-	private List<Message> mensagens;
+	private List<Message> mensagens = new ArrayList<>();
 
 	// mensagem seria um conjunto de label para dar uma formatação a mensagem.
 	// mensagem ia ter = nome do usuario , horario de envio e a propria mensagem
@@ -83,6 +84,14 @@ public class Community {
 
 	public void setMensagens(List<Message> mensagens) {
 		this.mensagens = mensagens;
+	}
+	public void addMessage(Message message)
+	{
+		this.mensagens.add(message);
+	}
+	public void removeMessage(Message message)
+	{
+		this.mensagens.remove(message);
 	}
 
 }

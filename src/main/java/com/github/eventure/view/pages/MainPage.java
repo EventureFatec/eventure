@@ -46,6 +46,7 @@ import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
+import com.github.eventure.view.components.CommunityPanel;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EventPanelEdit;
@@ -238,7 +239,7 @@ public class MainPage extends JPanel {
 
                     if (result == JOptionPane.OK_OPTION) {
                         String cpf = cpfField.getText().trim();
-                        if (!UserController.getInstance().validateCpf(cpf) || !cpf.isEmpty()) {
+                        if (UserController.getInstance().validateCpf(cpf) && !cpf.isEmpty()) {
                             Session.getLoggedUser().setCpf(cpf);
                             JOptionPane.showMessageDialog(null, "Você agora é um organizador!");
                         } else {
@@ -269,8 +270,9 @@ public class MainPage extends JPanel {
         chatButton.setOpaque(false);
         chatButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         chatButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Botão Chat clicado!", "Chat", JOptionPane.INFORMATION_MESSAGE);
-            ExibirEvents();
+            CommunityPanel communityPanel = new CommunityPanel(this);
+            showMainPanel(communityPanel, 0);
+           // ExibirEvents();
         });
         rightButtonsPanel.add(chatButton);
 

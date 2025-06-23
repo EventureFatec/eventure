@@ -20,8 +20,9 @@ public class User {
     private boolean organazador = false;
     private boolean isLogged = false;
     private List<Integer> myEventsList = new ArrayList<>(); // salva uma lista com todos os eventos que ele criou
-    private List<Integer> eventsList = new ArrayList<>();  // Inicializando a lista de eventos
-    private List<Integer> communityList = new ArrayList<>(); // Inicializando a lista de comunidades
+    private List<Integer> eventsList = new ArrayList<>();  // eventos que usuario participa
+    private List<Integer> communityList = new ArrayList<>(); // comunidades que o usuario faz parte
+    private List<Integer> myCommunityList = new ArrayList<>(); // comunidades criados pelo usuario
 
     // Construtor
     public User(String name, String email, String username, Password password, int userId, String cpf, String profilePic, boolean isLogged) {
@@ -92,7 +93,7 @@ public class User {
         this.isLogged = isLogged;
     }
 
-	public String getProfilePic(String profilePic) {
+	public String getProfilePic() {
 		return this.profilePic;
 	}
 	
@@ -120,8 +121,11 @@ public class User {
         return communityList;
     }
 
-    public void addCommunity(int communityId) {
-        communityList.add(communityId);
+    public void addMyCommunityList(int communityId) {
+        myCommunityList.add(communityId);
+    }
+    public void removeMyCommunityList(int communityId) {
+        myCommunityList.remove(communityId);
     }
     public void addListMyEvents(int idEvento) {
     	myEventsList.add(idEvento);
@@ -137,5 +141,12 @@ public class User {
 	public void setMyEventsList(List<Integer> myEventsList) {
 		this.myEventsList = myEventsList;
 	}
+	
+    public void addCommunityList(int idComunity) {
+    	communityList.add(idComunity);
+    }
+    public void removeCommunityList(int idComunity) {
+    	communityList.remove(idComunity);
+    }
     
 }
