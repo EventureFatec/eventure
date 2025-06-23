@@ -8,6 +8,7 @@ import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.EventClassification;
 import com.github.eventure.model.Message;
 import com.github.eventure.model.Visibilidade;
+import com.github.eventure.view.components.EventRequestPanel;
 import com.github.eventure.view.pages.LoginPage;
 import com.github.eventure.view.pages.RegisterPage;
 import com.github.eventure.view.pages.WelcomePage;
@@ -70,7 +71,12 @@ public class MainFrame extends JFrame {
 
         LoginPage loginPage = new LoginPage(this); // Passando o UserStorage
         contentPanel.add(loginPage, "login"); // Tela de login
-
+        
+    	ImageIcon im = new ImageIcon("C:/Users/User/Downloads/testeprojeto/teste.jpg");
+    	ImageIcon im2 = new ImageIcon(getClass().getResource("/fotoPerfil.png"));
+    	EventRequestPanel evr = new EventRequestPanel("evento da google", "11/09/25" , "allisson", "allisson@gmail.com",im,im2 );
+    	
+    	contentPanel.add(evr,"evr");
         MainPage mainPage = new MainPage(this);
         contentPanel.add(mainPage, "home");
 
