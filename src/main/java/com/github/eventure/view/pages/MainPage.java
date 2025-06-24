@@ -309,7 +309,7 @@ public class MainPage extends JPanel {
         profileButton.setOpaque(false);
         profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         profileButton.addActionListener(e -> {
-            ProfilePage profilePage = new ProfilePage();
+            ProfilePage profilePage = new ProfilePage(this);
             showMainPanel(profilePage, 1);
         });
         rightButtonsPanel.add(profileButton);
@@ -338,7 +338,7 @@ public class MainPage extends JPanel {
         JButton btnPerfil = new JButton(sbprofileIcon);
         configurarBotaoSidebar(btnPerfil);
         btnPerfil.addActionListener(e -> {
-            var profilePage = new ProfilePage();
+            var profilePage = new ProfilePage(this);
             showMainPanel(profilePage, 1);
         });
 
@@ -374,6 +374,10 @@ public class MainPage extends JPanel {
         ImageIcon sbconsultEventIcn = new ImageIcon(getClass().getResource("/Sidebar/ConsultEventSB.png"));
         JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
         configurarBotaoSidebar(btnConsultEventSB);
+        btnConsultEventSB.addActionListener(e -> {
+        	var eventPanelForConsult = new EventPanelForConsult(this);
+        	showMainPanel(eventPanelForConsult, 0);
+        });
 
         ImageIcon sbpresenceIcn = new ImageIcon(getClass().getResource("/Sidebar/PresenceSB.png"));
         JButton btnPresenceSB = new JButton(sbpresenceIcn);
@@ -639,6 +643,13 @@ public class MainPage extends JPanel {
         });
         galleryPanel.add(btnNext);
 
+        galleryPanel.revalidate();
+        galleryPanel.repaint();
+    }
+    public void closePanel() {
+        galleryPanel.removeAll();    
+        galleryPanel.setLayout(null);  
+        ExibirEvents();                
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }

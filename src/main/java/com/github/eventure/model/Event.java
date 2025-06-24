@@ -177,11 +177,16 @@ public class Event {
 	}
 
 	public void removePendingRequestIds(int id) {
-		pendingRequestIds.remove(id);
+	    boolean removed = pendingRequestIds.remove(Integer.valueOf(id));
+	    System.out.println("Removido? " + removed);
 	}
 	public boolean usersParticipaOuNão(int id)
 	{
 		return confirmedParticipantIds.contains(id);
+	}
+	public boolean usersParticipaOuNãoListPending(int id)
+	{
+		return pendingRequestIds.contains(id);
 	}
 	
 	public String getDateEnd() {

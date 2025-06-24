@@ -1,14 +1,17 @@
 package com.github.eventure.view.components;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.IdController;
@@ -18,9 +21,9 @@ import com.github.eventure.model.User;
 
 public class EventRequestsContainer extends JPanel {
     public EventRequestsContainer() {
-        setLayout(null);
+        setLayout(new BorderLayout());
         setPreferredSize(new Dimension(1130, 590));
-
+        
         // Recuperar usuário logado
         int userId = IdController.getIdUser();
         UserController userController = UserController.getInstance();
@@ -49,6 +52,8 @@ public class EventRequestsContainer extends JPanel {
                         event.getDate(),
                         requester.getName(),
                         requester.getEmail(),
+                        requesterId,
+                        eventId,
                         eventImage,
                         userImage
                 );
@@ -60,9 +65,12 @@ public class EventRequestsContainer extends JPanel {
         }
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.setBounds(0, 0, 1130, 590);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        add(scrollPane);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+
+        add(scrollPane, BorderLayout.CENTER);
     }
 }

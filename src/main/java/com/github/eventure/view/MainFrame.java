@@ -57,11 +57,12 @@ public class MainFrame extends JFrame {
         Message m21 = new Message("teste 02","14:50","pedro",1);
         comunidade02.addMessage(m1);
         comunidade02.addMessage(m21);
-//        var eventos = EventController.getInstance();
-//        String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
-//        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
-//                "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
-//                "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
+        var eventos = EventController.getInstance();
+        String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
+        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
+                "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
+                "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
+        
         // Adiciona as telas (pages) no contentPanel
         WelcomePage welcomePage = new WelcomePage(this);
         contentPanel.add(welcomePage, "welcome"); // Tela de boas-vindas
@@ -74,7 +75,7 @@ public class MainFrame extends JFrame {
         
     	ImageIcon im = new ImageIcon("C:/Users/User/Downloads/testeprojeto/teste.jpg");
     	ImageIcon im2 = new ImageIcon(getClass().getResource("/fotoPerfil.png"));
-    	EventRequestPanel evr = new EventRequestPanel("evento da google", "11/09/25" , "allisson", "allisson@gmail.com",im,im2 );
+    	EventRequestPanel evr = new EventRequestPanel("evento da google", "11/09/25" , "allisson", "allisson@gmail.com",0,1,im,im2 );
     	
     	contentPanel.add(evr,"evr");
         MainPage mainPage = new MainPage(this);
@@ -92,4 +93,5 @@ public class MainFrame extends JFrame {
     public void showPanel(String pageName) {
         cardLayout.show(contentPanel, pageName); // Exibe o painel baseado no nome passado
     }
+    
 }

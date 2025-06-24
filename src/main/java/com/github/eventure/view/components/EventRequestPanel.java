@@ -12,9 +12,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.github.eventure.controllers.EventController;
+
 public class EventRequestPanel extends JPanel {
-    public EventRequestPanel(String eventName, String eventDate, String userName, String userEmail,
+	private EventController eventController;
+	private int idUser;
+	private int idEvento;
+    public EventRequestPanel(String eventName, String eventDate, String userName, String userEmail,int idUser,int idEvento,
                              ImageIcon eventImage, ImageIcon userImage) {
+    	this.idUser = idUser;
+    	this.idEvento = idEvento;
+    	eventController = EventController.getInstance();
         setLayout(null);
         setPreferredSize(new Dimension(450, 180));
         setBackground(Color.WHITE);
@@ -58,6 +66,10 @@ public class EventRequestPanel extends JPanel {
         acceptButton.setForeground(Color.WHITE);
         acceptButton.setFocusPainted(false);
         add(acceptButton);
+        acceptButton.addActionListener(e -> {
+        	System.out.println("clicou no botão aceitar");
+        	eventController.adicionarParticipantesPrivateEvento(this.idEvento, this.idUser);
+        });
 
         JButton declineButton = new JButton("Decline Request");
         declineButton.setBounds(240, 150, 130, 25);
@@ -65,5 +77,9 @@ public class EventRequestPanel extends JPanel {
         declineButton.setForeground(Color.BLACK);
         declineButton.setFocusPainted(false);
         add(declineButton);
+        declineButton.addActionListener(e -> {
+        	System.out.println("negar");
+        	eventController.negarParticipantesPrivateEvento(idEvento, idUser);
+        });
     }
 }
