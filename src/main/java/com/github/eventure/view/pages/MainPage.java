@@ -20,6 +20,8 @@ import java.awt.PointerInfo;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -47,9 +49,13 @@ import com.github.eventure.model.User;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.CommunityPanel;
+import com.github.eventure.view.components.ConfirmarPresencaPanel;
 import com.github.eventure.view.components.CreateEventPanel;
 import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EventPanelEdit;
+import com.github.eventure.view.components.EventPanelPresenca;
+import com.github.eventure.view.components.EventRequestPanel;
+import com.github.eventure.view.components.EventRequestsContainer;
 import com.github.eventure.view.components.ProfilePage;
 
 
@@ -82,8 +88,10 @@ public class MainPage extends JPanel {
 
         // Galeria (plano de fundo)
         galleryPanel = new JPanel();
-        galleryPanel.setLayout(null); // hbox layout
-        galleryPanel.setBackground(new Color(0x330065));
+        galleryPanel.setLayout(null); // hbox layout #F8F8F8
+//        galleryPanel.setBackground(new Color(0x330065)); // roxo
+        galleryPanel.setBackground(new Color(0xF2F0F7));
+//        galleryPanel.setBackground(Color.WHITE);
         galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH,
                 frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
@@ -101,14 +109,17 @@ public class MainPage extends JPanel {
         ExibirEvents();
 
         // Barra de pesquisa
-        var searchField = new JTextField() {
+        JPanel searchPanel = new JPanel();
+        searchPanel.setOpaque(false); 
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            // Criando um efeito redondo
+        // Campo de pesquisa
+        JTextField searchField = new JTextField("Pesquisar...") {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
                 g2.setColor(new Color(0xBDB2D2));
                 int arc = getHeight();
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
@@ -126,25 +137,26 @@ public class MainPage extends JPanel {
                 g2.dispose();
             }
         };
+
+        Dimension tamanhoCampo = new Dimension(550, 40);
         searchField.setOpaque(false);
-        searchField.setPreferredSize(new Dimension(200, 35));
-        searchField.setMaximumSize(new Dimension(200, 35));
+        searchField.setPreferredSize(tamanhoCampo);
+        searchField.setMaximumSize(tamanhoCampo);
+        searchField.setMinimumSize(tamanhoCampo);
         searchField.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         searchField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        // Placeholder visual
-        searchField.setToolTipText("Pesquisar...");
         searchField.setForeground(Color.GRAY);
 
-        // Limpar o texto ao clicar na barra
-        searchField.addFocusListener(new java.awt.event.FocusListener() {
-            public void focusGained(java.awt.event.FocusEvent e) {
+        // Placeholder e ação
+        searchField.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
                 if (searchField.getText().equals("Pesquisar...")) {
                     searchField.setText("");
                     searchField.setForeground(Color.BLACK);
                 }
             }
 
-            public void focusLost(java.awt.event.FocusEvent e) {
+            public void focusLost(FocusEvent e) {
                 if (searchField.getText().isEmpty()) {
                     searchField.setText("Pesquisar...");
                     searchField.setForeground(Color.GRAY);
@@ -164,8 +176,11 @@ public class MainPage extends JPanel {
             }
         });
 
-        topbar.add(Box.createHorizontalGlue());
-        topbar.add(searchField);
+        
+        searchPanel.add(Box.createHorizontalGlue()); 
+        searchPanel.add(searchField);
+        searchPanel.add(Box.createHorizontalGlue());
+        topbar.add(searchPanel, BorderLayout.CENTER);
 
         // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -190,7 +205,7 @@ public class MainPage extends JPanel {
                 int textHeight = fm.getAscent();
 
                 g2.setFont(getFont());
-                g2.setColor(Color.WHITE); // COR DO TEXTO
+                g2.setColor(Color.WHITE);
                 g2.drawString(text, (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 2);
 
                 g2.dispose();
@@ -199,7 +214,7 @@ public class MainPage extends JPanel {
             @Override
             protected void paintBorder(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.setColor(new Color(0x330065)); // Cor da borda (opcional)
+                g2.setColor(new Color(0x330065)); 
                 g2.setStroke(new BasicStroke(1));
                 int arc = getHeight();
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
@@ -307,7 +322,7 @@ public class MainPage extends JPanel {
         profileButton.setOpaque(false);
         profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         profileButton.addActionListener(e -> {
-            ProfilePage profilePage = new ProfilePage();
+            ProfilePage profilePage = new ProfilePage(this);
             showMainPanel(profilePage, 1);
         });
         rightButtonsPanel.add(profileButton);
@@ -336,7 +351,7 @@ public class MainPage extends JPanel {
         JButton btnPerfil = new JButton(sbprofileIcon);
         configurarBotaoSidebar(btnPerfil);
         btnPerfil.addActionListener(e -> {
-            var profilePage = new ProfilePage();
+            var profilePage = new ProfilePage(this);
             showMainPanel(profilePage, 1);
         });
 
@@ -345,17 +360,57 @@ public class MainPage extends JPanel {
         configurarBotaoSidebar(btnConfig);
         btnConfig.addActionListener(e -> {
             // parametro é idDoEventos
-            var displayEvent = new DisplayEvent(0);
-            showMainPanel(displayEvent, 0);
+            EventRequestsContainer erc = new EventRequestsContainer();
+//            var displayEvent = new DisplayEvent(0);
+            showMainPanel(erc, 1);
         });
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
         btnCreateEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCreateEventSB.addActionListener(e -> {
-            var user = Session.getLoggedUser();
-            var createEventPanel = new CreateEventPanel(user,this);
-            showMainPanel(createEventPanel, 0);
+        	  User user = Session.getLoggedUser();
+
+              if (user == null) {
+                  JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser
+                                                                                       // exibido!
+                  return;
+              }
+
+              if (user.getCpf() == null) {
+                  int opcao = JOptionPane.showConfirmDialog(null,
+                          "Deseja se tornar um organizador?", "Confirmação", JOptionPane.YES_NO_OPTION);
+
+                  if (opcao == JOptionPane.YES_OPTION) {
+                      JTextField cpfField = new JTextField(15);
+                      JPanel panel = new JPanel();
+                      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                      panel.add(new JLabel("Digite seu CPF:"));
+                      panel.add(cpfField);
+
+                      int result = JOptionPane.showConfirmDialog(null, panel,
+                              "Cadastro de CPF", JOptionPane.OK_CANCEL_OPTION);
+
+                      if (result == JOptionPane.OK_OPTION) {
+                          String cpf = cpfField.getText().trim();
+                          if (UserController.getInstance().validateCpf(cpf) && !cpf.isEmpty()) {
+                              Session.getLoggedUser().setCpf(cpf);
+                              JOptionPane.showMessageDialog(null, "Você agora é um organizador!");
+                          } else {
+                              JOptionPane.showMessageDialog(null, "CPF inválido!");
+                              return;
+                          }
+                      } else {
+                          return; // cancelou o cadastro
+                      }
+                  } else {
+                      return; // não quis se tornar organizador
+                  }
+              }
+
+              // Continua para criação do evento
+              var createEventPanel = new CreateEventPanel(user,this);
+              showMainPanel(createEventPanel, 0);
         });
         configurarBotaoSidebar(btnCreateEventSB);
 
@@ -371,10 +426,18 @@ public class MainPage extends JPanel {
         ImageIcon sbconsultEventIcn = new ImageIcon(getClass().getResource("/Sidebar/ConsultEventSB.png"));
         JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
         configurarBotaoSidebar(btnConsultEventSB);
+        btnConsultEventSB.addActionListener(e -> {
+        	var eventPanelForConsult = new EventPanelForConsult(this);
+        	showMainPanel(eventPanelForConsult, 0);
+        });
 
         ImageIcon sbpresenceIcn = new ImageIcon(getClass().getResource("/Sidebar/PresenceSB.png"));
         JButton btnPresenceSB = new JButton(sbpresenceIcn);
         configurarBotaoSidebar(btnPresenceSB);
+        btnPresenceSB.addActionListener(e -> {
+        	var eventPanelPresenca = new EventPanelPresenca(this);
+        	showMainPanel(eventPanelPresenca, 0);
+        });
 
         ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
         JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
@@ -608,10 +671,11 @@ public class MainPage extends JPanel {
 
         // Botão Anterior
         JButton btnPrev = new JButton("");
-        ImageIcon icon = new ImageIcon(getClass().getResource("/setaAnterior.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/setacinza.png"));
         Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         btnPrev.setIcon(new ImageIcon(scaled));
         btnPrev.setBounds(80, 130, 40, 40);
+        btnPrev.setBorder(null);
         btnPrev.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnPrev.setEnabled(currentPage > 0);
         btnPrev.addActionListener(e -> {
@@ -625,9 +689,10 @@ public class MainPage extends JPanel {
         // Botão Próximo
         JButton btnNext = new JButton("");
         btnNext.setBounds(1290, 130, 40, 40);
-        ImageIcon icon02 = new ImageIcon(getClass().getResource("/setaProxima.png"));
+        ImageIcon icon02 = new ImageIcon(getClass().getResource("/setacinzaPos.png"));
         Image scaled02 = icon02.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         btnNext.setIcon(new ImageIcon(scaled02));
+        btnNext.setBorder(null);
         btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnNext.setEnabled((currentPage + 1) * pageSize < events.size());
         btnNext.addActionListener(e -> {
@@ -636,6 +701,13 @@ public class MainPage extends JPanel {
         });
         galleryPanel.add(btnNext);
 
+        galleryPanel.revalidate();
+        galleryPanel.repaint();
+    }
+    public void closePanel() {
+        galleryPanel.removeAll();    
+        galleryPanel.setLayout(null);  
+        ExibirEvents();                
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }

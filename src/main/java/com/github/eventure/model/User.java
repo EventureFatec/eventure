@@ -116,6 +116,10 @@ public class User {
     public void addListaEventos(int id) {
         eventsList.add(id);
     }
+    
+    public void removeListaEventos(int id) {
+        eventsList.remove(id);
+    }
 
     public List<Integer> getCommunityList() {
         return communityList;

@@ -23,6 +23,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -172,6 +173,34 @@ public class CommunityPanel extends JPanel {
         sidePanel.add(btnCriarComunidade);
         add(sidePanel);
         btnCriarComunidade.addActionListener(e -> {
+            int opcao = JOptionPane.showConfirmDialog(null,
+                    "Deseja criar uma comunidade?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            if(opcao == JOptionPane.YES_OPTION)
+            {
+            	 JTextField nomeComunidade = new JTextField();
+            	 JTextField descricaoComunidade = new JTextField();
+                 JPanel panel = new JPanel();
+                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                 panel.add(new JLabel("Digite nome da comunidade:"));
+                 panel.add(nomeComunidade);
+                 panel.add(new JLabel("Digite a descrição da comunidade:"));
+                 panel.add(descricaoComunidade);
+
+                 int result = JOptionPane.showConfirmDialog(null, panel,
+                         "Criar Comunidade", JOptionPane.OK_CANCEL_OPTION);
+                 if(result == JOptionPane.OK_OPTION)
+                 {
+                	 System.out.println("criando comunidade");
+                	 //cria comunidade
+                 }else
+                 {
+                	 return;
+                 }
+
+            }else
+            {
+            	return;
+            }
         	System.out.println("adicionar o panel para criar comunidade");
         });
 

@@ -21,9 +21,9 @@ import com.github.eventure.view.pages.EventPanel;
 import com.github.eventure.view.pages.EventPanelForEditPanel;
 import com.github.eventure.view.pages.MainPage;
 
-public class EventPanelEdit extends JPanel {
+public class EventPanelPresenca extends JPanel {
 
-    public EventPanelEdit(MainPage mainPage) {
+    public EventPanelPresenca(MainPage mainPage) {
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
         setBackground(Color.decode("#F5F5F5"));
@@ -49,7 +49,7 @@ public class EventPanelEdit extends JPanel {
         JPanel contentPanel = new JPanel(null);
         contentPanel.setBackground(Color.decode("#F5F5F5"));
 
-        JLabel label = new JLabel("Escolha um Evento Para Editar", SwingConstants.CENTER);
+        JLabel label = new JLabel("Escolha um Evento Para Gerenciar a lista de presença", SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 22));
         label.setBounds(0, 10, 1130, 40);
         contentPanel.add(label);
@@ -68,7 +68,7 @@ public class EventPanelEdit extends JPanel {
             int idEvent = user.getMyEventsList().get(i);
             var event = eventController.findEventById(idEvent);
 
-            EventPanelForEditPanel panel = new EventPanelForEditPanel(
+            EventPanelForPresenca panel = new EventPanelForPresenca(
                 event.getTitle(),
                 event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
                 event.getDate(),
@@ -105,3 +105,4 @@ public class EventPanelEdit extends JPanel {
         add(scrollPane);
     }
 }
+

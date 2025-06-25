@@ -1,6 +1,8 @@
-package com.github.eventure.view.pages;
+package com.github.eventure.view.components;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -13,17 +15,12 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import com.github.eventure.view.components.EditEventPanel;
+import com.github.eventure.view.pages.MainPage;
 
-import com.github.eventure.view.MainFrame;
-import com.github.eventure.view.components.CreateEventPanel;
-import com.github.eventure.view.components.DisplayEvent;
-
-import javax.swing.*;
-import java.awt.*;
-
-public class EventPanel extends JPanel {
+public class EventPanelForPresenca extends JPanel {
     private int idEvento;
-    public EventPanel(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
+    public EventPanelForPresenca(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
         // Tamanho fixo do painel
@@ -70,9 +67,9 @@ public class EventPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
-                var displayEvent = new DisplayEvent(idEvento);
+                var confirmarPresencaPanel = new ConfirmarPresencaPanel(idEvento , mainPage);
                 // chamar a tela exibir evento completo
-                mainPage.showMainPanel(displayEvent,1);
+                mainPage.showMainPanel(confirmarPresencaPanel,1);
             }
         });
         add(infoPanel, BorderLayout.CENTER);
@@ -82,4 +79,3 @@ public class EventPanel extends JPanel {
 	 
  }
 }
-
