@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
         String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
         eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
                 "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
-                "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
+                "orlando novaes", "300", "casa",Visibilidade.PUBLICO);
         
         // Adiciona as telas (pages) no contentPanel
         WelcomePage welcomePage = new WelcomePage(this);

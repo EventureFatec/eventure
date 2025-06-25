@@ -29,7 +29,7 @@ public class EventPanelConsult extends JPanel {
     public EventPanelConsult(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
-        // Tamanho fixo do painel
+        
         Dimension panelSize = new Dimension(300, 240);
         setPreferredSize(panelSize);
         setMaximumSize(panelSize);
@@ -51,19 +51,21 @@ public class EventPanelConsult extends JPanel {
         // ===== Informações =====
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(new Color(0xe5d8fd));
+//        infoPanel.setBackground(new Color(0xe5d8fd));
+        infoPanel.setBackground(new Color(0xFFFFFF));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         JLabel titleLabel = new JLabel("<html><b>" + title + "</b></html>");
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-
+        titleLabel.setForeground(new Color(0x4A148C));
+        
         JLabel locationLabel = new JLabel(location);
-        locationLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        locationLabel.setForeground(Color.GRAY);
+        locationLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        locationLabel.setForeground(new Color(0x777777));
 
         JLabel dateTimeLabel = new JLabel(date);
-        dateTimeLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        dateTimeLabel.setForeground(new Color(255, 102, 0)); // laranja (#FF6600)
+        dateTimeLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        dateTimeLabel.setForeground(new Color(0x777777)); 
 
         infoPanel.add(titleLabel);
         infoPanel.add(locationLabel);
