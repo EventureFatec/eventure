@@ -27,7 +27,6 @@ public class UserController {
         }
         return instance;
     }
-    
     public void desativarConta(User user)
     {
         user.setAtivo(false);
@@ -40,7 +39,6 @@ public class UserController {
         EventController eventController =  EventController.getInstance();
         eventController.ativarEventosDoUsuario(user.getUserId());
     }
-    
     public boolean createUser(String firstName, String username, String password, String email) {
         // Instantiate the user
         var u = new User();

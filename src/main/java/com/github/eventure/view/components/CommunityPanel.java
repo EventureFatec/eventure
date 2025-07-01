@@ -42,6 +42,7 @@ import com.github.eventure.view.pages.EventPanelForEditPanel;
 import com.github.eventure.view.pages.MainPage;
 
 public class CommunityPanel extends JPanel {
+	private String nomeComunidade;
 	private int idComunidade;
 	private String messagem;
 	private String nome;
@@ -177,27 +178,10 @@ public class CommunityPanel extends JPanel {
                     "Deseja criar uma comunidade?", "Confirmação", JOptionPane.YES_NO_OPTION);
             if(opcao == JOptionPane.YES_OPTION)
             {
-            	 JTextField nomeComunidade = new JTextField();
-            	 JTextField descricaoComunidade = new JTextField();
-                 JPanel panel = new JPanel();
-                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                 panel.add(new JLabel("Digite nome da comunidade:"));
-                 panel.add(nomeComunidade);
-                 panel.add(new JLabel("Digite a descrição da comunidade:"));
-                 panel.add(descricaoComunidade);
-
-                 int result = JOptionPane.showConfirmDialog(null, panel,
-                         "Criar Comunidade", JOptionPane.OK_CANCEL_OPTION);
-                 if(result == JOptionPane.OK_OPTION)
-                 {
-                	 System.out.println("criando comunidade");
-                	 //cria comunidade
-                 }else
-                 {
-                	 return;
-                 }
-
-            }else
+                	 var createCommunity = new CreateCommunityPanel(user);
+                	 mainPage.showMainPanel(createCommunity, 1);
+            }
+            else
             {
             	return;
             }
