@@ -210,6 +210,11 @@ public class EventController {
 			//  evento publico
 		 }else
 		  {
+			 if(event.usersParticipaOuNãoListPending(idUser))
+			 {
+				 JOptionPane.showMessageDialog(null, "Você já solicitou participação neste evento.");
+				 return;
+			 }
 			 // evento privado
 			 // adiciona o usuario a uma lista que o criador vai decidir se confirma ou não a participação
 			 JOptionPane.showInternalMessageDialog(null,"Pedido para participar enviado");
@@ -224,7 +229,17 @@ public class EventController {
 	public void adicionarParticipantesPrivateEvento(int idEvent,int idUser) {
 		Event event = findEventById(idEvent);
 		event.addConfirmedParticipantIds(idUser);
+		UserController userController = UserController.getInstance();
+		var user = userController.findUserById(idUser);
+		user.addListaEventos(idEvent);
+		event.removePendingRequestIds(idUser);
 	    JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
+	}
+	
+	public void negarParticipantesPrivateEvento(int idEvent,int idUser) {
+		Event event = findEventById(idEvent);
+		event.removePendingRequestIds(idUser);
+	    JOptionPane.showInternalMessageDialog(null,"Usuario removida da lista de pedidos!");
 	}
 
 	public void print(List<Event> eventos) {

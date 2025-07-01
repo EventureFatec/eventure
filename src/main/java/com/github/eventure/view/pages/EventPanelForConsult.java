@@ -1,32 +1,22 @@
-package com.github.eventure.view.components;
+package com.github.eventure.view.pages;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-
+import java.awt.*;
+import javax.swing.*;
 import com.github.eventure.controllers.EventController;
 import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
-import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
-import com.github.eventure.view.pages.EventPanel;
-import com.github.eventure.view.pages.EventPanelForEditPanel;
-import com.github.eventure.view.pages.MainPage;
+import com.github.eventure.view.components.EventPanelConsult;
+import com.github.eventure.view.components.ModernScrollBarUI;
 
-public class EventPanelEdit extends JPanel {
+public class EventPanelForConsult extends JPanel {
 
-    public EventPanelEdit(MainPage mainPage) {
+    public EventPanelForConsult(MainPage mainPage) {
         setLayout(null);
         setPreferredSize(new Dimension(1130, 590));
         setBackground(Color.decode("#F5F5F5"));
+
+      
         JPanel header = new JPanel(null);
         header.setBackground(Color.WHITE);
         header.setBounds(0, 0, 1130, 60);
@@ -46,14 +36,16 @@ public class EventPanelEdit extends JPanel {
         header.add(menuButton);
         add(header);
 
+       
         JPanel contentPanel = new JPanel(null);
         contentPanel.setBackground(Color.decode("#F5F5F5"));
 
-        JLabel label = new JLabel("Escolha um Evento Para Editar", SwingConstants.CENTER);
+        JLabel label = new JLabel("Escolha um Evento Para Visualizar", SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 22));
         label.setBounds(0, 10, 1130, 40);
         contentPanel.add(label);
 
+       
         var userController = UserController.getInstance();
         var eventController = EventController.getInstance();
         User user = userController.findUserById(IdController.getIdUser());
@@ -68,7 +60,7 @@ public class EventPanelEdit extends JPanel {
             int idEvent = user.getMyEventsList().get(i);
             var event = eventController.findEventById(idEvent);
 
-            EventPanelForEditPanel panel = new EventPanelForEditPanel(
+            EventPanelConsult panel = new EventPanelConsult(
                 event.getTitle(),
                 event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
                 event.getDate(),
@@ -85,7 +77,8 @@ public class EventPanelEdit extends JPanel {
             panel.setBounds(x, y, cardWidth, cardHeight);
             contentPanel.add(panel);
         }
-      
+
+        
         int rows = (int) Math.ceil(user.getMyEventsList().size() / (double) cardsPerRow);
         int contentHeight = 60 + rows * (cardHeight + spaceY);
         contentPanel.setPreferredSize(new Dimension(1130, contentHeight));
@@ -105,3 +98,6 @@ public class EventPanelEdit extends JPanel {
         add(scrollPane);
     }
 }
+
+
+
