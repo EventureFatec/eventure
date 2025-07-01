@@ -32,6 +32,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -60,6 +62,8 @@ import com.github.eventure.view.components.EventPanelPresenca;
 import com.github.eventure.view.components.EventRequestPanel;
 import com.github.eventure.view.components.EventRequestsContainer;
 import com.github.eventure.view.components.ProfilePage;
+import com.github.eventure.view.components.SettingsPanel;
+import com.github.eventure.view.components.ThemeManager;
 
 
 public class MainPage extends JPanel {
@@ -360,12 +364,7 @@ public class MainPage extends JPanel {
         ImageIcon sbsettingsIcon = new ImageIcon(getClass().getResource("/Sidebar/Settings.png"));
         JButton btnConfig = new JButton(sbsettingsIcon);
         configurarBotaoSidebar(btnConfig);
-        btnConfig.addActionListener(e -> {
-//        	EventPanelResquest evr = new EventPanelResquest(this);
-//        	showMainPanel(evr, 0);
-            EventRequestsContainer erc = new EventRequestsContainer();
-            showMainPanel(erc, 1);
-        });
+        btnConfig.addActionListener(e -> showSettingsDialog());
 
         ImageIcon sbcreateEventIcn = new ImageIcon(getClass().getResource("/Sidebar/CreateEventSB.png"));
         JButton btnCreateEventSB = new JButton(sbcreateEventIcn);
@@ -753,6 +752,28 @@ public class MainPage extends JPanel {
         ExibirEvents();                
         galleryPanel.revalidate();
         galleryPanel.repaint();
+    }
+    private void showSettingsDialog() {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Configurações", true);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(null);
+
+        SettingsPanel settingsPanel = new SettingsPanel(() -> {
+            applyTheme();
+            dialog.dispose();
+        });
+
+        dialog.setContentPane(settingsPanel);
+        dialog.setVisible(true);
+    }
+
+    private void applyTheme() {
+        Color bg = ThemeManager.getBackgroundColor();
+
+//        this.setBackground(bg);
+        galleryPanel.setBackground(bg);
+        topbar.setBackground(new Color(0x9F96B0));
+        sidebar.setBackground(new Color(0x9F96B0));
     }
 
 }
