@@ -24,6 +24,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -40,6 +41,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
@@ -48,6 +50,7 @@ import com.github.eventure.model.Session;
 import com.github.eventure.model.User;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
+import com.github.eventure.view.components.CommunityAllPanel;
 import com.github.eventure.view.components.CommunityPanel;
 import com.github.eventure.view.components.ConfirmarPresencaPanel;
 import com.github.eventure.view.components.CreateEventPanel;
@@ -85,7 +88,6 @@ public class MainPage extends JPanel {
         topbar.setLayout(new BorderLayout());
         topbar.setBackground(new Color(0xe5d8fd));
         topbar.setPreferredSize(new Dimension(0, 48)); // Define a altura da barra superior
-
         // Galeria (plano de fundo)
         galleryPanel = new JPanel();
         galleryPanel.setLayout(null); // hbox layout #F8F8F8
@@ -359,9 +361,9 @@ public class MainPage extends JPanel {
         JButton btnConfig = new JButton(sbsettingsIcon);
         configurarBotaoSidebar(btnConfig);
         btnConfig.addActionListener(e -> {
-            // parametro é idDoEventos
+//        	EventPanelResquest evr = new EventPanelResquest(this);
+//        	showMainPanel(evr, 0);
             EventRequestsContainer erc = new EventRequestsContainer();
-//            var displayEvent = new DisplayEvent(0);
             showMainPanel(erc, 1);
         });
 
@@ -418,8 +420,22 @@ public class MainPage extends JPanel {
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
         btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEditEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
             var editPanel = new EventPanelEdit(this);
             showMainPanel(editPanel, 0);
+        	}
         });
         configurarBotaoSidebar(btnEditEventSB);
 
@@ -427,8 +443,22 @@ public class MainPage extends JPanel {
         JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
         configurarBotaoSidebar(btnConsultEventSB);
         btnConsultEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento para consultar deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
         	var eventPanelForConsult = new EventPanelForConsult(this);
         	showMainPanel(eventPanelForConsult, 0);
+        	}
         });
 
         ImageIcon sbpresenceIcn = new ImageIcon(getClass().getResource("/Sidebar/PresenceSB.png"));
@@ -439,15 +469,27 @@ public class MainPage extends JPanel {
         	showMainPanel(eventPanelPresenca, 0);
         });
 
-        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
+        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/Comunidades.png"));
         JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
         configurarBotaoSidebar(btnHelpCenterSB);
+        
+        ImageIcon sbSolicitacoes = new ImageIcon(getClass().getResource("/Sidebar/solicitacoes.png"));
+        JButton sbBtnSolicitacoes = new JButton(sbSolicitacoes);
+        configurarBotaoSidebar(sbBtnSolicitacoes);
+        sbBtnSolicitacoes.addActionListener(e ->{
+            EventRequestsContainer erc = new EventRequestsContainer();
+            showMainPanel(erc, 1);	
+        });
 
         ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
         JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
         configurarBotaoSidebar(btnSocialMediaSB);
+        btnSocialMediaSB.addActionListener(e -> {
+        	CommunityAllPanel communityAllPanel = new CommunityAllPanel();
+        	showMainPanel(communityAllPanel, 1);
+        });
 
-        // Separador
+        
         JPanel separator = new JPanel();
         separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 3));
         separator.setBackground(new Color(0xCCCCCC)); // cor da linha
@@ -474,6 +516,7 @@ public class MainPage extends JPanel {
         sidebar.add(separator2);
         sidebar.add(Box.createVerticalStrut(12));
         sidebar.add(btnHelpCenterSB);
+        sidebar.add(sbBtnSolicitacoes);
         sidebar.add(btnSocialMediaSB);
 
         // Mouse Listener do Sidebar (Irá ler a posição do mouse)
@@ -646,7 +689,6 @@ public class MainPage extends JPanel {
         ExibirEvents(events);
     }
 
-    // Exibe os eventos da lista passada (pode ser todos, pode ser filtrados)
     public void ExibirEvents(List<Event> events) {
         galleryPanel.removeAll();
 
@@ -704,6 +746,7 @@ public class MainPage extends JPanel {
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }
+    
     public void closePanel() {
         galleryPanel.removeAll();    
         galleryPanel.setLayout(null);  

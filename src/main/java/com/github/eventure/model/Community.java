@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Community {
+	private boolean ativo = true; 
 	private String name;
 	private String description;
 	private int idMaker;
@@ -93,5 +94,12 @@ public class Community {
 	{
 		this.mensagens.remove(message);
 	}
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	
 
 }

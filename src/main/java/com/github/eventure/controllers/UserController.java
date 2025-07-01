@@ -27,6 +27,18 @@ public class UserController {
         }
         return instance;
     }
+    public void desativarConta(User user)
+    {
+        user.setAtivo(false);
+        EventController eventController =  EventController.getInstance();
+        eventController.desativarEventosDoUsuario(user.getUserId());
+    }
+    public void ativarConta(User user)
+    {
+        user.setAtivo(true);
+        EventController eventController =  EventController.getInstance();
+        eventController.ativarEventosDoUsuario(user.getUserId());
+    }
     public boolean createUser(String firstName, String username, String password, String email) {
         // Instantiate the user
         var u = new User();
@@ -215,9 +227,9 @@ public class UserController {
 
     public boolean login(String emailOrusername, String password) {
     // Procura o usuário no storage
-    print();
+//    print();
     User user = findUserByEmail(emailOrusername);
-    System.out.println("usuario = "+user);
+//    System.out.println("usuario = "+user);
     if(user == null)
     {
     	user = findUserByUsername(emailOrusername);
@@ -225,12 +237,21 @@ public class UserController {
     if (user != null) {
         // Verifica a senha
         Password userPassword = user.getPassword();
-        System.out.println(user.getPassword().getPasswordSalt().toString());
+//        System.out.println(user.getPassword().getPasswordSalt().toString());
         byte[] salt = user.getPassword().getPasswordSalt();
         byte[] hash = Encryption.generateHash(password, salt);
         boolean loginValido = Encryption.checkHashes(hash, user.getPassword().getPasswordHash());
-        System.out.println("Hashes são iguais? " + loginValido);
+//        System.out.println("Hashes são iguais? " + loginValido);
         if(loginValido) {
+            if (!user.isAtivo()) {
+                int opcao = JOptionPane.showConfirmDialog(null, "Sua conta está desativada. Deseja reativar?", 
+                                                          "Conta Inativa", JOptionPane.YES_NO_OPTION);
+                if (opcao == JOptionPane.YES_OPTION) {
+                    ativarConta(user);
+                } else {
+                    return false;
+                }
+            }
         	IdController.logoffUser();
         	IdController.setIdUser(user.getUserId());
         	return true;
