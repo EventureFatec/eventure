@@ -19,16 +19,16 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout; // Layout usado para alternar entre telas
-    private JPanel contentPanel; // Painel que contém as telas
+    private JPanel contentPanel;
 
     public MainFrame() {
-        setTitle("Eventure | Cada evento é uma aventura!"); // Título da janela
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Inicia maximizado
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fecha a aplicação ao fechar a janela
-        setMinimumSize(new Dimension(1280, 720)); // Tamanho mínimo da janela
-        setLocationRelativeTo(null); // Centra a janela na tela
+        setTitle("Eventure | Cada evento é uma aventura!"); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(1280, 720)); 
+        setLocationRelativeTo(null);
 
-        // Inicializando o CardLayout e o painel que vai conter as telas
+        
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         
@@ -40,7 +40,8 @@ public class MainFrame extends JFrame {
         CommunityController communityController = CommunityController.getInstance();
         var u = userController.findUserById(0);
         var u2 = userController.findUserById(1);
-        communityController.createCommunity(u, "salve crias");
+        String caminho02 = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
+        communityController.createCommunity(u, "salve crias","descrição",caminho02);
         communityController.addUser(0, 1);
         communityController.addUser(0, 2);
         var comunidade = communityController.findCommunityById(0);
@@ -49,7 +50,7 @@ public class MainFrame extends JFrame {
         comunidade.addMessage(m);
         comunidade.addMessage(m2);
         
-        communityController.createCommunity(u, "teste");
+        communityController.createCommunity(u, "teste","descrição",caminho02);
         communityController.addUser(1, 1);
         communityController.addUser(1, 2);
         var comunidade02 = communityController.findCommunityById(1);
@@ -61,7 +62,7 @@ public class MainFrame extends JFrame {
         String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
         eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
                 "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
-                "orlando novaes", "300", "casa",Visibilidade.PUBLICO);
+                "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
         
         // Adiciona as telas (pages) no contentPanel
         WelcomePage welcomePage = new WelcomePage(this);

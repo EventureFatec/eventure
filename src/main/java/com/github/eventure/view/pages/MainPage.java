@@ -24,6 +24,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -31,6 +32,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -42,6 +45,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
@@ -52,6 +56,7 @@ import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.SettingsPanel;
 import com.github.eventure.view.components.ThemeManager;
+import com.github.eventure.view.components.CommunityAllPanel;
 import com.github.eventure.view.components.CommunityPanel;
 import com.github.eventure.view.components.ConfirmarPresencaPanel;
 import com.github.eventure.view.components.CreateEventPanel;
@@ -61,6 +66,8 @@ import com.github.eventure.view.components.EventPanelPresenca;
 import com.github.eventure.view.components.EventRequestPanel;
 import com.github.eventure.view.components.EventRequestsContainer;
 import com.github.eventure.view.components.ProfilePage;
+import com.github.eventure.view.components.SettingsPanel;
+import com.github.eventure.view.components.ThemeManager;
 
 
 public class MainPage extends JPanel {
@@ -89,7 +96,6 @@ public class MainPage extends JPanel {
         topbar.setLayout(new BorderLayout());
         topbar.setBackground(new Color(0xe5d8fd));
         topbar.setPreferredSize(new Dimension(0, 48)); // Define a altura da barra superior
-
         // Galeria (plano de fundo)
         galleryPanel = new JPanel();
         galleryPanel.setLayout(null); // hbox layout #F8F8F8
@@ -417,8 +423,22 @@ public class MainPage extends JPanel {
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
         btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEditEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
             var editPanel = new EventPanelEdit(this);
             showMainPanel(editPanel, 0);
+        	}
         });
         configurarBotaoSidebar(btnEditEventSB);
 
@@ -426,8 +446,22 @@ public class MainPage extends JPanel {
         JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
         configurarBotaoSidebar(btnConsultEventSB);
         btnConsultEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento para consultar deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
         	var eventPanelForConsult = new EventPanelForConsult(this);
         	showMainPanel(eventPanelForConsult, 0);
+        	}
         });
 
         ImageIcon sbpresenceIcn = new ImageIcon(getClass().getResource("/Sidebar/PresenceSB.png"));
@@ -437,16 +471,29 @@ public class MainPage extends JPanel {
         	var eventPanelPresenca = new EventPanelPresenca(this);
         	showMainPanel(eventPanelPresenca, 0);
         });
+        
+        ImageIcon sbSolicitacoes = new ImageIcon(getClass().getResource("/Sidebar/solicitacoes.png"));
+        JButton sbBtnSolicitacoes = new JButton(sbSolicitacoes);
+        configurarBotaoSidebar(sbBtnSolicitacoes);
+        sbBtnSolicitacoes.addActionListener(e ->{
+            EventRequestsContainer erc = new EventRequestsContainer();
+            showMainPanel(erc, 1);	
+        });
 
-        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
+        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/Comunidades.png"));
         JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
         configurarBotaoSidebar(btnHelpCenterSB);
+        
 
         ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
         JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
         configurarBotaoSidebar(btnSocialMediaSB);
+        btnSocialMediaSB.addActionListener(e -> {
+        	CommunityAllPanel communityAllPanel = new CommunityAllPanel();
+        	showMainPanel(communityAllPanel, 1);
+        });
 
-        // Separador
+        
         JPanel separator = new JPanel();
         separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 3));
         separator.setBackground(new Color(0xCCCCCC)); // cor da linha
@@ -469,10 +516,12 @@ public class MainPage extends JPanel {
         sidebar.add(btnEditEventSB);
         sidebar.add(btnConsultEventSB);
         sidebar.add(btnPresenceSB);
+        sidebar.add(sbBtnSolicitacoes);
         sidebar.add(Box.createVerticalStrut(12));
         sidebar.add(separator2);
         sidebar.add(Box.createVerticalStrut(12));
         sidebar.add(btnHelpCenterSB);
+        sidebar.add(sbBtnSolicitacoes);
         sidebar.add(btnSocialMediaSB);
 
         // Mouse Listener do Sidebar (Irá ler a posição do mouse)
@@ -489,6 +538,7 @@ public class MainPage extends JPanel {
                 btnEditEventSB.setVisible(true);
                 btnConsultEventSB.setVisible(true);
                 btnPresenceSB.setVisible(true);
+                sbBtnSolicitacoes.setVisible(true);
                 separator2.setVisible(true);
                 btnHelpCenterSB.setVisible(true);
                 btnSocialMediaSB.setVisible(true);
@@ -511,6 +561,7 @@ public class MainPage extends JPanel {
                         btnEditEventSB.setVisible(true);
                         btnConsultEventSB.setVisible(true);
                         btnPresenceSB.setVisible(true);
+                        sbBtnSolicitacoes.setVisible(true);
                         separator2.setVisible(true);
                         btnHelpCenterSB.setVisible(true);
                         btnSocialMediaSB.setVisible(true);
@@ -645,7 +696,6 @@ public class MainPage extends JPanel {
         ExibirEvents(events);
     }
 
-    // Exibe os eventos da lista passada (pode ser todos, pode ser filtrados)
     public void ExibirEvents(List<Event> events) {
         galleryPanel.removeAll();
 
@@ -703,6 +753,7 @@ public class MainPage extends JPanel {
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }
+    
     public void closePanel() {
         galleryPanel.removeAll();    
         galleryPanel.setLayout(null);  
@@ -710,30 +761,27 @@ public class MainPage extends JPanel {
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }
-
     private void showSettingsDialog() {
-    JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Configurações", true);
-    dialog.setSize(300, 150);
-    dialog.setLocationRelativeTo(null);
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Configurações", true);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(null);
 
-    SettingsPanel settingsPanel = new SettingsPanel(() -> {
-        applyTheme();
-        dialog.dispose();
-    });
+        SettingsPanel settingsPanel = new SettingsPanel(() -> {
+            applyTheme();
+            dialog.dispose();
+        });
 
-    dialog.setContentPane(settingsPanel);
-    dialog.setVisible(true);
-}
+        dialog.setContentPane(settingsPanel);
+        dialog.setVisible(true);
+    }
 
-private void applyTheme() {
-    Color bg = ThemeManager.getBackgroundColor();
+    private void applyTheme() {
+        Color bg = ThemeManager.getBackgroundColor();
 
-//    this.setBackground(bg);
-    galleryPanel.setBackground(bg);
-    topbar.setBackground(new Color(0x9F96B0));
-    sidebar.setBackground(new Color(0x9F96B0));
-}
-
-
+//        this.setBackground(bg);
+        galleryPanel.setBackground(bg);
+        topbar.setBackground(new Color(0x9F96B0));
+        sidebar.setBackground(new Color(0x9F96B0));
+    }
 
 }

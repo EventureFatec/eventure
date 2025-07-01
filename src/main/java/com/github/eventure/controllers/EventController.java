@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import com.github.eventure.model.Address;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.User;
 import com.github.eventure.model.Visibilidade;
 import com.github.eventure.model.address.Cep;
 import com.github.eventure.storage.Storage;
@@ -31,6 +32,21 @@ public class EventController {
 			instance = new EventController();
 		}
 		return instance;
+	}
+	
+	public void desativarEventosDoUsuario(int userId) {
+	    for (Event e : eventController) {
+	        if (e.getIdMaker() == userId) {
+	            e.setAtivo(false);
+	        }
+	    }
+	}
+	public void ativarEventosDoUsuario(int userId) {
+	    for (Event e : eventController) {
+	        if (e.getIdMaker() == userId) {
+	            e.setAtivo(true);
+	        }
+	    }
 	}
 
 	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,String dateEnd,
@@ -200,12 +216,16 @@ public class EventController {
 	// se o criador do evento aceitar
 	public void adicionarParticipante(int idEvent, int idUser)
 	{
+		UserController userController = UserController.getInstance();
 		Event event = findEventById(idEvent);
+		User user = userController.findUserById(idUser);
 		if(!event.usersParticipaOuNão(idUser))
 		{
 		 if(event.getVisibilidade() == Visibilidade.PUBLICO)
 		 {
+			 user.addListaEventos(idEvent);
 			event.addConfirmedParticipantIds(idUser);
+			
 			JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
 			//  evento publico
 		 }else
@@ -285,7 +305,7 @@ public class EventController {
 	}
 
 	public List<Event> getAllEvents() {
-		return eventController.toList();
+		return eventController.find(Event::isAtivo).toList();
 	}
 
 	public List<Event> filterEventByPesquisa(String pesquisa) {

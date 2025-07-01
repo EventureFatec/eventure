@@ -22,9 +22,9 @@ import com.github.eventure.model.User;
 public class EventRequestsContainer extends JPanel {
     public EventRequestsContainer() {
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(1130, 590));
+        setPreferredSize(new Dimension(600, 540));
         
-        // Recuperar usuário logado
+        
         int userId = IdController.getIdUser();
         UserController userController = UserController.getInstance();
         EventController eventController = EventController.getInstance();
@@ -35,6 +35,7 @@ public class EventRequestsContainer extends JPanel {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
+        contentPanel.setPreferredSize(null);
 
         for (int eventId : user.getMyEventsList()) {
             Event event = eventController.findEventById(eventId);
@@ -66,6 +67,7 @@ public class EventRequestsContainer extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());

@@ -9,7 +9,7 @@ public class User {
     public User() {
     	
     }
-
+    private boolean ativo = true;
     private String name;
     private String email;
     private String username;
@@ -37,15 +37,24 @@ public class User {
     }
 
     // Getters e Setters
+    
+    
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public void setName(String name) {
         this.name = name;
     }
-
-    public Password getPassword() {
+	public Password getPassword() {
         return password;
     }
 
@@ -151,6 +160,16 @@ public class User {
     }
     public void removeCommunityList(int idComunity) {
     	communityList.remove(idComunity);
+    }
+    
+    public void desativarUser()
+    {
+    	this.ativo = false;
+    }
+    
+    public void ativarUser()
+    {
+    	this.ativo = true;
     }
     
 }

@@ -3,6 +3,7 @@ package com.github.eventure.controllers;
 import java.util.List;
 
 import com.github.eventure.model.Community;
+import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
 import com.github.eventure.storage.Storage;
 
@@ -20,9 +21,14 @@ public class CommunityController {
         return instance;
     }
 
-	public void createCommunity(User u, String nome) {
-		var community = new Community(nome, u.getUserId(), generateId());
+	public void createCommunity(User u, String nome,String descricao,String caminho) {
+		var community = new Community();
+		community.setName(nome);
+		community.setIdMaker(u.getUserId());
+		community.setDescription(descricao);
+		community.setImagePath(caminho);
 		community.addUserList(u.getUserId());
+		community.setIdCommunity(generateId());
 		u.addCommunityList(community.getIdCommunity());
 		communities.add(community);
 	}
@@ -83,5 +89,12 @@ public class CommunityController {
 
 	public static int generateId() {
 		return lastGeneratedId++;
+	}
+	public List<Community> getAllCommunities() {
+		return communities.toList();
+	}
+	public static int returnUltimoId()
+	{
+		return lastGeneratedId;
 	}
 }

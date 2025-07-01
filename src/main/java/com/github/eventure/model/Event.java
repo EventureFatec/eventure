@@ -8,6 +8,7 @@ import java.util.List;
 import com.github.eventure.model.address.Cep;
 
 public class Event {
+	public boolean ativo = true;
 	private int id;
 	private int idMaker;
 	private String title;
@@ -58,6 +59,14 @@ public class Event {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	public int getIdMaker() {
