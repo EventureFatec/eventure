@@ -9,7 +9,7 @@ public class User {
     public User() {
     	
     }
-
+    private boolean ativo = true;
     private String name;
     private String email;
     private String username;
@@ -45,7 +45,16 @@ public class User {
         this.name = name;
     }
 
-    public Password getPassword() {
+    
+    public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public Password getPassword() {
         return password;
     }
 

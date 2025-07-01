@@ -124,7 +124,7 @@ public class ProfilePage extends JPanel {
         buttons.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0));
         buttons.setOpaque(false);
 
-        buttons.add(button("Save", new Color(76, 175, 80), e -> {
+        buttons.add(button("Salvar", new Color(76, 175, 80), e -> {
             if (Arrays.equals(password.getPassword(), password2.getPassword())) {
                 ApplyChanges();
             } else {
@@ -132,7 +132,7 @@ public class ProfilePage extends JPanel {
             }
         }));
 
-        buttons.add(button("Exit", new Color(244, 67, 54), e -> {
+        buttons.add(button("Sair", new Color(244, 67, 54), e -> {
             int option = JOptionPane.showConfirmDialog(null, "Deseja sair da conta?", "Confirmação",
                     JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
@@ -149,15 +149,20 @@ public class ProfilePage extends JPanel {
             }
         }));
 
-        buttons.add(button("Delete", new Color(45, 45, 65), e -> {
+        buttons.add(button("Deletar Conta", new Color(45, 45, 65), e -> {
             int option = JOptionPane.showConfirmDialog(null, "Deseja excluir sua conta?", "Confirmação",
                     JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                //UserController.getInstance().deleteUser(loggedUser.getUserId());
-                //Session.logout();
+                UserController.getInstance().desativarConta(loggedUser);
+                Session.logout();
+                Container parent = this.getParent();
+
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 if (frame instanceof MainFrame mainFrame) {
                     mainFrame.showPanel("welcome");
+                }
+                if (mainPage != null) {
+                    mainPage.closePanel();
                 }
             }
         }));

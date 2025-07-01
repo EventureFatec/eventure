@@ -42,6 +42,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
@@ -417,8 +418,22 @@ public class MainPage extends JPanel {
         JButton btnEditEventSB = new JButton(sbeditEventIcn);
         btnEditEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEditEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
             var editPanel = new EventPanelEdit(this);
             showMainPanel(editPanel, 0);
+        	}
         });
         configurarBotaoSidebar(btnEditEventSB);
 
@@ -426,8 +441,22 @@ public class MainPage extends JPanel {
         JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
         configurarBotaoSidebar(btnConsultEventSB);
         btnConsultEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento para consultar deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
         	var eventPanelForConsult = new EventPanelForConsult(this);
         	showMainPanel(eventPanelForConsult, 0);
+        	}
         });
 
         ImageIcon sbpresenceIcn = new ImageIcon(getClass().getResource("/Sidebar/PresenceSB.png"));
@@ -437,6 +466,14 @@ public class MainPage extends JPanel {
         	var eventPanelPresenca = new EventPanelPresenca(this);
         	showMainPanel(eventPanelPresenca, 0);
         });
+        
+        ImageIcon sbSolicitacoes = new ImageIcon(getClass().getResource("/Sidebar/solicitacoes.png"));
+        JButton sbBtnSolicitacoes = new JButton(sbSolicitacoes);
+        configurarBotaoSidebar(sbBtnSolicitacoes);
+        sbBtnSolicitacoes.addActionListener(e ->{
+            EventRequestsContainer erc = new EventRequestsContainer();
+            showMainPanel(erc, 1);	
+        });
 
         ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/HelpCenterSB.png"));
         JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
@@ -445,6 +482,10 @@ public class MainPage extends JPanel {
         ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
         JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
         configurarBotaoSidebar(btnSocialMediaSB);
+        btnSocialMediaSB.addActionListener(e -> {
+//        	CommunityAllPanel communityAllPanel = new CommunityAllPanel();
+//        	showMainPanel(communityAllPanel, 1);
+        });
 
         // Separador
         JPanel separator = new JPanel();
@@ -469,6 +510,7 @@ public class MainPage extends JPanel {
         sidebar.add(btnEditEventSB);
         sidebar.add(btnConsultEventSB);
         sidebar.add(btnPresenceSB);
+        sidebar.add(sbBtnSolicitacoes);
         sidebar.add(Box.createVerticalStrut(12));
         sidebar.add(separator2);
         sidebar.add(Box.createVerticalStrut(12));
@@ -489,6 +531,7 @@ public class MainPage extends JPanel {
                 btnEditEventSB.setVisible(true);
                 btnConsultEventSB.setVisible(true);
                 btnPresenceSB.setVisible(true);
+                sbBtnSolicitacoes.setVisible(true);
                 separator2.setVisible(true);
                 btnHelpCenterSB.setVisible(true);
                 btnSocialMediaSB.setVisible(true);
@@ -511,6 +554,7 @@ public class MainPage extends JPanel {
                         btnEditEventSB.setVisible(true);
                         btnConsultEventSB.setVisible(true);
                         btnPresenceSB.setVisible(true);
+                        sbBtnSolicitacoes.setVisible(true);
                         separator2.setVisible(true);
                         btnHelpCenterSB.setVisible(true);
                         btnSocialMediaSB.setVisible(true);

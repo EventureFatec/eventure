@@ -32,6 +32,21 @@ public class EventController {
 		}
 		return instance;
 	}
+	
+	public void desativarEventosDoUsuario(int userId) {
+	    for (Event e : eventController) {
+	        if (e.getIdMaker() == userId) {
+	            e.setAtivo(false);
+	        }
+	    }
+	}
+	public void ativarEventosDoUsuario(int userId) {
+	    for (Event e : eventController) {
+	        if (e.getIdMaker() == userId) {
+	            e.setAtivo(true);
+	        }
+	    }
+	}
 
 	public void createEvent(int idMaker, String title, String description, EventClassification type, String date,String dateEnd,
 			String startHours, String endHours, String caminho, String cep, String estado, String cidade, String bairro,
@@ -285,7 +300,7 @@ public class EventController {
 	}
 
 	public List<Event> getAllEvents() {
-		return eventController.toList();
+		return eventController.find(Event::isAtivo).toList();
 	}
 
 	public List<Event> filterEventByPesquisa(String pesquisa) {
