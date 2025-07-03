@@ -40,7 +40,6 @@ public class UserController {
         eventController.ativarEventosDoUsuario(user.getUserId());
     }
     public boolean createUser(String firstName, String username, String password, String email) {
-        // Instantiate the user
         var u = new User();
         u.setName(firstName);
         EmailController emailTest = new EmailController();
@@ -64,7 +63,7 @@ public class UserController {
         	JOptionPane.showMessageDialog(null, "Usuario ja cadastrado.");
         	return false;
         }
-        // Create the password hash
+        
         if(validarSenha(password))
         {
             var salt = Encryption.generateSalt();
@@ -81,10 +80,8 @@ public class UserController {
             int id = UserController.generateId();
             u.setUserId(id);
             userStorage.add(u);
-            System.out.println("user id = "+u.getUserId());
             JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
             IdController.setIdUser(u.getUserId());
-            System.out.println("user idController = "+IdController.getIdUser());
             return true;
         }
         
@@ -92,7 +89,6 @@ public class UserController {
     }
 
     public User createUser(String firstName, String lastName, String password, String email, String cpf) {
-        // Instantiate the user
         var u = new User();
         u.setName(firstName + " " + lastName);
         EmailController emailTest = new EmailController();
@@ -107,7 +103,6 @@ public class UserController {
             u.setCpf(cpf);
             u.setOrganazador(true);
         }
-        // Create the password hash
         var salt = Encryption.generateSalt();
         var hash = Encryption.generateHash(password, salt);
         var passwordClass = new Password();
@@ -120,7 +115,6 @@ public class UserController {
             userStorage.add(u);
         }
 
-        // Return the user
         return u;
     }
 
@@ -157,8 +151,6 @@ public class UserController {
     }
 
     public void cloneUser(String name, String username, String password, String email, String cpf,String imagePath, int id) {
-        // Instantiate the user
-    	System.out.println("dentro do clone user");
         var userCloned = new User();
         userCloned.setName(name);
         userCloned.setUsername(username);
@@ -175,7 +167,7 @@ public class UserController {
         if (cpfValid) {
             userCloned.setCpf(cpf);
         }
-        // Create the password hash
+        
         if(!password.isEmpty())
         {
         var salt = Encryption.generateSalt();
@@ -185,8 +177,7 @@ public class UserController {
         passwordClass.setPasswordHash(hash);
         userCloned.setPassword(passwordClass);
         }
-        // arrumar esse metodo pois não posso gerar uma salt nova o que vai mudar a
-        // senha totalmente
+
 
         if (userCloned.getName() != null || userCloned.getPassword() != null || userCloned.getName() != null
                 || cpfValid || userCloned.getProfilePic() != null) {
@@ -196,8 +187,6 @@ public class UserController {
         }
 
         applyChanges(id, userCloned);
-        System.out.println("Modificado (cloneUser)");
-
     }
 
     public void deleteUser(User u) {
@@ -226,22 +215,17 @@ public class UserController {
     }
 
     public boolean login(String emailOrusername, String password) {
-    // Procura o usuário no storage
-//    print();
     User user = findUserByEmail(emailOrusername);
-//    System.out.println("usuario = "+user);
     if(user == null)
     {
     	user = findUserByUsername(emailOrusername);
     }  
     if (user != null) {
-        // Verifica a senha
+        
         Password userPassword = user.getPassword();
-//        System.out.println(user.getPassword().getPasswordSalt().toString());
         byte[] salt = user.getPassword().getPasswordSalt();
         byte[] hash = Encryption.generateHash(password, salt);
         boolean loginValido = Encryption.checkHashes(hash, user.getPassword().getPasswordHash());
-//        System.out.println("Hashes são iguais? " + loginValido);
         if(loginValido) {
             if (!user.isAtivo()) {
                 int opcao = JOptionPane.showConfirmDialog(null, "Sua conta está desativada. Deseja reativar?", 
@@ -260,7 +244,6 @@ public class UserController {
         }
     }
 
-    // Caso o usuário não seja encontrado
     return false;
 }
     public User findUserByEmailOrUsername(String emailOrUsername) {
@@ -283,7 +266,6 @@ public class UserController {
             System.out.println("id = "+u.getUserId());
             System.out.println("nome = "+u.getName());
             System.out.println("email = "+u.getEmail());
-//            System.out.println(u.getCpf());
             System.out.println("hash = "+u.getPassword().getPasswordHash().toString());
             System.out.println("salt = "+u.getPassword().getPasswordSalt().toString());
         }
@@ -358,8 +340,6 @@ public class UserController {
     }
 
     public boolean applyChanges(int id, User userCloned) {
-    	System.out.println("dentro do apply");
-    	System.out.println("imagem apply = "+userCloned.getProfilePic());
         var storedUser = findUserById(id);
 
         if (!(storedUser.getName() == userCloned.getName()) && userCloned.getName() != null) storedUser.setName(userCloned.getName());
@@ -381,7 +361,6 @@ public class UserController {
 
     }
     public boolean createUserSemMessageBox(String firstName, String username, String password, String email) {
-        // Instantiate the user
         var u = new User();
         u.setName(firstName);
         EmailController emailTest = new EmailController();
@@ -405,7 +384,6 @@ public class UserController {
         	JOptionPane.showMessageDialog(null, "Usuario ja cadastrado.");
         	return false;
         }
-        // Create the password hash
         if(validarSenha(password))
         {
             var salt = Encryption.generateSalt();
@@ -422,10 +400,7 @@ public class UserController {
             int id = UserController.generateId();
             u.setUserId(id);
             userStorage.add(u);
-            System.out.println("user id = "+u.getUserId());
-//            JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
             IdController.setIdUser(u.getUserId());
-            System.out.println("user idController = "+IdController.getIdUser());
             return true;
         }
         

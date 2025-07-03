@@ -23,7 +23,6 @@ public class EventPanelForPresenca extends JPanel {
     public EventPanelForPresenca(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
-        // Tamanho fixo do painel
         Dimension panelSize = new Dimension(300, 240);
         setPreferredSize(panelSize);
         setMaximumSize(panelSize);
@@ -68,7 +67,6 @@ public class EventPanelForPresenca extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
                 var confirmarPresencaPanel = new ConfirmarPresencaPanel(idEvento , mainPage);
-                // chamar a tela exibir evento completo
                 mainPage.showMainPanel(confirmarPresencaPanel,1);
             }
         });

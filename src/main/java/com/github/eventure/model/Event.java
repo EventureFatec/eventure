@@ -23,6 +23,7 @@ public class Event {
 	private Address address;
 	private Cep cep;
 	private Visibilidade visibilidade; // verifica se o evento é privado ou publico
+	private List<Integer> participacaoConfirmada = new ArrayList<>(); // usuarios que foram no evento
 	private List<Integer> confirmedParticipantIds = new ArrayList<>(); // usuario que estão confirmados nos eventos
 	private List<Integer> pendingRequestIds = new ArrayList<>(); /* lista para caso se o evento for privado
 	o criador do evento vai ter essa lista com os id para ele decidir se confirma a participação ou não dos 
@@ -166,7 +167,8 @@ public class Event {
 	}
 
 	public void removeConfirmedParticipantIds(int id) {
-		confirmedParticipantIds.remove(id);
+	    boolean removed = confirmedParticipantIds.remove(Integer.valueOf(id));
+	    System.out.println("Removido? " + removed);
 	}
 	public void setConfirmedParticipantIds(List<Integer> confirmedParticipantIds) {
 		this.confirmedParticipantIds = confirmedParticipantIds;
@@ -213,6 +215,22 @@ public class Event {
 	public void setVisibilidade(Visibilidade visibilidade) {
 		this.visibilidade = visibilidade;
 	}
+
+	public List<Integer> getParticipacaoConfirmada() {
+		return participacaoConfirmada;
+	}
+
+	public void setParticipacaoConfirmada(List<Integer> participacaoConfirmada) {
+		this.participacaoConfirmada = participacaoConfirmada;
+	}
+    public void addParticipaoConfirmada(int idEvento) {
+    	participacaoConfirmada.add(idEvento);
+    }
+    public void removeParticipaoConfirmada(int idEvento) {
+    	 boolean removed = participacaoConfirmada.remove(Integer.valueOf(idEvento));
+ 	    System.out.println("Removido? " + removed);
+    }
+	
     
 	
 }

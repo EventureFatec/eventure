@@ -11,6 +11,6 @@ public class Storage<T> extends ArrayList<T> {
     }
     
     public List<T> toList() {
-        return new ArrayList<>(this); // Cria uma nova lista com os elementos atuais
+        return new ArrayList<>(this); 
     }
 }

@@ -7,8 +7,8 @@ import java.awt.*;
 public class ModernScrollBarUI extends BasicScrollBarUI {
     @Override
     protected void configureScrollBarColors() {
-        thumbColor = new Color(142, 108, 255); // roxo suave
-        trackColor = new Color(245, 245, 245); // fundo claro
+        thumbColor = new Color(142, 108, 255); 
+        trackColor = new Color(245, 245, 245); 
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ModernScrollBarUI extends BasicScrollBarUI {
 
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
-        // transparente ou cor de fundo neutra
+        
     }
 
     @Override

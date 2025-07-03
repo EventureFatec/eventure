@@ -5,7 +5,6 @@ import java.time.LocalTime;
 public class Message {
 	private String message;
 	private String horario;
-	// guardar o horario que a mensagem foi enviada
 	private String name;
 	private int idUser;
 	public Message(String message,String horario,String name,int idUser)

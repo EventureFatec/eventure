@@ -20,7 +20,7 @@ public class ThemeManager {
         return darkMode ? DARK_BG : LIGHT_BG;
     }
 
-    // Pode ter também cores de texto, botão, etc
+   
     public static Color getForegroundColor() {
         return darkMode ? Color.WHITE : Color.BLACK;
     }

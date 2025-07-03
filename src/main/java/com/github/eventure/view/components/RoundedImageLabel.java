@@ -20,16 +20,16 @@ public class RoundedImageLabel extends JLabel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        int arc = 40; // Raio da borda
+        int arc = 40; 
 
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Cria uma máscara arredondada
+      
         Shape clip = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arc, arc);
         g2.setClip(clip);
 
-        // Desenha a imagem dentro da máscara
+       
         g2.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
         g2.dispose();

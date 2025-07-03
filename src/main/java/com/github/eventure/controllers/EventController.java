@@ -1,9 +1,11 @@
 
 package com.github.eventure.controllers;
 
+import java.util.ArrayList;
 //import java.time.LocalTime;
 //import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
@@ -91,7 +93,6 @@ public class EventController {
 
 	public void createEvent(int id, String description, String title, EventClassification type) {
 
-		System.out.println("deu certo");
 	}
 
 	public void deleteEvent(Event e) {
@@ -99,8 +100,22 @@ public class EventController {
 	}
 
 	public void deleteEventById(int id) {
-		// deletar caso o que eu tenha seja o id da empresa
 		var e = findEventById(id);
+		int idMaker = e.getIdMaker();
+		var userController = UserController.getInstance();
+		User userMaker = userController.findUserById(idMaker);
+		userMaker.removeListMyEvents(id);
+		for(int i = 0; i < e.getConfirmedParticipantIds().size(); i++)
+		{
+			int idUser = e.getConfirmedParticipantIds().get(i); 
+			var user = userController.findUserById(idUser);
+			user.removeListaEventos(id);
+		}
+		if(e.getVisibilidade() == Visibilidade.PRIVADO)
+		{
+			e.getPendingRequestIds().clear();
+		}
+		e.getParticipacaoConfirmada().clear();
 		eventController.remove(e);
 	}
 
@@ -115,6 +130,25 @@ public class EventController {
 	public List<Event> findEventsByTitleContaining(String title) {
 		return eventController.find(event -> event.getTitle().toLowerCase().contains(title.toLowerCase()))
 				.collect(Collectors.toList());
+	}
+	
+	public boolean haEventosPrivadosComRequisicoesPendentes(int id) {
+		var userController =  UserController.getInstance();
+		var user = userController.findUserById(id);
+	    var eventosId = user.getMyEventsList();
+	    List<Event> eventos = new ArrayList<>();
+	    for(int i = 0; i < eventosId.size(); i++)
+	    {
+	    	eventos.add(findEventById(eventosId.get(i)));
+	    }
+	    int contador = 0;
+
+	    for (Event e : eventos) {
+	        if (e.getVisibilidade() == Visibilidade.PRIVADO) {
+	            contador += e.getPendingRequestIds().size();
+	        }
+	    }
+	    return contador > 0;
 	}
 
 	public void eventClone(int idEvent, String title, String description, EventClassification type, String date, String dateEnd,
@@ -210,10 +244,16 @@ public class EventController {
 		}
 
 	}
+	public List<Integer> getConfirmadosQueNaoCompareceram(int eventId) {
+	    Event evento = findEventById(eventId);
+	    List<Integer> confirmados = evento.getConfirmedParticipantIds();
+	    List<Integer> compareceram = evento.getParticipacaoConfirmada();
+
+	    return confirmados.stream()
+	            .filter(id -> !compareceram.contains(id))
+	            .collect(Collectors.toList());
+	}
 	
-	// metodo para adicionar o usuario a lista de participantes de um evento sendo que se evento for publico
-	// ele adiciona automaticamente se não for ele adiciona a lista de solicitaçoes que o usuario so é adicionado
-	// se o criador do evento aceitar
 	public void adicionarParticipante(int idEvent, int idUser)
 	{
 		UserController userController = UserController.getInstance();
@@ -227,7 +267,6 @@ public class EventController {
 			event.addConfirmedParticipantIds(idUser);
 			
 			JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
-			//  evento publico
 		 }else
 		  {
 			 if(event.usersParticipaOuNãoListPending(idUser))
@@ -235,11 +274,8 @@ public class EventController {
 				 JOptionPane.showMessageDialog(null, "Você já solicitou participação neste evento.");
 				 return;
 			 }
-			 // evento privado
-			 // adiciona o usuario a uma lista que o criador vai decidir se confirma ou não a participação
 			 JOptionPane.showInternalMessageDialog(null,"Pedido para participar enviado");
-			 System.out.println("privado o evento");
-			event.addPendingRequestIds(idUser);
+			 event.addPendingRequestIds(idUser);
 		  }
 		}else {
 			JOptionPane.showMessageDialog(null, "Você já participa desse evento!");
@@ -254,6 +290,16 @@ public class EventController {
 		user.addListaEventos(idEvent);
 		event.removePendingRequestIds(idUser);
 	    JOptionPane.showInternalMessageDialog(null,"Presença confirmada");
+	}
+	
+	public void removerParticipante(int idEvent,int idUser)
+	{
+		Event event = findEventById(idEvent);
+		event.removeConfirmedParticipantIds(idUser);
+		UserController userController = UserController.getInstance();
+		var user = userController.findUserById(idUser);
+		user.removeListaEventos(idEvent);
+	    JOptionPane.showInternalMessageDialog(null,"Participação cancelada");
 	}
 	
 	public void negarParticipantesPrivateEvento(int idEvent,int idUser) {
@@ -296,6 +342,19 @@ public class EventController {
 			System.out.println("---------------------------");
 		}
 
+	}
+	public void ConfirmarPresenca(int idEvento, int idUser) {
+		var event = findEventById(idEvento); 
+		event.addParticipaoConfirmada(idUser);
+		var userController = UserController.getInstance();
+		var user = userController.findUserById(idUser);
+		user.addParticipaoConfirmada(idEvento);
+	}
+	
+	public void negarPresenca(int idEvento, int idUser)
+	{
+		var event = findEventById(idEvento); 
+		
 	}
 
 	public void filterCategories(List<EventClassification> eventClassification) {
@@ -347,9 +406,7 @@ public class EventController {
 			var user = userController.findUserById(idMaker);
 			user.addListMyEvents(e.getId());
 			eventController.add(e);
-//			JOptionPane.showMessageDialog(null, "Evento criado com sucesso!");
 		} else {
-			//JOptionPane.showMessageDialog(null, "Erro ao criar evento, Preencha os campos corretamente");
 		}
 
 	}

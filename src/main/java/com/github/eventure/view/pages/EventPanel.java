@@ -26,7 +26,7 @@ public class EventPanel extends JPanel {
     public EventPanel(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
-        // Tamanho fixo do painel
+        
         Dimension panelSize = new Dimension(300, 240);
         setPreferredSize(panelSize);
         setMaximumSize(panelSize);
@@ -71,7 +71,6 @@ public class EventPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
                 var displayEvent = new DisplayEvent(idEvento);
-                // chamar a tela exibir evento completo
                 mainPage.showMainPanel(displayEvent,1);
             }
         });

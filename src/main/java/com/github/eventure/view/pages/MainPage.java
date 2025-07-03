@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -45,6 +46,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.GeradorCertificado;
 import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.ImageController;
 import com.github.eventure.controllers.UserController;
@@ -56,10 +58,13 @@ import com.github.eventure.model.Visibilidade;
 import com.github.eventure.view.MainFrame;
 import com.github.eventure.view.components.SettingsPanel;
 import com.github.eventure.view.components.ThemeManager;
+import com.github.eventure.view.components.AllEventCertificadoPanel;
 import com.github.eventure.view.components.CommunityAllPanel;
 import com.github.eventure.view.components.CommunityPanel;
 import com.github.eventure.view.components.ConfirmarPresencaPanel;
 import com.github.eventure.view.components.CreateEventPanel;
+import com.github.eventure.view.components.DeleteAllEventPanel;
+import com.github.eventure.view.components.DisplayAllEvents;
 import com.github.eventure.view.components.DisplayEvent;
 import com.github.eventure.view.components.EventPanelEdit;
 import com.github.eventure.view.components.EventPanelPresenca;
@@ -81,32 +86,30 @@ public class MainPage extends JPanel {
     private JLayeredPane layeredPane;
     private final int SIDEBAR_COLLAPSED_WIDTH = 45;
     private final int SIDEBAR_EXPANDED_WIDTH = 300;
+    private int currentPageTodos = 0;
+    private int currentPageMeus = 0;
+    private final int pageSizeEvent = 3;
 
     public MainPage(MainFrame frame) {
         this.frame = frame;
         setLayout(new BorderLayout());
-        // setPreferredSize(1280, 720);
 
         layeredPane = new JLayeredPane();
         layeredPane.setLayout(null);
         add(layeredPane, BorderLayout.CENTER);
 
-        // Barra superior
         topbar = new JPanel();
         topbar.setLayout(new BorderLayout());
         topbar.setBackground(new Color(0xe5d8fd));
-        topbar.setPreferredSize(new Dimension(0, 48)); // Define a altura da barra superior
-        // Galeria (plano de fundo)
+        topbar.setPreferredSize(new Dimension(0, 48));
+
         galleryPanel = new JPanel();
-        galleryPanel.setLayout(null); // hbox layout #F8F8F8
-//        galleryPanel.setBackground(new Color(0x330065)); // roxo
+        galleryPanel.setLayout(null);
         galleryPanel.setBackground(new Color(0xF2F0F7));
-//        galleryPanel.setBackground(Color.WHITE);
         galleryPanel.setBounds(SIDEBAR_COLLAPSED_WIDTH, 0, frame.getWidth() - SIDEBAR_COLLAPSED_WIDTH,
                 frame.getWidth() - topbar.getHeight());
         layeredPane.add(galleryPanel, JLayeredPane.DEFAULT_LAYER);
 
-        // Logo Topbar
         ImageIcon icon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
         JLabel logo = new JLabel(icon);
         var leftPanel = new JPanel();
@@ -118,13 +121,11 @@ public class MainPage extends JPanel {
 
         ExibirEvents();
 
-        // Barra de pesquisa
         JPanel searchPanel = new JPanel();
         searchPanel.setOpaque(false); 
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // Campo de pesquisa
         JTextField searchField = new JTextField("Pesquisar...") {
             @Override
             protected void paintComponent(Graphics g) {
@@ -157,7 +158,6 @@ public class MainPage extends JPanel {
         searchField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         searchField.setForeground(Color.GRAY);
 
-        // Placeholder e ação
         searchField.addFocusListener(new FocusAdapter() {
             public void focusGained(FocusEvent e) {
                 if (searchField.getText().equals("Pesquisar...")) {
@@ -192,23 +192,16 @@ public class MainPage extends JPanel {
         searchPanel.add(Box.createHorizontalGlue());
         topbar.add(searchPanel, BorderLayout.CENTER);
 
-        // Botões da barra superior à direita
         JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtonsPanel.setOpaque(false);
-        // Botão Criar Evento
         JButton createEventButton = new JButton("Criar Evento") {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
                 int arc = getHeight();
-
-                // Fundo personalizado
-                g2.setColor(new Color(0x330065)); // FUNDO desejado (roxo escuro, por exemplo)
+                g2.setColor(new Color(0x330065)); 
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
-
-                // Texto centralizado
                 FontMetrics fm = g2.getFontMetrics();
                 String text = getText();
                 int textWidth = fm.stringWidth(text);
@@ -243,8 +236,7 @@ public class MainPage extends JPanel {
             User user = Session.getLoggedUser();
 
             if (user == null) {
-                JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser
-                                                                                     // exibido!
+                JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado.");                                                               
                 return;
             }
 
@@ -272,21 +264,18 @@ public class MainPage extends JPanel {
                             return;
                         }
                     } else {
-                        return; // cancelou o cadastro
+                        return; 
                     }
                 } else {
-                    return; // não quis se tornar organizador
+                    return; 
                 }
             }
-
-            // Continua para criação do evento
             var createEventPanel = new CreateEventPanel(user,this);
             showMainPanel(createEventPanel, 0);
         });
 
         rightButtonsPanel.add(createEventButton);
 
-        // Botão Chat
         ImageIcon chatIcon = new ImageIcon(getClass().getResource("/ChatButton.png"));
         JButton chatButton = new JButton(chatIcon);
         chatButton.setContentAreaFilled(false);
@@ -297,11 +286,9 @@ public class MainPage extends JPanel {
         chatButton.addActionListener(e -> {
             CommunityPanel communityPanel = new CommunityPanel(this);
             showMainPanel(communityPanel, 0);
-           // ExibirEvents();
         });
         rightButtonsPanel.add(chatButton);
 
-        // Botão Notificação
         ImageIcon bellIcon = new ImageIcon(getClass().getResource("/BellButton.png"));
         JButton bellButton = new JButton(bellIcon);
         bellButton.setContentAreaFilled(false);
@@ -310,20 +297,12 @@ public class MainPage extends JPanel {
         bellButton.setOpaque(false);
         bellButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         bellButton.addActionListener(e -> {
-            var evt = EventController.getInstance();
-            var eventClassification = EventClassification.GASTRONOMY;
-
-            var img = new ImageController();
-            String path = img.selecionarImagem();
-            evt.createEvent(0, "feira de gastronomia", "uma feira cheia de delicias", eventClassification, "20/02/2021","21/03/2022",
-                    "15:30", "16:00", path, "12760000", "São paulo", "lavrinhas", "capela do jacu",
-                    "geraldo nogueira de sa", "100", "casa",Visibilidade.PRIVADO);
-            ExibirEvents();
+        	var deleteEventPanel = new DeleteAllEventPanel(this);
+        	showMainPanel(deleteEventPanel, 0);
         });
 
         rightButtonsPanel.add(bellButton);
 
-        // Botão Perfil
         ImageIcon profileIcon = new ImageIcon(getClass().getResource("/UserButton.png"));
         JButton profileButton = new JButton(profileIcon);
         profileButton.setContentAreaFilled(false);
@@ -338,19 +317,17 @@ public class MainPage extends JPanel {
         rightButtonsPanel.add(profileButton);
 
         topbar.add(rightButtonsPanel, BorderLayout.EAST);
-        // Barra lateral
         sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setBackground(new Color(0xe5d8fd));
         sidebar.setBounds(0, 0, SIDEBAR_COLLAPSED_WIDTH, 1080);
 
-        // Botões da barra lateral
 
         ImageIcon sbhomeIcon = new ImageIcon(getClass().getResource("/Sidebar/HomeButton.png"));
         JButton btnInicio = new JButton(sbhomeIcon);
         btnInicio.addActionListener(e -> {
             galleryPanel.removeAll();
-            galleryPanel.setLayout(null); // Volta ao estado original se necessário
+            galleryPanel.setLayout(null); 
             ExibirEvents();
             galleryPanel.revalidate();
             galleryPanel.repaint();
@@ -377,8 +354,8 @@ public class MainPage extends JPanel {
         	  User user = Session.getLoggedUser();
 
               if (user == null) {
-                  JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado."); // esse erro não é para ser
-                                                                                       // exibido!
+                  JOptionPane.showMessageDialog(null, "Erro: Nenhum usuário logado.");
+                                                                                       
                   return;
               }
 
@@ -406,14 +383,12 @@ public class MainPage extends JPanel {
                               return;
                           }
                       } else {
-                          return; // cancelou o cadastro
+                          return; 
                       }
                   } else {
-                      return; // não quis se tornar organizador
+                      return;
                   }
               }
-
-              // Continua para criação do evento
               var createEventPanel = new CreateEventPanel(user,this);
               showMainPanel(createEventPanel, 0);
         });
@@ -441,6 +416,39 @@ public class MainPage extends JPanel {
         	}
         });
         configurarBotaoSidebar(btnEditEventSB);
+        
+        ImageIcon sbDeleteEventIcn = new ImageIcon(getClass().getResource("/Sidebar/excluireventos.png"));
+        JButton btnDeleteEventSB = new JButton(sbDeleteEventIcn);
+        btnDeleteEventSB.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnDeleteEventSB.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	}else {
+            var deletePanel = new DeleteAllEventPanel(this);
+            showMainPanel(deletePanel, 0);
+        	}
+        });
+        configurarBotaoSidebar(btnDeleteEventSB);
+        
+        ImageIcon sbTodosEventos = new ImageIcon(getClass().getResource("/Sidebar/todosEventos1.png"));
+        JButton sbBtnTodosEventos = new JButton(sbTodosEventos);
+        configurarBotaoSidebar(sbBtnTodosEventos);
+        sbBtnTodosEventos.addActionListener(e ->{
+        	var Allevent = new DisplayAllEvents(this);
+            showMainPanel(Allevent, 0);
+        });
+
+        
 
         ImageIcon sbconsultEventIcn = new ImageIcon(getClass().getResource("/Sidebar/ConsultEventSB.png"));
         JButton btnConsultEventSB = new JButton(sbconsultEventIcn);
@@ -468,43 +476,94 @@ public class MainPage extends JPanel {
         JButton btnPresenceSB = new JButton(sbpresenceIcn);
         configurarBotaoSidebar(btnPresenceSB);
         btnPresenceSB.addActionListener(e -> {
-        	var eventPanelPresenca = new EventPanelPresenca(this);
-        	showMainPanel(eventPanelPresenca, 0);
+        	var userController = UserController.getInstance();
+        	User user = userController.findUserById(IdController.getIdUser());
+        	if(user.getMyEventsList().size() == 0)
+        	{
+        		int result = JOptionPane.showConfirmDialog(null, "Você não tem nenhum evento deseja criar um ?","Confirmação",JOptionPane.YES_NO_OPTION);
+        		if(result == JOptionPane.YES_OPTION)
+        		{
+        			btnCreateEventSB.doClick();
+        		}else
+        		{
+        			return;
+        		}
+        	 }else
+        	  {
+        		var eventPanelPresenca = new EventPanelPresenca(this);
+            	showMainPanel(eventPanelPresenca, 0);
+        	  }
         });
         
         ImageIcon sbSolicitacoes = new ImageIcon(getClass().getResource("/Sidebar/solicitacoes.png"));
         JButton sbBtnSolicitacoes = new JButton(sbSolicitacoes);
         configurarBotaoSidebar(sbBtnSolicitacoes);
         sbBtnSolicitacoes.addActionListener(e ->{
-            EventRequestsContainer erc = new EventRequestsContainer();
-            showMainPanel(erc, 1);	
+        	var eventController = EventController.getInstance();
+        	if(!eventController.haEventosPrivadosComRequisicoesPendentes(IdController.getIdUser()))
+        	{
+                JOptionPane.showMessageDialog(null, "Nenhuma requisição no momento");
+        	}else
+        	 {
+                EventRequestsContainer erc = new EventRequestsContainer();
+                showMainPanel(erc, 1);	
+        	 }
         });
 
-        ImageIcon sbhelpCenterIcn = new ImageIcon(getClass().getResource("/Sidebar/Comunidades.png"));
-        JButton btnHelpCenterSB = new JButton(sbhelpCenterIcn);
-        configurarBotaoSidebar(btnHelpCenterSB);
-        
-
-        ImageIcon sbsocialMediaIcn = new ImageIcon(getClass().getResource("/Sidebar/SocialMediaSB.png"));
-        JButton btnSocialMediaSB = new JButton(sbsocialMediaIcn);
-        configurarBotaoSidebar(btnSocialMediaSB);
-        btnSocialMediaSB.addActionListener(e -> {
+        ImageIcon sbComunidades = new ImageIcon(getClass().getResource("/Sidebar/Comunidades.png"));
+        JButton btnComunidades = new JButton(sbComunidades);
+        configurarBotaoSidebar(btnComunidades);
+        btnComunidades.addActionListener(e ->{
         	CommunityAllPanel communityAllPanel = new CommunityAllPanel();
         	showMainPanel(communityAllPanel, 1);
+        });
+        
+        ImageIcon sbEmitirCertificado = new ImageIcon(getClass().getResource("/Sidebar/emitircertificado.png"));
+        JButton btnEmitirCertificado = new JButton(sbEmitirCertificado);
+        configurarBotaoSidebar(btnEmitirCertificado);
+        btnEmitirCertificado.addActionListener(e -> {
+        	var userController = UserController.getInstance();
+        	var user = userController.findUserById(IdController.getIdUser());
+        	if(user.getParticipaoConfirmada().size() > 0)
+        	{
+        	var allEventCerticado = new AllEventCertificadoPanel(this);
+        	showMainPanel(allEventCerticado, 0);
+        	}else
+        	{
+        		JOptionPane.showMessageDialog(null,"Nenhum certificado para ser emitido");
+        	}
+        });
+
+        ImageIcon sbSair = new ImageIcon(getClass().getResource("/Sidebar/sair.png"));
+        JButton btnSair = new JButton(sbSair);
+        configurarBotaoSidebar(btnSair);
+        btnSair.addActionListener(e -> {
+            int option = JOptionPane.showConfirmDialog(null, "Deseja sair da conta?", "Confirmação",
+                    JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                Session.logout();
+                Container parent = this.getParent();
+                if (frame instanceof MainFrame mainFrame) {
+                    mainFrame.showPanel("welcome");
+                }
+                if (this != null) {
+                    this.closePanel();
+                }
+            }
         });
 
         
         JPanel separator = new JPanel();
         separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 3));
-        separator.setBackground(new Color(0xCCCCCC)); // cor da linha
+        separator.setBackground(new Color(0xCCCCCC));
         separator.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JPanel separator2 = new JPanel();
         separator2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 3));
-        separator2.setBackground(new Color(0xCCCCCC)); // cor da linha
+        separator2.setBackground(new Color(0xCCCCCC));
         separator2.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Itens barra lateral | Está em ordem de cima pra baixo
+        
         sidebar.add(Box.createVerticalStrut(8));
         sidebar.add(btnInicio);
         sidebar.add(btnPerfil);
@@ -515,19 +574,22 @@ public class MainPage extends JPanel {
         sidebar.add(btnCreateEventSB);
         sidebar.add(btnEditEventSB);
         sidebar.add(btnConsultEventSB);
+        sidebar.add(btnDeleteEventSB);
+        sidebar.add(sbBtnTodosEventos);
         sidebar.add(btnPresenceSB);
         sidebar.add(sbBtnSolicitacoes);
         sidebar.add(Box.createVerticalStrut(12));
         sidebar.add(separator2);
         sidebar.add(Box.createVerticalStrut(12));
-        sidebar.add(btnHelpCenterSB);
+        sidebar.add(btnComunidades);
         sidebar.add(sbBtnSolicitacoes);
-        sidebar.add(btnSocialMediaSB);
+        sidebar.add(btnEmitirCertificado);
+        sidebar.add(btnSair);
 
-        // Mouse Listener do Sidebar (Irá ler a posição do mouse)
+        
         sidebar.addMouseListener(new MouseAdapter() {
             @Override
-            // Ao passar o mouse no sidebar = expandir
+            
             public void mouseEntered(MouseEvent e) {
                 expandSidebar();
                 btnInicio.setVisible(true);
@@ -537,14 +599,17 @@ public class MainPage extends JPanel {
                 btnCreateEventSB.setVisible(true);
                 btnEditEventSB.setVisible(true);
                 btnConsultEventSB.setVisible(true);
+                btnDeleteEventSB.setVisible(true);
+                sbBtnTodosEventos.setVisible(true);
                 btnPresenceSB.setVisible(true);
                 sbBtnSolicitacoes.setVisible(true);
                 separator2.setVisible(true);
-                btnHelpCenterSB.setVisible(true);
-                btnSocialMediaSB.setVisible(true);
+                btnComunidades.setVisible(true);
+                btnEmitirCertificado.setVisible(true);
+                btnSair.setVisible(true);
             }
 
-            // Ao tirar o mouse de cima do sidebar = colapsar
+            
             @Override
             public void mouseExited(MouseEvent e) {
                 SwingUtilities.invokeLater(() -> {
@@ -560,11 +625,14 @@ public class MainPage extends JPanel {
                         btnCreateEventSB.setVisible(true);
                         btnEditEventSB.setVisible(true);
                         btnConsultEventSB.setVisible(true);
+                        btnDeleteEventSB.setVisible(true);
+                        sbBtnTodosEventos.setVisible(true);
                         btnPresenceSB.setVisible(true);
                         sbBtnSolicitacoes.setVisible(true);
                         separator2.setVisible(true);
-                        btnHelpCenterSB.setVisible(true);
-                        btnSocialMediaSB.setVisible(true);
+                        btnComunidades.setVisible(true);
+                        btnEmitirCertificado.setVisible(true);
+                        btnSair.setVisible(true);
                     }
                 });
             }
@@ -572,7 +640,6 @@ public class MainPage extends JPanel {
 
         layeredPane.add(sidebar, JLayeredPane.PALETTE_LAYER);
 
-        // Ajusta dinamicamente ao redimensionar
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -599,8 +666,7 @@ public class MainPage extends JPanel {
         galleryPanel.removeAll();
 
         if (modo == 1) {
-            // Modo BoxLayout (como na branch Profile Page)
-            galleryPanel.setLayout(new GridBagLayout()); // Centraliza o conteúdo
+            galleryPanel.setLayout(new GridBagLayout());
 
             JPanel whitePanel = new JPanel(new BorderLayout());
             whitePanel.setBackground(new Color(0xe5d8fd));
@@ -634,7 +700,6 @@ public class MainPage extends JPanel {
             gbc.anchor = GridBagConstraints.CENTER;
             galleryPanel.add(whitePanel, gbc);
         } else {
-            // Modo layout nulo (como na branch Carousel)
             galleryPanel.setLayout(null);
 
             JPanel whitePanel = contentPanel;
@@ -689,20 +754,30 @@ public class MainPage extends JPanel {
         sidebar.revalidate();
         sidebar.repaint();
     }
+    public void ExibirEvents()
+    {
+    	removerLabels();
+    	ExibirEventsTodos();
+    	ExibirMeusEventos();
+    }
 
-    // Exibe todos os eventos com paginação
-    public void ExibirEvents() {
+    public void ExibirEventsTodos() {
         var events = EventController.getInstance().getAllEvents();
         ExibirEvents(events);
     }
 
     public void ExibirEvents(List<Event> events) {
-        galleryPanel.removeAll();
+       
+        for (Component comp : galleryPanel.getComponents()) {
+            if ("eventoGeral".equals(comp.getName())) {
+                galleryPanel.remove(comp);
+            }
+        }
 
-        int start = currentPage * pageSize;
+        int start = currentPageTodos * pageSize;
         int end = Math.min(start + pageSize, events.size());
         int x = 160;
-        int y = 30;
+        int y = 60;
 
         for (int i = start; i < end; i++) {
             var event = events.get(i);
@@ -714,11 +789,17 @@ public class MainPage extends JPanel {
                     event.getId(),
                     this);
             panel.setBounds(x, y, 300, 240);
+            panel.setName("eventoGeral");
             galleryPanel.add(panel);
             x += 400;
         }
-
-        // Botão Anterior
+        JLabel todosEventos = new JLabel("Todos Eventos");
+        todosEventos.setFont(new Font("SansSerif", Font.BOLD, 20));
+        todosEventos.setBounds(160, 20, 300, 30);
+        todosEventos.setForeground(new Color(0x2e1a47));
+        todosEventos.setName("labelTodos");
+        galleryPanel.add(todosEventos);
+        
         JButton btnPrev = new JButton("");
         ImageIcon icon = new ImageIcon(getClass().getResource("/setacinza.png"));
         Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -726,16 +807,16 @@ public class MainPage extends JPanel {
         btnPrev.setBounds(80, 130, 40, 40);
         btnPrev.setBorder(null);
         btnPrev.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnPrev.setEnabled(currentPage > 0);
+        btnPrev.setEnabled(currentPageTodos > 0);
         btnPrev.addActionListener(e -> {
-            if (currentPage > 0) {
-                currentPage--;
+            if (currentPageTodos > 0) {
+                currentPageTodos--;
                 ExibirEvents(events);
             }
         });
+        btnPrev.setName("eventoGeral");
         galleryPanel.add(btnPrev);
 
-        // Botão Próximo
         JButton btnNext = new JButton("");
         btnNext.setBounds(1290, 130, 40, 40);
         ImageIcon icon02 = new ImageIcon(getClass().getResource("/setacinzaPos.png"));
@@ -743,23 +824,117 @@ public class MainPage extends JPanel {
         btnNext.setIcon(new ImageIcon(scaled02));
         btnNext.setBorder(null);
         btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnNext.setEnabled((currentPage + 1) * pageSize < events.size());
+        btnNext.setEnabled((currentPageTodos + 1) * pageSize < events.size());
         btnNext.addActionListener(e -> {
-            currentPage++;
+            currentPageTodos++;
             ExibirEvents(events);
         });
+        btnNext.setName("eventoGeral");
         galleryPanel.add(btnNext);
 
         galleryPanel.revalidate();
         galleryPanel.repaint();
     }
-    
+    public void ExibirMeusEventos() {
+        int idUser = IdController.getIdUser();
+        User user = UserController.getInstance().findUserById(idUser);
+        List<Integer> idEventos = user.getEventsList();
+
+        List<Event> todosEventos = EventController.getInstance().getAllEvents();
+        List<Event> meusEventos = new ArrayList<>();
+
+        for (Event evento : todosEventos) {
+            if (idEventos.contains(evento.getId())) {
+                meusEventos.add(evento);
+            }
+        }
+
+        ExibirMeusEventos(meusEventos);
+    }
+
+    public void ExibirMeusEventos(List<Event> events) {
+        for (Component comp : galleryPanel.getComponents()) {
+            if ("meuEvento".equals(comp.getName())) {
+                galleryPanel.remove(comp);
+            }
+        }
+
+        int start = currentPageMeus * pageSize;
+        int end = Math.min(start + pageSize, events.size());
+        int x = 160;
+        int y = 390; 
+
+        for (int i = start; i < end; i++) {
+            var event = events.get(i);
+            EventPanel panel = new EventPanel(
+                    event.getTitle(),
+                    event.getAddress().getEstado() + ", " + event.getAddress().getCidade(),
+                    event.getDate(),
+                    event.getImagePath(),
+                    event.getId(),
+                    this);
+            panel.setBounds(x, y, 300, 240);
+            panel.setName("meuEvento");
+            galleryPanel.add(panel);
+            x += 400;
+        }
+        
+        JLabel meusEventos = new JLabel("Meus Eventos");
+        meusEventos.setFont(new Font("SansSerif", Font.BOLD, 20));
+        meusEventos.setBounds(160, 350, 300, 30);
+        meusEventos.setForeground(new Color(0x2e1a47));
+        meusEventos.setName("labelMeus");
+        galleryPanel.add(meusEventos);
+
+        JButton btnPrev = new JButton("");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/setacinza.png"));
+        Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        btnPrev.setIcon(new ImageIcon(scaled));
+        btnPrev.setBounds(80, y + 100, 40, 40);
+        btnPrev.setBorder(null);
+        btnPrev.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnPrev.setEnabled(currentPageMeus > 0);
+        btnPrev.addActionListener(e -> {
+            if (currentPageMeus > 0) {
+                currentPageMeus--;
+                ExibirMeusEventos(events);
+            }
+        });
+        btnPrev.setName("meuEvento");
+        galleryPanel.add(btnPrev);
+
+        JButton btnNext = new JButton("");
+        btnNext.setBounds(1290, y + 100, 40, 40);
+        ImageIcon icon02 = new ImageIcon(getClass().getResource("/setacinzaPos.png"));
+        Image scaled02 = icon02.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        btnNext.setIcon(new ImageIcon(scaled02));
+        btnNext.setBorder(null);
+        btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnNext.setEnabled((currentPageMeus + 1) * pageSize < events.size());
+        btnNext.addActionListener(e -> {
+            currentPageMeus++;
+            ExibirMeusEventos(events);
+        });
+        btnNext.setName("meuEvento");
+        galleryPanel.add(btnNext);
+
+        galleryPanel.revalidate();
+        galleryPanel.repaint();
+    }
     public void closePanel() {
         galleryPanel.removeAll();    
         galleryPanel.setLayout(null);  
         ExibirEvents();                
         galleryPanel.revalidate();
         galleryPanel.repaint();
+    }
+    private void removerLabels() {
+        for (Component comp : galleryPanel.getComponents()) {
+            String name = comp.getName();
+            if (name != null && (name.equals("labelTodos") || name.equals("labelMeus"))) {
+                galleryPanel.remove(comp);
+            }
+        }
     }
     private void showSettingsDialog() {
         JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Configurações", true);
@@ -778,7 +953,6 @@ public class MainPage extends JPanel {
     private void applyTheme() {
         Color bg = ThemeManager.getBackgroundColor();
 
-//        this.setBackground(bg);
         galleryPanel.setBackground(bg);
         topbar.setBackground(new Color(0x9F96B0));
         sidebar.setBackground(new Color(0x9F96B0));

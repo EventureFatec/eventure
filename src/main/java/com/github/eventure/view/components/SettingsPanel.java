@@ -15,7 +15,7 @@ public class SettingsPanel extends JPanel {
 
         darkModeCheck.addActionListener(e -> {
             ThemeManager.setDarkMode(darkModeCheck.isSelected());
-            onThemeChanged.run(); // chama quem estiver ouvindo
+            onThemeChanged.run(); 
         });
 
         add(darkModeCheck);

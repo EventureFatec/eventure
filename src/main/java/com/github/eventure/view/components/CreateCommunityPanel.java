@@ -6,11 +6,12 @@ import java.io.File;
 
 import com.github.eventure.controllers.CommunityController;
 import com.github.eventure.model.User;
+import com.github.eventure.view.pages.MainPage;
 
 
 public class CreateCommunityPanel extends JPanel {
 	private String caminhoImagem = null;
-    public CreateCommunityPanel(User user) {
+    public CreateCommunityPanel(User user,MainPage mainPage) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         setBackground(new Color(248, 249, 255)); 
@@ -21,12 +22,14 @@ public class CreateCommunityPanel extends JPanel {
 
         JLabel lblNome = new JLabel("Nome");
         lblNome.setFont(new Font("SansSerif", Font.BOLD, 14));
+        lblNome.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JTextField txtNome = new JTextField("");
         estilizarCampo(txtNome);
 
         JLabel lblDescricao = new JLabel("Descrição");
         lblDescricao.setFont(new Font("SansSerif", Font.BOLD, 14));
+        lblDescricao.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JTextField txtDescricao = new JTextField("");
         estilizarCampo(txtDescricao);
@@ -79,6 +82,8 @@ public class CreateCommunityPanel extends JPanel {
                 var controller = CommunityController.getInstance();
                 controller.createCommunity(user, nome,descricao,caminhoImagem);
                 JOptionPane.showMessageDialog(this, "Comunidade criada com sucesso!");
+                var communityPanel = new CommunityPanel(mainPage);
+                mainPage.showMainPanel(communityPanel,0);
             } else {
                 JOptionPane.showMessageDialog(this, "O nome da comunidade é obrigatório.");
             }

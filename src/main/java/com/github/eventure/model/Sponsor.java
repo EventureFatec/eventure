@@ -1,5 +1,3 @@
-// this model indicates what properties have. In this case, it has a name, a bussiness email,
-// an address, a CNPJ and a unique id to differentiate each sponsor with a easier identifier
 
 package com.github.eventure.model;
 
@@ -9,7 +7,7 @@ public class Sponsor {
     private Address address;
     private long cnpj;
     private int idSponsor;
-//  private Event event; Future plans if we have time
+
 
     public String getName() {
         return name;

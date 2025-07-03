@@ -51,8 +51,6 @@ public class CommunityController {
 	}
 
 	public void invites(String nome, int idUser, int idCommunity) {
-		// seria uma funcão para que usuarios possam enviar convites ao criador da
-		// comunidade e ele escolha se aceita ou não
 		var comunnity = findCommunityById(idCommunity);
 		addUser(idCommunity, idUser);
 	}

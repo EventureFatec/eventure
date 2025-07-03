@@ -14,40 +14,34 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.IdController;
-import com.github.eventure.controllers.UserController;
-import com.github.eventure.model.User;
-import com.github.eventure.view.pages.EventPanelForEditPanel;
 import com.github.eventure.view.pages.MainPage;
 
-public class EventPanelConsult extends JPanel {
+public class EventPanelForDelete extends JPanel{
     private int idEvento;
-    public EventPanelConsult(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
+    public EventPanelForDelete(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
         
         idEvento = id;
-        
         Dimension panelSize = new Dimension(300, 240);
         setPreferredSize(panelSize);
         setMaximumSize(panelSize);
         setMinimumSize(panelSize);
 
         this.setBackground(new Color(0xe5d8fd));
+        setBorder(BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
 
-       
-        
         ImageIcon icon = new ImageIcon(imagePath);
         Image scaled = icon.getImage().getScaledInstance(300, 120, Image.SCALE_SMOOTH);
         JLabel imageLabel = new JLabel(new ImageIcon(scaled));
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         imageLabel.setVerticalAlignment(JLabel.CENTER);
         add(imageLabel, BorderLayout.NORTH);
-
+        
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(new Color(0xFFFFFF));
@@ -56,14 +50,14 @@ public class EventPanelConsult extends JPanel {
         JLabel titleLabel = new JLabel("<html><b>" + title + "</b></html>");
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         titleLabel.setForeground(new Color(0x4A148C));
-        
+
         JLabel locationLabel = new JLabel(location);
         locationLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         locationLabel.setForeground(new Color(0x777777));
 
         JLabel dateTimeLabel = new JLabel(date);
         dateTimeLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-        dateTimeLabel.setForeground(new Color(0x777777)); 
+        dateTimeLabel.setForeground(new Color(0x777777));
 
         infoPanel.add(titleLabel);
         infoPanel.add(locationLabel);
@@ -73,9 +67,18 @@ public class EventPanelConsult extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Clicou no evento com ID: " + idEvento);
-                var displayEventPanel = new DisplayEvent(idEvento);
-                mainPage.showMainPanel(displayEventPanel,1);
+            	int opcao = JOptionPane.showConfirmDialog(null,
+                        "Deseja deletar esse Eventos?", "Confirmação", JOptionPane.YES_NO_OPTION);
+                if(opcao == JOptionPane.YES_OPTION)
+                {
+                  var eventController = EventController.getInstance();
+                  eventController.deleteEventById(idEvento);
+                  JOptionPane.showMessageDialog(null, "Evento deletado com sucesso");
+                  mainPage.ExibirEvents();
+                }else
+                {
+                	JOptionPane.showMessageDialog(null, "Evento não foi deletado");
+                }
             }
         });
         add(infoPanel, BorderLayout.CENTER);
@@ -85,4 +88,3 @@ public class EventPanelConsult extends JPanel {
 	 
  }
 }
-
