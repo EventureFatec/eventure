@@ -11,8 +11,11 @@ import java.awt.*;
 import java.util.List;
 
 public class ConfirmarPresencaPanel extends JPanel {
-
+    private int eventId;
+    private MainPage mainPage;
     public ConfirmarPresencaPanel(int eventId,MainPage mainPage) {
+    	this.mainPage = mainPage;
+    	this.eventId = eventId;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -40,9 +43,8 @@ public class ConfirmarPresencaPanel extends JPanel {
         add(searchField);
         add(Box.createRigidArea(new Dimension(0, 20)));
 
-        List<Integer> participantesIds = EventController.getInstance()
-                .findEventById(eventId)
-                .getConfirmedParticipantIds();
+        List<Integer> participantesIds = EventController.getInstance().getConfirmadosQueNaoCompareceram(eventId);
+                
         UserController userController = UserController.getInstance();
 
         JPanel listaCards = new JPanel();
@@ -100,7 +102,9 @@ public class ConfirmarPresencaPanel extends JPanel {
         confirmar.setBackground(new Color(0, 180, 100));
         confirmar.setForeground(Color.WHITE);
         confirmar.addActionListener(e ->{
-        	
+        	var eventController = EventController.getInstance();
+        	eventController.ConfirmarPresenca(eventId, user.getUserId());
+        	JOptionPane.showMessageDialog(null, "Presença confirmada");
         });
         JButton recusar = new JButton("Recusar");
         recusar.setBackground(new Color(220, 50, 50));

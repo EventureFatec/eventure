@@ -30,13 +30,11 @@ public class LoginPage extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(0x330065));
 
-        // Wrapper com padding
         JPanel wrapperPanel = new JPanel(new GridBagLayout());
         wrapperPanel.setBackground(new Color(0x330065));
         wrapperPanel.setBorder(new EmptyBorder(40, 40, 40, 40));
         this.add(wrapperPanel, BorderLayout.CENTER);
 
-        // Painel principal com sombra leve, borda arredondada e background branco
         JPanel mainPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -51,7 +49,7 @@ public class LoginPage extends JPanel {
             }
         };
         mainPanel.setOpaque(false);
-        mainPanel.setPreferredSize(new Dimension(420, 600)); // altura aumentada de 520 para 600
+        mainPanel.setPreferredSize(new Dimension(420, 600));
         mainPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -62,7 +60,6 @@ public class LoginPage extends JPanel {
 
         int y = 0;
 
-        // Logo
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
         Image logoImageScaled = logoIcon.getImage().getScaledInstance(320, 90, Image.SCALE_SMOOTH);
         logoIcon = new ImageIcon(logoImageScaled);
@@ -77,7 +74,6 @@ public class LoginPage extends JPanel {
         Font labelFont = new Font("Segoe UI", Font.BOLD, 20);
         Font fieldFont = new Font("Segoe UI", Font.PLAIN, 18);
 
-        // Login Label
         JLabel loginLabel = new JLabel("Login");
         loginLabel.setFont(labelFont);
         loginLabel.setForeground(new Color(0x330065));
@@ -86,7 +82,6 @@ public class LoginPage extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         mainPanel.add(loginLabel, gbc);
 
-        // Login Field
         loginField = new JTextField();
         loginField.setFont(fieldFont);
         loginField.setPreferredSize(new Dimension(350, 40));
@@ -100,7 +95,6 @@ public class LoginPage extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(loginField, gbc);
 
-        // Password Label
         JLabel passwordLabel = new JLabel("Senha");
         passwordLabel.setFont(labelFont);
         passwordLabel.setForeground(new Color(0x330065));
@@ -109,7 +103,6 @@ public class LoginPage extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         mainPanel.add(passwordLabel, gbc);
 
-        // Password Field
         passwordField = new JPasswordField();
         passwordField.setFont(fieldFont);
         passwordField.setPreferredSize(new Dimension(350, 40));
@@ -123,14 +116,12 @@ public class LoginPage extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(passwordField, gbc);
 
-        // Botão Entrar com gradiente e hover
         loginButton = createGradientButton("Entrar");
         gbc.gridy = y++;
         gbc.weighty = 0;
         gbc.insets = new Insets(25, 20, 10, 20);
         mainPanel.add(loginButton, gbc);
 
-        // Botão Registrar simples mas com cor roxa clara
         registerBtn = new JButton("Cadastre-se");
         registerBtn.setFont(labelFont);
         registerBtn.setForeground(new Color(0x330065));
@@ -141,14 +132,12 @@ public class LoginPage extends JPanel {
         gbc.weighty = 0;
         mainPanel.add(registerBtn, gbc);
 
-        // Espaço extra embaixo para empurrar os componentes para cima
         gbc.gridy = y++;
         gbc.weighty = 1.0;
         mainPanel.add(Box.createVerticalGlue(), gbc);
 
         wrapperPanel.add(mainPanel);
 
-        // Ações
         loginButton.addActionListener((ActionEvent e) -> {
             String username = loginField.getText();
             String password = new String(passwordField.getPassword());

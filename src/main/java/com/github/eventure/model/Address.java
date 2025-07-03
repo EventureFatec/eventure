@@ -8,7 +8,6 @@ public class Address {
 	private String rua;
 	private String numero;
 	private String complemento;
-//	private int idUser;
 	public Address() {
 		
 	}

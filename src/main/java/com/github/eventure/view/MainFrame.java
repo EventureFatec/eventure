@@ -18,7 +18,7 @@ import com.github.eventure.view.pages.MainPage;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
-    private CardLayout cardLayout; // Layout usado para alternar entre telas
+    private CardLayout cardLayout; 
     private JPanel contentPanel;
 
     public MainFrame() {
@@ -36,7 +36,7 @@ public class MainFrame extends JFrame {
         userController.createUserSemMessageBox("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
         userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
         userController.createUserSemMessageBox("luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
-        // criando comunidade
+        
         CommunityController communityController = CommunityController.getInstance();
         var u = userController.findUserById(0);
         var u2 = userController.findUserById(1);
@@ -64,15 +64,15 @@ public class MainFrame extends JFrame {
                 "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
                 "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
         
-        // Adiciona as telas (pages) no contentPanel
+        
         WelcomePage welcomePage = new WelcomePage(this);
-        contentPanel.add(welcomePage, "welcome"); // Tela de boas-vindas
+        contentPanel.add(welcomePage, "welcome");
 
         RegisterPage registerPage = new RegisterPage(this);
-        contentPanel.add(registerPage, "register"); // Tela de cadastro
+        contentPanel.add(registerPage, "register"); 
 
-        LoginPage loginPage = new LoginPage(this); // Passando o UserStorage
-        contentPanel.add(loginPage, "login"); // Tela de login
+        LoginPage loginPage = new LoginPage(this); 
+        contentPanel.add(loginPage, "login"); 
         
     	ImageIcon im = new ImageIcon("C:/Users/User/Downloads/testeprojeto/teste.jpg");
     	ImageIcon im2 = new ImageIcon(getClass().getResource("/fotoPerfil.png"));
@@ -82,17 +82,17 @@ public class MainFrame extends JFrame {
         MainPage mainPage = new MainPage(this);
         contentPanel.add(mainPage, "home");
 
-        // Exibe explicitamente a tela de boas-vindas ao iniciar
+        
         showPanel("welcome");
 
-        // Faz a janela aparecer
+       
         setContentPane(contentPanel);
         setVisible(true);
     }
 
-    // Método para mostrar um painel específico (por nome)
+    
     public void showPanel(String pageName) {
-        cardLayout.show(contentPanel, pageName); // Exibe o painel baseado no nome passado
+        cardLayout.show(contentPanel, pageName); 
     }
     
 }

@@ -15,18 +15,13 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
-import com.github.eventure.controllers.EventController;
-import com.github.eventure.controllers.IdController;
-import com.github.eventure.controllers.UserController;
-import com.github.eventure.model.User;
-import com.github.eventure.view.pages.EventPanelForEditPanel;
+import com.github.eventure.controllers.GeradorCertificado;
 import com.github.eventure.view.pages.MainPage;
 
-public class EventPanelConsult extends JPanel {
+public class EventPanelForCertificado extends JPanel{
     private int idEvento;
-    public EventPanelConsult(String title, String location, String date, String imagePath,int id,MainPage mainPage) {
+    public EventPanelForCertificado(String title, String location, String date, String imagePath,int id,MainPage mainPage,String nome) {
         
         idEvento = id;
         
@@ -48,6 +43,7 @@ public class EventPanelConsult extends JPanel {
         imageLabel.setVerticalAlignment(JLabel.CENTER);
         add(imageLabel, BorderLayout.NORTH);
 
+        
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(new Color(0xFFFFFF));
@@ -74,8 +70,9 @@ public class EventPanelConsult extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Clicou no evento com ID: " + idEvento);
-                var displayEventPanel = new DisplayEvent(idEvento);
-                mainPage.showMainPanel(displayEventPanel,1);
+                GeradorCertificado.gerar(nome, title);
+                AllEventCertificadoPanel allEventCertificadoPanel = new AllEventCertificadoPanel(mainPage);
+                mainPage.showMainPanel(allEventCertificadoPanel, 0);;
             }
         });
         add(infoPanel, BorderLayout.CENTER);
@@ -85,4 +82,3 @@ public class EventPanelConsult extends JPanel {
 	 
  }
 }
-

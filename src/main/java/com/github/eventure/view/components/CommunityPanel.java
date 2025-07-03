@@ -61,7 +61,6 @@ public class CommunityPanel extends JPanel {
         this.setBackground(Color.WHITE);
         JPanel sidePanel = new JPanel(null);
         sidePanel.setBounds(0, 0, 250, 590);
-//        sidePanel.setBackground(new Color(0xE5D8FD));
         sidePanel.setBackground(Color.WHITE);
         
         ImageIcon setaImage = new ImageIcon(getClass().getResource("/seta02.png"));
@@ -71,7 +70,6 @@ public class CommunityPanel extends JPanel {
         backButton.setBounds(10, 10, 40, 40);
         sidePanel.add(backButton);
         backButton.addActionListener(e -> {
-        	System.out.println("Botão voltar");
         	mainPage.ExibirEvents();
         });
         
@@ -106,8 +104,6 @@ public class CommunityPanel extends JPanel {
 
             
             botaoComunidade.addActionListener(e -> {
-            	
-                System.out.println("Clicou em: " + comunidade.getName());
                 recarregarPanelComunidade(comunidade.getIdCommunity());
             });
 
@@ -118,7 +114,6 @@ public class CommunityPanel extends JPanel {
         JScrollPane scrollPane01 = new JScrollPane(conteudoScroll);
         scrollPane01.setBounds(10, 60, 230, 400);
         scrollPane01.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//        scrollPane01.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane01.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane01.setBorder(BorderFactory.createEmptyBorder());
 
@@ -178,14 +173,13 @@ public class CommunityPanel extends JPanel {
                     "Deseja criar uma comunidade?", "Confirmação", JOptionPane.YES_NO_OPTION);
             if(opcao == JOptionPane.YES_OPTION)
             {
-                	 var createCommunity = new CreateCommunityPanel(user);
+                	 var createCommunity = new CreateCommunityPanel(user,mainPage);
                 	 mainPage.showMainPanel(createCommunity, 1);
             }
             else
             {
             	return;
             }
-        	System.out.println("adicionar o panel para criar comunidade");
         });
 
         JPanel topPanel = new JPanel();

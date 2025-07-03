@@ -49,7 +49,6 @@ public class ProfilePage extends JPanel {
     public ProfilePage(MainPage mainPage) {
         setLayout(new BorderLayout());
 
-        // Painel lateral
         JPanel sidePanel = new JPanel();
         sidePanel.setPreferredSize(new Dimension(180, 600));
         sidePanel.setBackground(new Color(38, 38, 78));
@@ -69,7 +68,7 @@ public class ProfilePage extends JPanel {
 
         add(sidePanel, BorderLayout.WEST);
 
-        // Painel central
+        
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
@@ -87,7 +86,7 @@ public class ProfilePage extends JPanel {
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // Imagem de perfil
+        
         imagePreview = new JLabel();
         imagePreview.setPreferredSize(new Dimension(200, 140));
         imagePreview.setMaximumSize(new Dimension(200, 140));
@@ -119,7 +118,6 @@ public class ProfilePage extends JPanel {
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // Botões
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0));
         buttons.setOpaque(false);
@@ -149,7 +147,7 @@ public class ProfilePage extends JPanel {
             }
         }));
 
-        buttons.add(button("Deletar Conta", new Color(45, 45, 65), e -> {
+        buttons.add(button("Deletar", new Color(45, 45, 65), e -> {
             int option = JOptionPane.showConfirmDialog(null, "Deseja excluir sua conta?", "Confirmação",
                     JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {

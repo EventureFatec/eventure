@@ -35,7 +35,7 @@ public class EventRequestPanel extends JPanel {
         add(eventImageLabel);
 
         
-        JLabel title = new JLabel("Event Requests");
+        JLabel title = new JLabel("Requisições para Evento");
         title.setFont(new Font("Segoe UI", Font.BOLD, 16));
         title.setBounds(100, 20, 200, 20);
         add(title);
@@ -47,7 +47,7 @@ public class EventRequestPanel extends JPanel {
         add(subtitle);
 
         
-        JTextField requestField = new JTextField("✓ Request");
+        JTextField requestField = new JTextField("✓ Requisições");
         requestField.setEditable(false);
         requestField.setBounds(100, 70, 200, 25);
         add(requestField);
@@ -60,25 +60,23 @@ public class EventRequestPanel extends JPanel {
         userInfo.setBounds(150, 110, 250, 20); 
         add(userInfo);
 
-        JButton acceptButton = new JButton("Accept Request");
+        JButton acceptButton = new JButton("Aceitar");
         acceptButton.setBounds(100, 150, 130, 25);
         acceptButton.setBackground(new Color(0x007BFF));
         acceptButton.setForeground(Color.WHITE);
         acceptButton.setFocusPainted(false);
         add(acceptButton);
         acceptButton.addActionListener(e -> {
-        	System.out.println("clicou no botão aceitar");
         	eventController.adicionarParticipantesPrivateEvento(this.idEvento, this.idUser);
         });
 
-        JButton declineButton = new JButton("Decline Request");
+        JButton declineButton = new JButton("Recusar");
         declineButton.setBounds(240, 150, 130, 25);
         declineButton.setBackground(new Color(0xEEEEEE));
         declineButton.setForeground(Color.BLACK);
         declineButton.setFocusPainted(false);
         add(declineButton);
         declineButton.addActionListener(e -> {
-        	System.out.println("negar");
         	eventController.negarParticipantesPrivateEvento(idEvento, idUser);
         });
     }

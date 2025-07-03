@@ -19,12 +19,13 @@ public class User {
 	private String profilePic;
     private boolean organazador = false;
     private boolean isLogged = false;
+    private List<Integer> participaoConfirmada = new ArrayList<>(); // salva uma lista de id de eventos que o usuario participou
     private List<Integer> myEventsList = new ArrayList<>(); // salva uma lista com todos os eventos que ele criou
     private List<Integer> eventsList = new ArrayList<>();  // eventos que usuario participa
     private List<Integer> communityList = new ArrayList<>(); // comunidades que o usuario faz parte
     private List<Integer> myCommunityList = new ArrayList<>(); // comunidades criados pelo usuario
 
-    // Construtor
+    
     public User(String name, String email, String username, Password password, int userId, String cpf, String profilePic, boolean isLogged) {
         this.name = name;
         this.email = email;
@@ -36,7 +37,7 @@ public class User {
         this.isLogged = isLogged;
     }
 
-    // Getters e Setters
+    
     
     
     public String getName() {
@@ -127,7 +128,8 @@ public class User {
     }
     
     public void removeListaEventos(int id) {
-        eventsList.remove(id);
+    	boolean removed = eventsList.remove(Integer.valueOf(id));
+ 	    System.out.println("Removido? " + removed);
     }
 
     public List<Integer> getCommunityList() {
@@ -144,7 +146,8 @@ public class User {
     	myEventsList.add(idEvento);
     }
     public void removeListMyEvents(int idEvento) {
-    	myEventsList.remove(idEvento);
+    	 boolean removed = myEventsList.remove(Integer.valueOf(idEvento));
+ 	    System.out.println("Removido? " + removed);
     }
 
 	public List<Integer> getMyEventsList() {
@@ -171,5 +174,22 @@ public class User {
     {
     	this.ativo = true;
     }
+
+	public List<Integer> getParticipaoConfirmada() {
+		return participaoConfirmada;
+	}
+
+	public void setParticipaoConfirmada(List<Integer> participaoConfirmada) {
+		this.participaoConfirmada = participaoConfirmada;
+	}
+    public void addParticipaoConfirmada(int idEvento) {
+    	participaoConfirmada.add(idEvento);
+    }
+    public void removeParticipaoConfirmada(int idEvento) {
+    	 boolean removed = participaoConfirmada.remove(Integer.valueOf(idEvento));
+ 	    System.out.println("Removido? " + removed);
+    }
+    
+    
     
 }

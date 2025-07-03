@@ -61,23 +61,21 @@ public class EditEventPanel extends JPanel {
 	        setLayout(null);
 	        setPreferredSize(new Dimension(1130, 590));
              
-	        // Painel esquerdo
 	        JPanel leftPanel = new JPanel(null);
 	        leftPanel.setBounds(0, 0, 426, 590);
 	        leftPanel.setBackground(new Color(0xb10ef7));
-	        //0xadd8e6 azul mais claro
-	        //(33, 150, 243) azul mais forte
+
 	        JLabel leftLabel = new JLabel("<html><h1 style='color:white;'>Eventure</h1><p style='color:white;'>Criando conexões</p></html>");
 	        leftLabel.setBounds(50, 300, 300, 100);
 	        leftPanel.add(leftLabel);
             var eventController02 = EventController.getInstance();
             var event = eventController02.findEventById(idEvent);
-	        // Painel direito
-	        JPanel rightPanel = new JPanel(null); // Layout absoluto para mais controle
+	        
+	        JPanel rightPanel = new JPanel(null); 
 	        rightPanel.setBounds(426, 0, 704, 590);
 	        rightPanel.setBackground(new Color(0xe5d8fd));;
 
-	        // Título do formulário
+	        
 	        JLabel header = new JLabel("Editar seu evento");
 	        header.setFont(new Font("SansSerif", Font.BOLD, 22));
 	        header.setBounds(200, 20, 400, 30);
@@ -85,7 +83,7 @@ public class EditEventPanel extends JPanel {
 
 	        int xMargin = 50;
 	        int y = 60;
-	        int panelWidth = 704; // largura do rightPanel
+	        int panelWidth = 704; 
 
 	        int fieldWidth = 300;
 	        int labelWidth = 300;
@@ -93,7 +91,7 @@ public class EditEventPanel extends JPanel {
 	        int xLabel = (panelWidth - labelWidth) / 2;
 	        int xField = (panelWidth - fieldWidth) / 2;
 
-	        // Título do evento
+	        
 	        JLabel titleLabel = new JLabel("Nome do evento:");
 	        titleLabel.setBounds(xLabel, y, 300, 20);
 	        rightPanel.add(titleLabel);
@@ -125,7 +123,7 @@ public class EditEventPanel extends JPanel {
 	        rightPanel.add(publicoButton);
 	        rightPanel.add(privadoButton);
 	        y+=25;
-	        // Descrição
+	        
 	        JLabel descLabel = new JLabel("Descrição:");
 	        descLabel.setBounds(xLabel, y, 300, 20);
 	        rightPanel.add(descLabel);
@@ -210,7 +208,7 @@ public class EditEventPanel extends JPanel {
 	        rightPanel.add(classificationBox);
 	        y += 50;
 
-	        // Botão Criar Evento (inferior direito)
+	        
 	        JButton proximoButton = new JButton("Continuar");
 	        proximoButton.setBackground(new Color(0x330065));
 	        proximoButton.setForeground(Color.WHITE);
@@ -218,7 +216,7 @@ public class EditEventPanel extends JPanel {
 	        proximoButton.setBorderPainted(false);
 	        proximoButton.setOpaque(true);
 	        proximoButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-	        proximoButton.setBounds(704 - 150 - 20, 590 - 50, 150, 30); // Largura 150, margem 20 da borda
+	        proximoButton.setBounds(704 - 150 - 20, 590 - 50, 150, 30); 
 	        proximoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	        rightPanel.add(proximoButton);
 	        proximoButton.addActionListener(e -> {
@@ -238,23 +236,20 @@ public class EditEventPanel extends JPanel {
 	                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	                date = sdf.format(selectedDate);
 	            }
-	            System.out.println("data 1 = "+date);
+	            
 	            Date selectedDateEnd = datePicker2.getDate();
 	            
 	            if (selectedDateEnd != null) {
 	                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	                dateEnd = sdf.format(selectedDateEnd);
 	            }
-	            System.out.println("data 2 = "+dateEnd);
+	            
 	            
 	            if (publicoButton.isSelected()) {
-	                System.out.println("Opção selecionada: Público");
 	                visibilidade = Visibilidade.PUBLICO;
 	            } else if (privadoButton.isSelected()) {
-	                System.out.println("Opção selecionada: Privado");
 	                visibilidade = Visibilidade.PRIVADO;
 	            }
-	            System.out.println("visibilidade = "+visibilidade.toString());
 
 	            
 	        	starsHours = startHourField.getText();
@@ -287,7 +282,6 @@ public class EditEventPanel extends JPanel {
 
 	            JLabel imagemPreview = new JLabel();
 	            imagemPreview.setBounds((panelWidth - 300) / 2, y2, 300, 200);
-//	            imagemPreview.setBorder(null);
 	            imagemPreview.setBorder(new LineBorder(Color.BLACK, 1));
 	            ImageIcon icon03 = new ImageIcon(getClass().getResource("/selecionarImagem.png"));
 	            imagemPreview.setIcon(icon03);
@@ -305,14 +299,12 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(selectImageBtn);
 	            y2 += 35;
 
-	            // Alinhamento
 	            int alinhamentoX = imagemPreview.getX();
 	            int campoAltura = 25;
 	            int labelLargura = 80;
 	            int campoLargura = 150;
 	            int espacamentoY = 25;
 
-	            // CEP
 	            JLabel cepLabel = new JLabel("CEP:");
 	            cepLabel.setBounds(alinhamentoX, y2, labelLargura, campoAltura);
 	            rightPanel.add(cepLabel);
@@ -334,7 +326,6 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(buscarCepBtn);
 	            y2 += espacamentoY;
 	            
-	            // Estado
 	            JLabel estadoLabel = new JLabel("Estado:");
 	            estadoLabel.setBounds(alinhamentoX, y2, labelLargura, campoAltura);
 	            rightPanel.add(estadoLabel);
@@ -344,7 +335,6 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(estadoField);
 	           
 	            
-	            // Cidade
 	            JLabel cidadeLabel = new JLabel("Cidade:");
 	            cidadeLabel.setBounds(alinhamentoX + 20 + campoLargura, y2-25, labelLargura, campoAltura);
 	            rightPanel.add(cidadeLabel);
@@ -355,7 +345,7 @@ public class EditEventPanel extends JPanel {
 	            
 	            y2 += espacamentoY;
 	            y2+=25;
-	            // Bairro
+
 	            JLabel bairroLabel = new JLabel("Bairro:");
 	            bairroLabel.setBounds(alinhamentoX, y2-25, labelLargura, campoAltura);
 	            rightPanel.add(bairroLabel);
@@ -363,7 +353,7 @@ public class EditEventPanel extends JPanel {
 	            JTextField bairroField = new JTextField();
 	            bairroField.setBounds(alinhamentoX, y2, campoLargura, campoAltura);
 	            rightPanel.add(bairroField);
-	            // Rua
+
 	            JLabel ruaLabel = new JLabel("Rua:");
 	            ruaLabel.setBounds(alinhamentoX + 20 + campoLargura, y2 - 25, labelLargura, campoAltura);
 	            rightPanel.add(ruaLabel);
@@ -374,7 +364,7 @@ public class EditEventPanel extends JPanel {
 	            
 	            y2 += espacamentoY;
 	            
-	            // Número
+
 	            JLabel numeroLabel = new JLabel("Número:");
 	            numeroLabel.setBounds(alinhamentoX, y2, 150, campoAltura);
 	            rightPanel.add(numeroLabel);
@@ -384,7 +374,6 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(numeroField);
 	            
 
-	            // Complemento
 	            JLabel complementoLabel = new JLabel("Complemento:");
 	            complementoLabel.setBounds(alinhamentoX + labelLargura + 90, y2, 100, campoAltura);
 	            rightPanel.add(complementoLabel);
@@ -394,23 +383,22 @@ public class EditEventPanel extends JPanel {
 	            rightPanel.add(complementoField);
 	            
 	            y2 += espacamentoY;
-	            // para garantir que mesmo que o usuario não selecione uma foto diferente. a antiga ja esta setada
 	            caminho = event.getImagePath();
-	            //selecionar imagem 
+	            
 	            selectImageBtn.addActionListener(e2 -> {
 	            	ImageController imageController = new ImageController();
 	            	 caminho = imageController.selecionarImagem();
 	            	 if(!caminho.isEmpty() && caminho != null) {
 	                ImageIcon icon = new ImageIcon(caminho);
 
-	                // Redimensiona para caber no JLabel
+	                
 	                Image imagemRedimensionada = icon.getImage().getScaledInstance(
 	                    imagemPreview.getWidth(),
 	                    imagemPreview.getHeight(),
 	                    Image.SCALE_SMOOTH
 	                );
 	                 
-	                // Define a imagem no JLabel
+	               
 	                imagemPreview.setIcon(new ImageIcon(imagemRedimensionada));
 	                imagemPreview.repaint(); 
 	            	 }
@@ -424,14 +412,14 @@ public class EditEventPanel extends JPanel {
 	                	 if(!caminho.isEmpty() && caminho != null) {
 	                    ImageIcon icon = new ImageIcon(caminho);
 
-	                    // Redimensiona para caber no JLabel
+	                    
 	                    Image imagemRedimensionada = icon.getImage().getScaledInstance(
 	                        imagemPreview.getWidth(),
 	                        imagemPreview.getHeight(),
 	                        Image.SCALE_SMOOTH
 	                    );
 
-	                    // Define a imagem no JLabel
+	                    
 	                    imagemPreview.setIcon(new ImageIcon(imagemRedimensionada));
 	                    imagemPreview.repaint();
 	                	 }
@@ -442,7 +430,7 @@ public class EditEventPanel extends JPanel {
 	                    imagemPreview.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 	                }
 	            });
-	            // buscar cep
+	            
 	            buscarCepBtn.addActionListener(e2 -> {
 	              	 String cep01 = cepField.getText();
 	                String url = Cep.VIACEP_URL + "/" + cep01 + "/json/";
@@ -456,7 +444,7 @@ public class EditEventPanel extends JPanel {
 	                	complementoField.setText(cep.getComplement());
 	                }
 	               });
-	            // Botão final
+	            
 	            JButton concluirButton = new JButton("Editar Evento");
 	            concluirButton.setBounds(704 - 150 - 20, 590 - 50, 150, 30);
 	            concluirButton.setBackground(new Color(0x330065));
@@ -478,8 +466,6 @@ public class EditEventPanel extends JPanel {
 	            	boolean cepValido =  cepAddress.matches("\\d{8}");
 	            	if(!caminho.isEmpty()  && !cepAddress.isEmpty() && cepValido && !estado.isEmpty() && !cidade.isEmpty() && !bairro.isEmpty() && !rua.isEmpty() && !numero.isEmpty()) {
 	            		var eventController = EventController.getInstance();
-	            		System.out.println("id controller no create event = "+IdController.getIdUser());
-	            		// metodo de editar
 	            		eventController.eventClone(id, title, description, selectedClassification, date, dateEnd, starsHours, endHours, caminho, cepAddress, estado, cidade, bairro, rua, numero, complemento,visibilidade);          		
 	            		JOptionPane.showMessageDialog(null,"Evento editado com sucesso!");
 	                    this.setVisible(false);

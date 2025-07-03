@@ -21,12 +21,11 @@ public class RegisterPage extends JPanel {
         this.mainFrame = mainFrame;
         this.setPreferredSize(new Dimension(1280, 720));
         this.setBackground(new Color(0x330065));
-        this.setLayout(new GridBagLayout()); // para centralizar a janela
+        this.setLayout(new GridBagLayout());
         initComponents();
     }
 
     private void initComponents() {
-        // painel branco que será a janela centralizada
         JPanel windowPanel = new JPanel(new BorderLayout(0, 20)) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -34,7 +33,7 @@ public class RegisterPage extends JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(255, 255, 255));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
-                g2.setColor(new Color(180, 180, 180, 100)); // sombra
+                g2.setColor(new Color(180, 180, 180, 100));
                 g2.setStroke(new BasicStroke(3));
                 g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 25, 25);
                 g2.dispose();
@@ -44,14 +43,12 @@ public class RegisterPage extends JPanel {
         windowPanel.setPreferredSize(new Dimension(800, 520));
         windowPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
 
-        // Logo no topo
         JLabel logoLabel = new JLabel();
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         var logoIcon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
         logoLabel.setIcon(logoIcon);
         windowPanel.add(logoLabel, BorderLayout.NORTH);
 
-        // painel central com os campos
         JPanel formPanel = new JPanel();
         formPanel.setOpaque(false);
         formPanel.setLayout(new GridBagLayout());
@@ -95,7 +92,6 @@ public class RegisterPage extends JPanel {
 
         windowPanel.add(formPanel, BorderLayout.CENTER);
 
-        // painel de botões
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(false);
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
@@ -111,7 +107,6 @@ public class RegisterPage extends JPanel {
 
         this.add(windowPanel, new GridBagConstraints());
 
-        // ações
         botaoCadastrar.addActionListener(e -> {
             var name = campoNome.getText().trim();
             var email = campoEmail.getText().trim();
@@ -278,8 +273,8 @@ public class RegisterPage extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                Color colorStart = new Color(200, 200, 200); // cinza claro
-                Color colorEnd = new Color(160, 160, 160); // cinza médio
+                Color colorStart = new Color(200, 200, 200);
+                Color colorEnd = new Color(160, 160, 160);
 
                 if (hover) {
                     colorStart = colorStart.brighter();
@@ -303,7 +298,7 @@ public class RegisterPage extends JPanel {
             @Override
             protected void paintBorder(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.setColor(new Color(120, 120, 120)); // cinza escuro
+                g2.setColor(new Color(120, 120, 120));
                 g2.setStroke(new BasicStroke(2));
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 30, 30);
                 g2.dispose();

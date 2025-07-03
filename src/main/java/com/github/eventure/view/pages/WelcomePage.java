@@ -43,13 +43,11 @@ public class WelcomePage extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(0x330065));
 
-        // Wrapper com padding
         var wrapperPanel = new JPanel(new GridBagLayout());
         wrapperPanel.setBackground(new Color(0x330065));
         wrapperPanel.setBorder(new EmptyBorder(40, 40, 40, 40));
         this.add(wrapperPanel, BorderLayout.CENTER);
 
-        // Main Panel centralizado
         var mainPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -57,7 +55,7 @@ public class WelcomePage extends JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(255, 255, 255));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
-                g2.setColor(new Color(180, 180, 180, 100)); // sombra
+                g2.setColor(new Color(180, 180, 180, 100)); 
                 g2.setStroke(new BasicStroke(3));
                 g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 25, 25);
                 g2.dispose();
@@ -76,7 +74,6 @@ public class WelcomePage extends JPanel {
 
         int y = 0;
 
-        // Logo
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/EVENTURE-LOGO.png"));
         Image logoImageScaled = logoIcon.getImage().getScaledInstance(320, 90, Image.SCALE_SMOOTH);
         logoIcon = new ImageIcon(logoImageScaled);
@@ -91,7 +88,6 @@ public class WelcomePage extends JPanel {
         Font labelFont = new Font("Segoe UI", Font.PLAIN, 20);
         Font titleFont = new Font("Segoe UI", Font.BOLD, 52);
 
-        // Bem Vindo Label
         var welcomeLabel = new JLabel("Bem Vindo!");
         welcomeLabel.setFont(titleFont);
         welcomeLabel.setForeground(new Color(0x330065));

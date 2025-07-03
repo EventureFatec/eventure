@@ -39,7 +39,6 @@ public class CommunityAllPanel extends JPanel {
         setPreferredSize(new Dimension(1100, 550));
         setBackground(new Color(245, 245, 245)); 
 
-        // Criar header parecido com o do evento, só que para comunidades
         JPanel header = new JPanel(null);
         header.setBackground(Color.WHITE);
         header.setPreferredSize(new Dimension(1130, 60));
@@ -47,16 +46,8 @@ public class CommunityAllPanel extends JPanel {
         JLabel logo = new JLabel("Eventure");
         logo.setFont(new Font("SansSerif", Font.BOLD, 20));
         logo.setBounds(20, 15, 200, 30);
-
-//        JButton menuButton = new JButton("⋮");
-//        menuButton.setFont(new Font("SansSerif", Font.BOLD, 18));
-//        menuButton.setFocusPainted(false);
-//        menuButton.setContentAreaFilled(false);
-//        menuButton.setBorderPainted(false);
-//        menuButton.setBounds(1000, 15, 40, 30);
-
         header.add(logo);
-//        header.add(menuButton);
+
 
         JLabel headerLabel = new JLabel("Escolha uma Comunidade Para Entrar", SwingConstants.CENTER);
         headerLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
@@ -65,7 +56,7 @@ public class CommunityAllPanel extends JPanel {
 
         add(header, BorderLayout.NORTH);
 
-        // Seu conteúdo abaixo do header
+        
         CommunityController communityController = CommunityController.getInstance();
         UserController userController = UserController.getInstance();
         int idUser = IdController.getIdUser();
