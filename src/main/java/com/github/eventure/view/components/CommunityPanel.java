@@ -80,11 +80,12 @@ public class CommunityPanel extends JPanel {
         List<Community> comunidades = new ArrayList<>();
         user = userController.findUserById(IdController.getIdUser());
         listaDeComunidades = user.getCommunityList();
-        idComunidade = listaDeComunidades.indexOf(0);
+        if (!listaDeComunidades.isEmpty()) {
+            idComunidade = listaDeComunidades.get(0);
+        }
         communityController = CommunityController.getInstance();
-        for(int i = 0; i < listaDeComunidades.size(); i++)
-        {
-        	comunidades.add(communityController.findCommunity(listaDeComunidades.indexOf(i)));
+        for (Integer id : listaDeComunidades) {
+            comunidades.add(communityController.findCommunity(id));
         }
 
         for (Community comunidade : comunidades) {
