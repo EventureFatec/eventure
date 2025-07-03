@@ -1,0 +1,98 @@
+package com.github.eventure.view;
+
+import javax.swing.*;
+
+import com.github.eventure.controllers.CommunityController;
+import com.github.eventure.controllers.EventController;
+import com.github.eventure.controllers.UserController;
+import com.github.eventure.model.EventClassification;
+import com.github.eventure.model.Message;
+import com.github.eventure.model.Visibilidade;
+import com.github.eventure.view.components.EventRequestPanel;
+import com.github.eventure.view.pages.LoginPage;
+import com.github.eventure.view.pages.RegisterPage;
+import com.github.eventure.view.pages.WelcomePage;
+
+import com.github.eventure.view.pages.MainPage;
+
+import java.awt.*;
+
+public class MainFrame extends JFrame {
+    private CardLayout cardLayout; 
+    private JPanel contentPanel;
+
+    public MainFrame() {
+        setTitle("Eventure | Cada evento é uma aventura!"); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(1280, 720)); 
+        setLocationRelativeTo(null);
+
+        
+        cardLayout = new CardLayout();
+        contentPanel = new JPanel(cardLayout);
+        
+        var userController = UserController.getInstance();
+        userController.createUserSemMessageBox("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
+        userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
+        userController.createUserSemMessageBox("luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
+        
+        CommunityController communityController = CommunityController.getInstance();
+        var u = userController.findUserById(0);
+        var u2 = userController.findUserById(1);
+        String caminho02 = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
+        communityController.createCommunity(u, "salve crias","descrição",caminho02);
+        communityController.addUser(0, 1);
+        communityController.addUser(0, 2);
+        var comunidade = communityController.findCommunityById(0);
+        Message m = new Message("Bom dia","7:50","allisson",0);
+        Message m2 = new Message("Bom tarde","14:50","pedro",1);
+        comunidade.addMessage(m);
+        comunidade.addMessage(m2);
+        
+        communityController.createCommunity(u, "teste","descrição",caminho02);
+        communityController.addUser(1, 1);
+        communityController.addUser(1, 2);
+        var comunidade02 = communityController.findCommunityById(1);
+        Message m1 = new Message("teste ","7:50","allisson",0);
+        Message m21 = new Message("teste 02","14:50","pedro",1);
+        comunidade02.addMessage(m1);
+        comunidade02.addMessage(m21);
+        var eventos = EventController.getInstance();
+        String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
+        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
+                "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
+                "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
+        
+        
+        WelcomePage welcomePage = new WelcomePage(this);
+        contentPanel.add(welcomePage, "welcome");
+
+        RegisterPage registerPage = new RegisterPage(this);
+        contentPanel.add(registerPage, "register"); 
+
+        LoginPage loginPage = new LoginPage(this); 
+        contentPanel.add(loginPage, "login"); 
+        
+    	ImageIcon im = new ImageIcon("C:/Users/User/Downloads/testeprojeto/teste.jpg");
+    	ImageIcon im2 = new ImageIcon(getClass().getResource("/fotoPerfil.png"));
+    	EventRequestPanel evr = new EventRequestPanel("evento da google", "11/09/25" , "allisson", "allisson@gmail.com",0,1,im,im2 );
+    	
+    	contentPanel.add(evr,"evr");
+        MainPage mainPage = new MainPage(this);
+        contentPanel.add(mainPage, "home");
+
+        
+        showPanel("welcome");
+
+       
+        setContentPane(contentPanel);
+        setVisible(true);
+    }
+
+    
+    public void showPanel(String pageName) {
+        cardLayout.show(contentPanel, pageName); 
+    }
+    
+}
