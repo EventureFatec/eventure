@@ -349,6 +349,7 @@ public class EventController {
 		var userController = UserController.getInstance();
 		var user = userController.findUserById(idUser);
 		user.addParticipaoConfirmada(idEvento);
+		JOptionPane.showMessageDialog(null, "Presença Confirmada");
 	}
 	
 	public void negarPresenca(int idEvento, int idUser)
@@ -409,6 +410,37 @@ public class EventController {
 		} else {
 		}
 
+	}
+	public void adicionarParticipanteSemMessageBox(int idEvent, int idUser)
+	{
+		UserController userController = UserController.getInstance();
+		Event event = findEventById(idEvent);
+		User user = userController.findUserById(idUser);
+		if(!event.usersParticipaOuNão(idUser))
+		{
+		 if(event.getVisibilidade() == Visibilidade.PUBLICO)
+		 {
+			 user.addListaEventos(idEvent);
+			event.addConfirmedParticipantIds(idUser);
+		 }else
+		  {
+			 if(event.usersParticipaOuNãoListPending(idUser))
+			 {
+				 return;
+			 }
+			 event.addPendingRequestIds(idUser);
+		  }
+		}else {
+			JOptionPane.showMessageDialog(null, "Você já participa desse evento!");
+		}
+	}
+	
+	public void ConfirmarPresencaSemMessageBox(int idEvento, int idUser) {
+		var event = findEventById(idEvento); 
+		event.addParticipaoConfirmada(idUser);
+		var userController = UserController.getInstance();
+		var user = userController.findUserById(idUser);
+		user.addParticipaoConfirmada(idEvento);
 	}
 
 	public static int generateId() {

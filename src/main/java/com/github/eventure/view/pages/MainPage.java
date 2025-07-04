@@ -505,7 +505,7 @@ public class MainPage extends JPanel {
                 JOptionPane.showMessageDialog(null, "Nenhuma requisição no momento");
         	}else
         	 {
-                EventRequestsContainer erc = new EventRequestsContainer();
+                EventRequestsContainer erc = new EventRequestsContainer(this);
                 showMainPanel(erc, 1);	
         	 }
         });

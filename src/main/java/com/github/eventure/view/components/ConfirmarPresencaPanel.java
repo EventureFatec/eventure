@@ -104,7 +104,7 @@ public class ConfirmarPresencaPanel extends JPanel {
         confirmar.addActionListener(e ->{
         	var eventController = EventController.getInstance();
         	eventController.ConfirmarPresenca(eventId, user.getUserId());
-        	JOptionPane.showMessageDialog(null, "Presença confirmada");
+        	reconstruirTela();
         });
         JButton recusar = new JButton("Recusar");
         recusar.setBackground(new Color(220, 50, 50));
@@ -132,5 +132,63 @@ public class ConfirmarPresencaPanel extends JPanel {
         ImageIcon icon = new ImageIcon(path);
         Image img = icon.getImage().getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
+    }
+    private void reconstruirTela() {
+        removeAll();
+        revalidate();
+        repaint();
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(Color.WHITE);
+        setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+        JLabel titulo = new JLabel("Confirmações de Presença");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel subtitulo = new JLabel("Gerenciar Participantes");
+        subtitulo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        subtitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField searchField = new JTextField("Buscar nome");
+        searchField.setMaximumSize(new Dimension(400, 30));
+        searchField.setForeground(Color.GRAY);
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+
+        add(titulo);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(subtitulo);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(searchField);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+
+        UserController userController = UserController.getInstance();
+        List<Integer> participantesIds = EventController.getInstance().getConfirmadosQueNaoCompareceram(eventId);
+
+        JPanel novaLista = new JPanel();
+        novaLista.setLayout(new BoxLayout(novaLista, BoxLayout.Y_AXIS));
+        novaLista.setOpaque(false);
+
+        for (Integer userId : participantesIds) {
+            User user = userController.findUserById(userId);
+            if (user == null) continue;
+            novaLista.add(criarCardUsuario(user));
+            novaLista.add(Box.createRigidArea(new Dimension(0, 15)));
+        }
+
+        JScrollPane scrollPane = new JScrollPane(novaLista);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setPreferredSize(new Dimension(600, 400));
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        add(scrollPane);
+
+        revalidate();
+        repaint();
     }
 }
