@@ -13,13 +13,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.github.eventure.controllers.EventController;
+import com.github.eventure.view.pages.MainPage;
 
 public class EventRequestPanel extends JPanel {
 	private EventController eventController;
 	private int idUser;
 	private int idEvento;
-    public EventRequestPanel(String eventName, String eventDate, String userName, String userEmail,int idUser,int idEvento,
+	private MainPage mainPage;
+    public EventRequestPanel(MainPage mainPage,String eventName, String eventDate, String userName, String userEmail,int idUser,int idEvento,
                              ImageIcon eventImage, ImageIcon userImage) {
+		this.mainPage = mainPage;
     	this.idUser = idUser;
     	this.idEvento = idEvento;
     	eventController = EventController.getInstance();
@@ -68,6 +71,8 @@ public class EventRequestPanel extends JPanel {
         add(acceptButton);
         acceptButton.addActionListener(e -> {
         	eventController.adicionarParticipantesPrivateEvento(this.idEvento, this.idUser);
+        	var eventRequestContainer = new EventRequestsContainer(mainPage);
+        	mainPage.showMainPanel(eventRequestContainer, 1);
         });
 
         JButton declineButton = new JButton("Recusar");

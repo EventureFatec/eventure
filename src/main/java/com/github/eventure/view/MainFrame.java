@@ -33,36 +33,58 @@ public class MainFrame extends JFrame {
         contentPanel = new JPanel(cardLayout);
         
         var userController = UserController.getInstance();
-        userController.createUserSemMessageBox("allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
-        userController.createUserSemMessageBox("pedro", "pedrinho", "Pedro7787@", "pedro@gmail.com");
-        userController.createUserSemMessageBox("luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
+        userController.createUserSemMessageBox("Allisson", "allissonsx", "Allisson7787@", "allisson@gmail.com");
+        userController.createUserSemMessageBox("Pedro", "pedro", "Pedro7787@", "pedro@gmail.com");
+        userController.createUserSemMessageBox("Luiz", "kkniow", "Teste123!", "bahneh971@gmail.com");
+        userController.createUserSemMessageBox("Waldir", "waldir", "Allisson7787@", "waldir@gmail.com");
         
         CommunityController communityController = CommunityController.getInstance();
         var u = userController.findUserById(0);
         var u2 = userController.findUserById(1);
-        String caminho02 = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
-        communityController.createCommunity(u, "salve crias","descrição",caminho02);
+        String caminho02 = "C:/Users/User/Downloads/Acelera Fotos/ClubedoLivro.jpg";
+        communityController.createCommunity(u, "Clube do livro","comunidade sobre livro",caminho02);
         communityController.addUser(0, 1);
         communityController.addUser(0, 2);
         var comunidade = communityController.findCommunityById(0);
         Message m = new Message("Bom dia","7:50","allisson",0);
-        Message m2 = new Message("Bom tarde","14:50","pedro",1);
+        Message m2 = new Message("Recomendações de livro?","10:50","pedro",1);
         comunidade.addMessage(m);
         comunidade.addMessage(m2);
-        
-        communityController.createCommunity(u, "teste","descrição",caminho02);
+        String grupoEstudos = "C:/Users/User/Downloads/Acelera Fotos/grupoEstudos.jpg";
+        communityController.createCommunity(u, "Grupo de Estudos","Assuntos diversos sobre educação",grupoEstudos);
         communityController.addUser(1, 1);
         communityController.addUser(1, 2);
         var comunidade02 = communityController.findCommunityById(1);
-        Message m1 = new Message("teste ","7:50","allisson",0);
-        Message m21 = new Message("teste 02","14:50","pedro",1);
+        Message m1 = new Message("Ola tudo bem","7:50","allisson",0);
+        Message m21 = new Message("Que horas vai ser o encontro","12:00","pedro",1);
         comunidade02.addMessage(m1);
         comunidade02.addMessage(m21);
         var eventos = EventController.getInstance();
         String caminho = "C:/Users/User/Downloads/testeprojeto/teste.jpg";
-        eventos.createEventSemMessageBox(0, "Evento do google", "imersão ia", EventClassification.COURSES_AND_WORKSHOPS,
-                "20/02/2025", "25/06/2025", "15:20", "20:30", caminho, "01001000", "sao paulo", "guaralhus", "bairro20",
-                "orlando novaes", "300", "casa",Visibilidade.PRIVADO);
+        eventos.createEventSemMessageBox(0, "Conferência de Inovação e Tecnologia", "Conferencia para discutir sobre os avanços da tecnologia", EventClassification.CONFERENCE,
+                "20/07/2025", "21/07/2025", "15:20", "20:30", caminho, "01001000", "São paulo", "Guaralhus", "Vila Brasil",
+                "Orlando Novaes", "312", "Predio",Visibilidade.PRIVADO);
+        
+        String caminho03 = "C:/Users/User/Downloads/Acelera Fotos/rockInrio.jpg";
+        eventos.createEventSemMessageBox(1, "Rock In Rio", "Show disponiveis:Cold Play, Eminem e Imagine Dragons", EventClassification.PARTIES_AND_SHOWS,
+                "14/08/2025", "21/08/2025", "12:00", "23:00", caminho03, "20000000", "Rio de Janeiro", "Rio de Janeiro", "centro",
+                "Avenida Rio Branco", "450", "Espaço",Visibilidade.PRIVADO);
+        
+        String caminho04 = "C:/Users/User/Downloads/Acelera Fotos/ClubedoLivro.jpg";
+        eventos.createEventSemMessageBox(0, "Clube do livro", "clube sobre livros de ação e aventura", EventClassification.HOBBIES,
+                "19/07/2025", "19/07/2025", "12:30", "20:00", caminho04, "12604030", "São paulo", "Lorena", "Comerciarios",
+                "Avenida Central", "15", "casa",Visibilidade.PUBLICO);
+        
+        String caminho0f = "C:/Users/User/Downloads/Acelera Fotos/festajunina.jpg";
+        eventos.createEventSemMessageBox(2, "Festa Junina", "Festa com diversas Doces e Salgados", EventClassification.GASTRONOMY,
+                "19/07/2025", "19/07/2025", "12:30", "20:00", caminho0f, "12701120", "São paulo", "Cruzeiro", "Vila Paulista",
+                "Quinze de Novembro", "18", "casa",Visibilidade.PUBLICO);
+        
+        var eventController = EventController.getInstance();
+        eventController.adicionarParticipanteSemMessageBox(0, 1);
+        eventController.adicionarParticipanteSemMessageBox(0, 2);
+        eventController.adicionarParticipanteSemMessageBox(0, 3);
+        eventController.ConfirmarPresencaSemMessageBox(0, 2);
         
         
         WelcomePage welcomePage = new WelcomePage(this);
@@ -74,11 +96,6 @@ public class MainFrame extends JFrame {
         LoginPage loginPage = new LoginPage(this); 
         contentPanel.add(loginPage, "login"); 
         
-    	ImageIcon im = new ImageIcon("C:/Users/User/Downloads/testeprojeto/teste.jpg");
-    	ImageIcon im2 = new ImageIcon(getClass().getResource("/fotoPerfil.png"));
-    	EventRequestPanel evr = new EventRequestPanel("evento da google", "11/09/25" , "allisson", "allisson@gmail.com",0,1,im,im2 );
-    	
-    	contentPanel.add(evr,"evr");
         MainPage mainPage = new MainPage(this);
         contentPanel.add(mainPage, "home");
 

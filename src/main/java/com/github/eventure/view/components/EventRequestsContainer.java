@@ -18,9 +18,10 @@ import com.github.eventure.controllers.IdController;
 import com.github.eventure.controllers.UserController;
 import com.github.eventure.model.Event;
 import com.github.eventure.model.User;
+import com.github.eventure.view.pages.MainPage;
 
 public class EventRequestsContainer extends JPanel {
-    public EventRequestsContainer() {
+    public EventRequestsContainer(MainPage mainPage) {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(600, 540));
         
@@ -49,7 +50,8 @@ public class EventRequestsContainer extends JPanel {
                 ImageIcon userImage = new ImageIcon(requester.getProfilePic());
 
                 EventRequestPanel requestPanel = new EventRequestPanel(
-                        event.getTitle(),
+                        mainPage,
+                		event.getTitle(),
                         event.getDate(),
                         requester.getName(),
                         requester.getEmail(),
